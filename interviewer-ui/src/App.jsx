@@ -1,6 +1,23 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import MonacoEditor from "@monaco-editor/react";
+import './App.css';
+
+// Add this ASCII art banner function for the retro vibe
+const AsciiHeader = ({ text }) => {
+  return (
+    <pre className="text-green-500 font-mono text-xs md:text-sm leading-tight overflow-hidden my-2">
+{`
+ ___ _  _ _____ ___ ___ _   _ ___ _____      _____ ___ 
+|_ _| \\| |_   _| __| _ \\ | | |_ _| __\\\\ \\    / / __| _ \\
+ | || .\` | | | | _||   / |_| || || _| \\ \\/\\/ /| _||   /
+|___|_|\\_| |_| |___|_|_\\\\___/|___|___| \\_/\\_/ |___|_|_\\
+                                                     
+${'>>'} ${text}
+`}
+    </pre>
+  );
+};
 
 // ✅ Login Page
 function LoginPage({ setToken }) {
@@ -54,36 +71,70 @@ function LoginPage({ setToken }) {
   };
 
   return (
-    <div className="h-screen flex flex-col items-center justify-center bg-black text-green-400 p-6">
-      <h1 className="text-2xl font-mono mb-4">Login to Interviewer</h1>
-      {error && <div className="text-red-500 mb-4">{error}</div>}
-      
-      <form onSubmit={handleSubmit} className="flex flex-col items-center w-64">
-        <input 
-          placeholder="Username" 
-          value={username} 
-          onChange={(e) => setUsername(e.target.value)} 
-          className="mb-2 p-2 bg-gray-800 text-white rounded w-full" 
-          disabled={isLoading}
-          required
-        />
-        <input 
-          type="password" 
-          placeholder="Password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
-          className="mb-4 p-2 bg-gray-800 text-white rounded w-full" 
-          disabled={isLoading}
-          required
-        />
-        <button 
-          type="submit"
-          disabled={isLoading || !username || !password}
-          className={`px-4 py-2 ${isLoading ? 'bg-gray-600' : 'bg-green-600 hover:bg-green-700'} text-white rounded w-full transition-colors`}
-        >
-          {isLoading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
+    <div className="h-screen flex flex-col items-center justify-center bg-black text-green-400 p-6 font-mono">
+      <div className="w-full max-w-md border-2 border-green-500 bg-gray-900 p-6 rounded-none relative terminal-window">
+        <div className="scanline"></div>
+        <div className="absolute top-0 left-0 right-0 bg-green-600 text-black px-4 py-1 flex justify-between items-center">
+          <div>interviewer.exe</div>
+          <div>[X]</div>
+        </div>
+        <div className="mt-6">
+          <AsciiHeader text="LOGIN MODULE v1.0.3" />
+          
+          <div className="mb-4 text-green-300 text-sm typewriter">
+            <span className="text-yellow-400">$</span> SYSTEM AUTHENTICATION REQUIRED
+          </div>
+          
+          {error && (
+            <div className="mb-4 border border-red-500 bg-red-900/30 p-2 text-red-400 text-sm">
+              <span className="text-red-500">ERROR:</span> {error}
+            </div>
+          )}
+          
+          <form onSubmit={handleSubmit} className="flex flex-col mt-6">
+            <div className="flex items-center mb-4">
+              <span className="text-yellow-400 mr-2">$</span>
+              <span className="text-green-500 mr-2">user:</span>
+              <input 
+                placeholder="username" 
+                value={username} 
+                onChange={(e) => setUsername(e.target.value)} 
+                className="flex-1 ml-2 bg-black text-green-400 border-b border-green-500 focus:border-green-400 outline-none p-1" 
+                disabled={isLoading}
+                required
+              />
+              {!username && <span className="cursor"></span>}
+            </div>
+            
+            <div className="flex items-center mb-6">
+              <span className="text-yellow-400 mr-2">$</span>
+              <span className="text-green-500 mr-2">pass:</span>
+              <input 
+                type="password" 
+                placeholder="password" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                className="flex-1 ml-2 bg-black text-green-400 border-b border-green-500 focus:border-green-400 outline-none p-1" 
+                disabled={isLoading}
+                required
+              />
+              {!password && <span className="cursor"></span>}
+            </div>
+            
+            <button 
+              type="submit"
+              disabled={isLoading || !username || !password}
+              className="mt-4 bg-black border border-green-500 text-green-500 px-4 py-2 hover:bg-green-800 hover:text-black transition-colors duration-300 retro-button"
+            >
+              {isLoading ? '[ AUTHENTICATING... ]' : '[ LOGIN ]'}
+            </button>
+            
+            <div className="text-xs text-gray-500 mt-4 text-center">
+              © 1982-2024 INTERVIEWER CORP. ALL RIGHTS RESERVED.
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
@@ -254,38 +305,56 @@ function InterviewScreen({ token, setToken }) {
         try {
           // Get the current topic and question number
           const currentTopic = data.conversation.current_topic;
-          const currentQuestion = data.conversation.current_question_number;
+          const currentSubtopic = data.conversation.current_subtopic;
+          const currentQuestionNumber = data.conversation.current_question_number;
           
-          // Find the latest message from the interviewer in the current topic/question
-          const topic = data.conversation.topics[currentTopic];
-          if (topic && topic.questions) {
-            const question = topic.questions[currentQuestion];
-            if (question && question.messages) {
-              // Find the last interviewer message
-              const interviewerMessages = question.messages.filter(msg => 
+          console.log("Current topic:", currentTopic);
+          console.log("Current subtopic:", currentSubtopic);
+          console.log("Current question number:", currentQuestionNumber);
+          
+          // Check if interview is finished
+          isFinished = currentTopic === 0 && currentSubtopic === "Finished";
+          
+          // Get the current topic using the current_topic value
+          const topics = data.conversation.topics;
+          const currentTopicData = topics[currentTopic];
+          
+          console.log("Current topic data:", currentTopicData);
+          
+          if (currentTopicData && currentTopicData.questions) {
+            // Get the current question using current_question_number
+            const currentQuestion = currentTopicData.questions[currentQuestionNumber];
+            console.log("Current question:", currentQuestion);
+            
+            if (currentQuestion && currentQuestion.messages) {
+              // Get all interviewer messages for this question
+              const interviewerMessages = currentQuestion.messages.filter(msg => 
                 msg.author === "interviewer"
               );
+              
+              console.log("Interviewer messages:", interviewerMessages);
               
               if (interviewerMessages.length > 0) {
                 // Get the most recent message
                 const latestMessage = interviewerMessages[interviewerMessages.length - 1];
                 
-                // Check if it's JSON content that needs parsing
-                if (latestMessage.content.startsWith('{') && latestMessage.content.endsWith('}')) {
+                // Try to parse JSON content if it's a JSON string
+                if (typeof latestMessage.content === 'string' && 
+                    latestMessage.content.trim().startsWith('{') && 
+                    latestMessage.content.trim().endsWith('}')) {
                   try {
                     const parsedContent = JSON.parse(latestMessage.content);
-                    interviewerResponse = parsedContent.next_question;
-                    
-                    // Check if interview is finished
-                    isFinished = parsedContent.next_topic === "Finished";
+                    interviewerResponse = parsedContent.next_question || parsedContent.question || latestMessage.content;
                   } catch (error) {
-                    // If parsing fails, use the raw content
                     console.error("Error parsing JSON response:", error);
                     interviewerResponse = latestMessage.content;
                   }
                 } else {
+                  // If it's not JSON, use the content directly
                   interviewerResponse = latestMessage.content;
                 }
+                
+                console.log("Extracted interviewer response:", interviewerResponse);
               }
             }
           }
@@ -299,9 +368,21 @@ function InterviewScreen({ token, setToken }) {
       if (isFinished) {
         setIsInterviewEnded(true);
         setMessages([
-          ...newMessages, 
+          ...newMessages,
           { role: "interviewer", content: interviewerResponse },
-          { role: "system", content: "Interview has ended. You can start a new interview." }
+          { 
+            role: "system", 
+            content: `
+=================================
+    INTERVIEW COMPLETED
+=================================
+
+Thank you for participating in our technical interview process! 
+The interview has concluded.
+
+You can start a new interview by clicking the [ INITIALIZE_INTERVIEW ] button above.
+            `.trim()
+          }
         ]);
       } else {
         setMessages([...newMessages, { role: "interviewer", content: interviewerResponse }]);
@@ -339,126 +420,175 @@ function InterviewScreen({ token, setToken }) {
   };
 
   return (
-    <div className="h-screen w-full bg-black text-green-400 p-6 flex flex-col items-center">
-      <h1 className="text-2xl font-mono mb-4">Mock Interview Terminal</h1>
-
-      {/* Display authentication errors */}
-      {authError && (
-        <div className="w-full max-w-2xl mb-4 p-4 bg-red-900 text-white rounded text-center">
-          {authError}
+    <div className="min-h-screen w-full bg-black text-green-400 p-3 md:p-6 flex flex-col items-center font-mono">
+      <div className="w-full max-w-4xl border-2 border-green-500 bg-gray-900 p-4 rounded-none relative terminal-window">
+        <div className="scanline"></div>
+        <div className="absolute top-0 left-0 right-0 bg-green-600 text-black px-4 py-1 flex justify-between items-center">
+          <div>terminal@interviewer:~</div>
+          <div className="flex">
+            <span className="mr-4">|=|</span>
+            <span className="mr-4">|_|</span>
+            <span>[X]</span>
+          </div>
         </div>
-      )}
-
-      {!pageLoaded ? (
-        <div className="text-yellow-300 text-center animate-pulse">
-          Loading terminal interface...
+        
+        <div className="mt-8 mb-4">
+          <AsciiHeader text="TECHNICAL INTERVIEW TERMINAL v2.4.1" />
         </div>
-      ) : (
-        <>
-          {/* ✅ Start Interview Button */}
-          <button 
-            onClick={startNewInterview} 
-            disabled={isLoading}
-            className={`mb-4 px-4 py-2 ${isLoading ? 'bg-gray-600' : 'bg-red-600 hover:bg-red-700'} text-white rounded transition-colors`}
-          >
-            {isLoading ? "Loading..." : "Start New Interview"}
-          </button>
 
-          {/* ✅ Chat Window */}
-          <div className="w-full max-w-2xl h-80 overflow-y-auto p-4 bg-gray-900 border border-green-600 rounded mb-4">
-            {messages.length === 0 ? (
-              <div className="text-center text-gray-500 py-8">
-                Click "Start New Interview" to begin
+        {/* Display authentication errors */}
+        {authError && (
+          <div className="w-full mb-4 p-2 bg-red-900/30 border border-red-500 text-red-400 text-sm">
+            <span className="text-red-500">ERROR:</span> {authError}
+          </div>
+        )}
+
+        {!pageLoaded ? (
+          <div className="text-yellow-300 text-center animate-pulse p-8">
+            <pre className="text-xs">
+            {`
+            [ LOADING SYSTEM ]
+            ==================
+            Initializing interface...
+            Checking authorization...
+            Loading terminal modules...
+            `}
+            </pre>
+          </div>
+        ) : (
+          <>
+            {/* ✅ Terminal Header */}
+            <div className="border-b border-green-500 pb-2 mb-4 flex flex-col md:flex-row md:justify-between items-center">
+              <div className="text-yellow-400 text-xs mb-2 md:mb-0">
+                <span className="mr-2">[SYSTEM]:</span> Backend Interview Protocol Active
               </div>
-            ) : (
-              messages.map((msg, index) => (
-                <div 
-                  key={index} 
-                  className={`p-2 mb-2 ${
-                    msg.role === "user" 
-                      ? "text-blue-300 text-right" 
-                      : msg.role === "system" 
-                        ? "text-red-400 text-center italic" 
-                        : "text-yellow-300 text-left"
-                  }`}
-                >
-                  {msg.role === "user" 
-                    ? "You: " 
-                    : msg.role === "system" 
-                      ? "" 
-                      : "Interviewer: "
-                  }
-                  {msg.content && msg.content.startsWith('{') && msg.content.endsWith('}')
-                    ? (() => {
-                        try {
-                          const parsed = JSON.parse(msg.content);
-                          return parsed.next_question || parsed.question || msg.content;
-                        } catch (error) {
-                          console.warn("Error parsing message JSON:", error.message);
-                          return msg.content;
-                        }
-                      })()
-                    : msg.content
-                  }
+              {/* ✅ Start Interview Button */}
+              <button 
+                onClick={startNewInterview} 
+                disabled={isLoading}
+                className={`px-4 py-1 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''} bg-black border border-red-500 text-red-500 hover:bg-red-900 hover:text-white transition-colors duration-300 retro-button`}
+              >
+                {isLoading ? "[ LOADING... ]" : "[ INITIALIZE_INTERVIEW ]"}
+              </button>
+            </div>
+
+            {/* ✅ Chat Window */}
+            <div className="w-full h-80 overflow-y-auto p-4 bg-black border border-green-600 font-mono text-sm mb-4 retro-scrollbar">
+              {messages.length === 0 ? (
+                <div className="text-center text-gray-500 py-8 text-xs">
+                  <pre className="whitespace-pre-wrap">
+                  {`
+                  =================================
+                  COMMAND REQUIRED: START_INTERVIEW
+                  =================================
+                  `}
+                  </pre>
                 </div>
-              ))
-            )}
-          </div>
+              ) : (
+                messages.map((msg, index) => (
+                  <div 
+                    key={index} 
+                    className="message"
+                    data-role={msg.role}
+                  >
+                    <div className="message-content">
+                      {msg.content && msg.content.startsWith('{') && msg.content.endsWith('}')
+                        ? (() => {
+                            try {
+                              const parsed = JSON.parse(msg.content);
+                              return parsed.next_question || parsed.question || msg.content;
+                            } catch (error) {
+                              console.warn("Error parsing message JSON:", error.message);
+                              return msg.content;
+                            }
+                          })()
+                        : msg.content
+                      }
+                      {msg.role === "interviewer" && <span className="cursor"></span>}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
 
-          {/* ✅ Input Controls */}
-          <div className="flex flex-col items-center w-full max-w-2xl gap-2">
-            {interviewId && !isInterviewEnded && !authError && (
-              <>
-                {/* ✅ Toggle Code/Text Mode */}
-                <button 
-                  onClick={() => setIsCodeMode(!isCodeMode)} 
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded w-full transition-colors"
-                >
-                  {isCodeMode ? "Switch to Text Mode" : "Switch to Code Mode"}
-                </button>
+            {/* ✅ Input Controls */}
+            <div className="flex flex-col w-full gap-2">
+              {interviewId && !isInterviewEnded && !authError && (
+                <>
+                  {/* ✅ Toggle Code/Text Mode */}
+                  <div className="flex justify-end mb-2">
+                    <button 
+                      onClick={() => setIsCodeMode(!isCodeMode)} 
+                      className="px-3 py-1 bg-black border border-blue-500 text-blue-500 hover:bg-blue-900 hover:text-white transition-colors duration-300 text-xs retro-button"
+                    >
+                      [ {isCodeMode ? "TEXT_MODE" : "CODE_MODE"} ]
+                    </button>
+                  </div>
 
-                {/* ✅ Text Input or Code Editor */}
-                {isCodeMode ? (
-                  <MonacoEditor 
-                    height="200px" 
-                    language="javascript" 
-                    theme="vs-dark" 
-                    value={input} 
-                    onChange={(value) => setInput(value)} 
-                    className="w-full border border-gray-700 rounded" 
-                  />
-                ) : (
-                  <textarea 
-                    value={input} 
-                    onChange={(e) => setInput(e.target.value)} 
-                    onKeyDown={handleKeyDown}
-                    disabled={isLoading || isInterviewEnded}
-                    className="w-full h-32 bg-gray-800 text-green-400 p-2 rounded" 
-                    placeholder={isLoading ? "Waiting for response..." : "Type your response here..."} 
-                  />
-                )}
+                  {/* ✅ Text Input or Code Editor */}
+                  <div className="relative">
+                    <div className="absolute top-0 left-0 bg-green-800 text-black px-2 py-0.5 text-xs">
+                      {isCodeMode ? "code_editor.js" : "message.txt"}
+                    </div>
+                    {isCodeMode ? (
+                      <div className="border border-green-500">
+                        <MonacoEditor 
+                          height="200px" 
+                          language="javascript" 
+                          theme="vs-dark" 
+                          value={input} 
+                          onChange={(value) => setInput(value)} 
+                          options={{
+                            minimap: { enabled: false },
+                            scrollBeyondLastLine: false,
+                            fontFamily: "monospace"
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex">
+                        <div className="bg-gray-800 text-yellow-400 p-2">
+                          &gt;
+                        </div>
+                        <textarea 
+                          value={input} 
+                          onChange={(e) => setInput(e.target.value)} 
+                          onKeyDown={handleKeyDown}
+                          disabled={isLoading || isInterviewEnded}
+                          className="w-full h-28 bg-gray-900 text-green-400 p-2 border border-green-500 outline-none resize-none" 
+                          placeholder={isLoading ? "Processing response..." : "Enter your response..."}
+                        />
+                      </div>
+                    )}
+                  </div>
 
-                {/* ✅ Send Message Button */}
-                <button 
-                  onClick={sendMessage} 
-                  disabled={isLoading || !input.trim() || isInterviewEnded}
-                  className={`mt-2 px-4 py-2 ${isLoading || !input.trim() || isInterviewEnded ? 'bg-gray-600' : 'bg-green-600 hover:bg-green-700'} text-white rounded w-full transition-colors`}
-                >
-                  {isLoading ? "Sending..." : "Send"}
-                </button>
-              </>
-            )}
+                  {/* ✅ Send Message Button */}
+                  <button 
+                    onClick={sendMessage} 
+                    disabled={isLoading || !input.trim() || isInterviewEnded}
+                    className={`mt-2 px-4 py-2 ${isLoading || !input.trim() || isInterviewEnded ? 'bg-gray-800 text-gray-500' : 'bg-black border border-green-500 text-green-500 hover:bg-green-900 hover:text-white'} transition-colors duration-300 retro-button`}
+                  >
+                    {isLoading ? "[ TRANSMITTING... ]" : "[ SEND_MESSAGE ]"}
+                  </button>
+                </>
+              )}
 
-            {/* ✅ Logout Button */}
-            <button 
-              onClick={handleLogout} 
-              className="mt-4 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded w-full transition-colors"
-            >
-              Logout
-            </button>
-          </div>
-        </>
-      )}
+              {/* ✅ Logout Button */}
+              <button 
+                onClick={handleLogout} 
+                className="mt-4 px-4 py-2 bg-black border border-gray-500 text-gray-500 hover:bg-gray-800 hover:text-white transition-colors duration-300 retro-button"
+              >
+                [ EXIT_SYSTEM ]
+              </button>
+            </div>
+            
+            {/* ✅ Terminal Footer */}
+            <div className="text-xs text-gray-600 mt-6 border-t border-gray-800 pt-2 w-full text-center">
+              INTERVIEWER OS v3.1.42 // MEMORY: 640K (CLASSIC) // TERMINAL: ACTIVE // PING: 23ms
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }

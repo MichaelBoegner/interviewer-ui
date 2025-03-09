@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Terminal Icon</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect stroke="#00FF00" stroke-width="2" x="1" y="1" width="30" height="30" rx="2"></rect>
+        <path d="M6,8 L12,16 L6,24" stroke="#00FF00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        <line x1="14" y1="24" x2="26" y2="24" stroke="#00FF00" stroke-width="2" stroke-linecap="round"></line>
+    </g>
+</svg> 
