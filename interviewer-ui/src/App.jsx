@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "r
 import MonacoEditor from "@monaco-editor/react";
 import './App.css';
 
+// Add this constant at the top of the file, after imports
+const API_URL = import.meta.env.VITE_API_URL;
+
 // Add this ASCII art banner function for the retro vibe
 const AsciiHeader = ({ text }) => {
   return (
@@ -48,7 +51,7 @@ function LoginPage({ setToken }) {
     setError("");
     
     try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
+      const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -196,7 +199,7 @@ function InterviewScreen({ token, setToken }) {
     
     try {
       console.log("Starting new interview with token:", token);
-      const response = await fetch("http://localhost:8080/api/interviews", {
+      const response = await fetch(`${API_URL}/interviews`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json", 
@@ -277,7 +280,7 @@ function InterviewScreen({ token, setToken }) {
       
       console.log("Sending payload:", payload);
       
-      const response = await fetch(`http://localhost:8080/api/conversations/${interviewId}`, {
+      const response = await fetch(`${API_URL}/conversations/${interviewId}`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json", 
