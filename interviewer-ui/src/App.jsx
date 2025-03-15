@@ -6,7 +6,7 @@ import './App.css';
 // Add this constant at the top of the file, after imports
 const API_URL = import.meta.env.VITE_API_URL;
 
-// Add this ASCII art banner function for the retro vibe
+// Add this ASCII art banner function for the retro vibe.
 const AsciiHeader = ({ text }) => {
   return (
     <div className="my-2">
