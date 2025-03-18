@@ -142,7 +142,6 @@ function LoginPage({ setToken }) {
         <div className="scanline"></div>
         <div className="absolute top-0 left-0 right-0 bg-green-600 text-black px-4 py-1 flex justify-between items-center">
           <div>{showRegister ? "register.exe" : "login.exe"}</div>
-          <div>[X]</div>
         </div>
         <div className="mt-6">
           <AsciiHeader text={showRegister ? "REGISTRATION MODULE v1.0.0" : "LOGIN MODULE v1.0.3"} />
@@ -228,7 +227,7 @@ function LoginPage({ setToken }) {
             </button>
             
             <div className="text-xs text-gray-500 mt-4 text-center">
-              © 1982-2024 INTERVIEWER CORP. ALL RIGHTS RESERVED.
+              © 2025 BOEGNER ENTERRISES INC. ALL RIGHTS RESERVED.
             </div>
           </form>
         </div>
@@ -592,26 +591,10 @@ You can start a new interview by clicking the [ INITIALIZE_INTERVIEW ] button ab
     <div className="min-h-screen w-full bg-black text-green-400 p-3 md:p-6 flex flex-col items-center font-mono">
       <div className="w-full max-w-4xl border-2 border-green-500 bg-gray-900 p-4 rounded-none relative terminal-window">
         <div className="scanline"></div>
-        <div className="absolute top-0 left-0 right-0 bg-green-600 text-black px-4 py-1 flex justify-between items-center">
-          <div className="flex items-center">
-            <span>terminal.exe</span>
-            {questionsAnswered > 0 && (
-              <span className="ml-4 bg-black px-2 py-0.5 rounded text-green-400 text-xs">
-                SCORE: {totalScore}/{questionsAnswered * 10} ({((totalScore/questionsAnswered/10)*100).toFixed(0)}%)
-              </span>
-            )}
-          </div>
-          <button 
-            onClick={handleLogout} 
-            className="hover:text-red-500 focus:outline-none text-sm" 
-            title="Exit System"
-          >
-            [X]
-          </button>
-        </div>
+       
         
         <div className="mt-8 mb-4">
-          <AsciiHeader text="TECHNICAL INTERVIEW TERMINAL v2.4.1" />
+          <AsciiHeader text="TECHNICAL INTERVIEW TERMINAL v1.0.0" />
         </div>
 
         {/* Display authentication errors */}
@@ -654,11 +637,8 @@ You can start a new interview by clicking the [ INITIALIZE_INTERVIEW ] button ab
             <div className="w-full h-80 overflow-y-auto p-4 bg-black border border-green-600 font-mono text-sm mb-4 retro-scrollbar" ref={messagesContainerRef}>
               {messages.length === 0 ? (
                 <div className="text-center text-gray-500 py-8 text-xs">
-                  <pre className="whitespace-pre-wrap">
+                  <pre className="whitespace-pre-wrap ">
                   {`
-                  =================================
-                  COMMAND REQUIRED: START_INTERVIEW
-                  =================================
                   `}
                   </pre>
                 </div>
@@ -723,20 +703,18 @@ You can start a new interview by clicking the [ INITIALIZE_INTERVIEW ] button ab
               {interviewId && !isInterviewEnded && !authError && (
                 <>
                   {/* ✅ Toggle Code/Text Mode */}
+                  
                   <div className="flex justify-end mb-2">
                     <button 
                       onClick={() => setIsCodeMode(!isCodeMode)} 
-                      className="px-3 py-1 bg-black border border-blue-500 text-blue-500 hover:bg-blue-900 hover:text-white transition-colors duration-300 text-xs retro-button"
+                      className="px-3 py-1 mb-4 bg-black border border-blue-500 text-blue-500 hover:bg-blue-900 hover:text-white transition-colors duration-300 text-xs retro-button"
                     >
                       [ {isCodeMode ? "TEXT_MODE" : "CODE_MODE"} ]
                     </button>
                   </div>
 
                   {/* ✅ Text Input or Code Editor */}
-                  <div className="relative">
-                    <div className="absolute top-0 left-0 bg-green-800 text-black px-2 py-0.5 text-xs">
-                      {isCodeMode ? "code_editor.js" : "message.txt"}
-                    </div>
+                  <div className="relative mt-4">
                     {isCodeMode ? (
                       <div className="border border-green-500">
                         <MonacoEditor 
@@ -755,7 +733,7 @@ You can start a new interview by clicking the [ INITIALIZE_INTERVIEW ] button ab
                     ) : (
                       <div className="flex">
                         <div className="bg-gray-800 text-yellow-400 p-2">
-                          &gt;
+
                         </div>
                         <textarea 
                           value={input} 
@@ -791,7 +769,7 @@ You can start a new interview by clicking the [ INITIALIZE_INTERVIEW ] button ab
             
             {/* ✅ Terminal Footer */}
             <div className="text-xs text-gray-600 mt-6 border-t border-gray-800 pt-2 w-full text-center">
-              INTERVIEWER OS v3.1.42 // MEMORY: 640K (CLASSIC) // TERMINAL: ACTIVE // PING: 23ms
+              ====================================================================
             </div>
           </>
         )}
