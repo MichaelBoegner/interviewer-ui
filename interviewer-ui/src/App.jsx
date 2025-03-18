@@ -144,7 +144,7 @@ function LoginPage({ setToken }) {
           <div>{showRegister ? "register.exe" : "login.exe"}</div>
         </div>
         <div className="mt-6">
-          <AsciiHeader text={showRegister ? "REGISTRATION MODULE v1.0.0" : "LOGIN MODULE v1.0.3"} />
+          <AsciiHeader text={showRegister ? "REGISTRATION MODULE v1.0.0" : "LOGIN MODULE v1.0.0"} />
           
           <div className="mb-4 text-green-300 text-sm typewriter">
             <span className="text-yellow-400">$</span> {showRegister ? "NEW USER REGISTRATION" : "SYSTEM AUTHENTICATION REQUIRED"}
