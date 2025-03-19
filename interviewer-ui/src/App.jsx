@@ -227,7 +227,7 @@ function LoginPage({ setToken }) {
             </button>
             
             <div className="text-xs text-gray-500 mt-4 text-center">
-              © 2025 BOEGNER ENTERRISES INC. ALL RIGHTS RESERVED.
+              © 2025 BOEGNER ENTERPRISES INC. ALL RIGHTS RESERVED.
             </div>
           </form>
         </div>
