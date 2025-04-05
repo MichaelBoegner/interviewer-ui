@@ -374,28 +374,26 @@ function InterviewScreen({ token, setToken }) {
       
       // Construct the payload based on whether this is the first message or not
       let payload;
+      let url;
       if (isFirstMessage) {
         // First message only needs the user message
         payload = {
-          message: {
-            author: "user",
-            content: userMessage
-          }
+          message: userMessage
+          
         };
+        url = `${API_URL}/conversations/create/${interviewId}`;
       } else {
         // Subsequent messages need conversation_id and message
         payload = {
           conversation_id: conversationId,
-          message: {
-            author: "user",
-            content: userMessage
-          }
+          message: userMessage
         };
+        url = `${API_URL}/conversations/append/${interviewId}`;
       }
       
       console.log("Sending payload:", payload);
       
-      const response = await fetch(`${API_URL}/conversations/${interviewId}`, {
+      const response = await fetch(url, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json", 
