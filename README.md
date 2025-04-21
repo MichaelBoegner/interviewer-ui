@@ -350,9 +350,6 @@ The frontend is built in React and communicates with the protected backend API. 
 - GPT-4 feedback and response display
 - Post-interview summary (upcoming)
 
-You can explore the UI code and structure here:  
-🔗 [Frontend GitHub Repository](https://github.com/michaelboegner/interviewer-ui)
-
 The frontend is currently deployed on Vercel and connects to a deployed Fly.io backend
 
 
