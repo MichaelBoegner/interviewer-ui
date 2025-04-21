@@ -97,6 +97,8 @@ The backend is structured using a layered architecture:
 - **RESTful API Design**: Consistent and predictable API endpoints
 - **Middleware Pipeline**: Extensible middleware for request processing
 - **Environment-based Configuration**: Flexible configuration for different deployment environments
+- **Integration and Unit Testing**: Broad coverage utilizing Go's stdlib testing
+- **Wired to Deploy to AWS**: ALB/ECS/Fargate configured and deployable for easy service switch from Fly.io in future
 
 ## 🛠️ Tech Stack
 
@@ -318,17 +320,25 @@ Tests are run consistently during development and are integrated into the CI pip
 ## 🛣️ Development Roadmap
 
 ### Current Focus
-- Implementation of CI/CD pipeline
+#### GTM steps: 
+- Password recovery/sign-up notification
+- Payment integration  
+- Dashboard of interviews and results
+- Subscription levels
+- Profile page to change subscription
+- Basic user security protocols  
+- Marketing landing page
+- Restructure user models to reflect subscription tier
+- User analytics
+- Marketing
 
 ### Upcoming Improvements
 - Enhancing error handling and recovery mechanisms
 - Structured logging for better observability
-- Input validation
 - Implement a single active session policy
 - Supporting multiple conversation tracks within an interview
 - Adding detailed analytics for interview performance
 - Optimizing database queries
-- Refining API documentation
 - Interview preferences (language, difficulty, duration, etc . . .)
 
 ## 🌐 Frontend
