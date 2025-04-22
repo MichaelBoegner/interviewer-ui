@@ -89,7 +89,7 @@ The backend is structured using a layered architecture:
 
 ## 🎯 Key Features
 
-- **User Management**: Secure user registration, authentication, and profile management
+- **User Management**: Secure user registration, authentication, and password recovery
 - **JWT-based Authentication**: Access tokens with configurable expiration and refresh token rotation
 - **Structured Mock Interviews**: Dynamic interview generation
 - **Conversational AI Integration**: Seamless integration with OpenAI's GPT model
