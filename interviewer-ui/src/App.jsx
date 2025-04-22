@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import ResetRequest from './ResetRequest';
+import ResetPassword from './ResetPassword';
 import MonacoEditor from "@monaco-editor/react";
 import './App.css';
 
@@ -95,7 +97,7 @@ function LoginPage({ setToken }) {
     setSuccessMessage("");
     
     try {
-      const response = await fetch(`${API_URL}/users/`, {
+      const response = await fetch(`${API_URL}/users`, {
         method: "POST",
         redirect: "error",
         headers: { "Content-Type": "application/json" },
@@ -226,10 +228,15 @@ function LoginPage({ setToken }) {
               [ {showRegister ? 'RETURN_TO_LOGIN' : 'NEW_USER_REGISTRATION'} ]
             </button>
             
-            <div className="text-xs text-gray-500 mt-4 text-center">
-              © 2025 BOEGNER ENTERPRISES INC. ALL RIGHTS RESERVED.
-            </div>
+         
           </form>
+          <p>
+            Forgot your password?{" "}
+            <a href="/reset-request">Reset it here</a>
+          </p>
+          <div className="text-xs text-gray-500 mt-4 text-center">
+              © 2025 BOEGNER ENTERPRISES INC. ALL RIGHTS RESERVED.
+          </div>
         </div>
       </div>
     </div>
@@ -852,6 +859,8 @@ export default function App() {
             )
           } 
         />
+        <Route path="/reset-request" element={<ResetRequest />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
