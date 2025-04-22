@@ -186,7 +186,7 @@ The backend is structured using a layered architecture:
 │ username        │       │ user_id          │◄──────┤ interview_id     │
 │ email           │       │ length           │       │ current_topic    │
 │ password        │       │ number_questions │       │ current_subtopic │
-│ created_at      │       │ difficulty       │       │ current_question_│
+│ created_at      │       │ difficulty       │       │ current_question │
 │ updated_at      │       │ status           │       │ created_at       │
 └────────┬────────┘       │ score            │       │ updated_at       │
          │                │ language         │       └────────┬─────────┘
