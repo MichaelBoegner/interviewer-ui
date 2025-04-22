@@ -235,7 +235,7 @@ function LoginPage({ setToken }) {
             <a href="/reset-request">Reset it here</a>
           </p>
           <div className="text-xs text-gray-500 mt-4 text-center">
-              © 2025 BOEGNER ENTERPRISES INC. ALL RIGHTS RESERVED.
+            © 2025 Interviewer.dev. All rights reserved.
           </div>
         </div>
       </div>
