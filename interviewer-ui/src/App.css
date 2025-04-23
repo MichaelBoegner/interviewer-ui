@@ -128,7 +128,9 @@ body {
   font-family: 'VT323', monospace;
   text-transform: uppercase;
   letter-spacing: 1px;
-  padding: 0.5em 1em;
+  padding: 0.25em 0.5em;
+  margin: 0.1em;
+  margin-top: 1rem;
   background: var(--terminal-black);
   border: 1px solid currentColor;
   color: inherit;

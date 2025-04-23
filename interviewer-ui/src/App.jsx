@@ -9,7 +9,7 @@ import './App.css';
 const API_URL = import.meta.env.VITE_API_URL;
 
 // Add this ASCII art banner function for the retro vibe.
-const AsciiHeader = ({ text }) => {
+export const AsciiHeader = ({ text }) => {
   return (
     <div className="my-2">
       <pre className="text-green-500 ascii-header" style={{
@@ -745,8 +745,9 @@ You can start a new interview by clicking the [ INITIALIZE_INTERVIEW ] button ab
                           onChange={(e) => setInput(e.target.value)} 
                           onKeyDown={handleKeyDown}
                           disabled={isLoading || isInterviewEnded}
-                          className="w-full h-28 bg-gray-900 text-green-400 p-2 border border-green-500 outline-none resize-none" 
                           placeholder={isLoading ? "Processing response..." : "Enter your response..."}
+                          className="w-full min-h-[10rem] resize-y bg-gray-900 text-green-400 p-3 border border-green-500 outline-none font-mono"
+                          style={{ minHeight: "10rem", minWidth: "40rem", height: "auto" }} 
                         />
                       </div>
                     )}

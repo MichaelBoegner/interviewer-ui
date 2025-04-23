@@ -1,9 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <title>Terminal Icon</title>
-    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect stroke="#00FF00" stroke-width="2" x="1" y="1" width="30" height="30" rx="2"></rect>
-        <path d="M6,8 L12,16 L6,24" stroke="#00FF00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-        <line x1="14" y1="24" x2="26" y2="24" stroke="#00FF00" stroke-width="2" stroke-linecap="round"></line>
-    </g>
-</svg> 
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#00FF41"></feDropShadow>
+    </filter>
+  </defs>
+
+  <!-- Transparent background -->
+  <rect width="64" height="64" fill="none"></rect>
+
+  <!-- Glowing outer box -->
+  <rect x="2" y="2" width="60" height="60" rx="8" stroke="#00FF41" stroke-width="4" fill="none" filter="url(#glow)"></rect>
+
+  <!-- > symbol -->
+  <polyline points="14,20 28,32 14,44" fill="none" stroke="#00FF41" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"></polyline>
+
+  <!-- underscore cursor as a short thick rectangle -->
+  <rect x="36" y="44" width="14" height="3" fill="#00FF41" filter="url(#glow)"></rect>
+</svg>
