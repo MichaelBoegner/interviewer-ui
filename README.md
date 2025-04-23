@@ -322,16 +322,14 @@ Tests are run consistently during development and are integrated into the CI pip
 
 ### Current Focus
 #### GTM steps: 
-- Payment integration  
+- Payment integration | Stripe 
 - Ensure interview recovery on reloads/failures
 - Dashboard of interviews and results
-- Subscription levels
-- Profile page to change subscription
-- Basic user security protocols  
-- Marketing landing page
-- Restructure user models to reflect subscription tier
 - User analytics
-- Marketing
+- Subscription levels rate limiting
+- Marketing landing page
+- Basic user security protocols  
+- Marketing for launch
 - Github login
 
 
