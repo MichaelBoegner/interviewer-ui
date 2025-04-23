@@ -322,8 +322,8 @@ Tests are run consistently during development and are integrated into the CI pip
 
 ### Current Focus
 #### GTM steps: 
-- Password recovery/sign-up notification
 - Payment integration  
+- Ensure interview recovery on reloads/failures
 - Dashboard of interviews and results
 - Subscription levels
 - Profile page to change subscription
@@ -332,6 +332,8 @@ Tests are run consistently during development and are integrated into the CI pip
 - Restructure user models to reflect subscription tier
 - User analytics
 - Marketing
+- Github login
+
 
 ### Upcoming Improvements
 - Enhancing error handling and recovery mechanisms
