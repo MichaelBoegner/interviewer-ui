@@ -17,7 +17,7 @@ export default function LandingPage() {
             Interviewer is a solo-built, AI-powered platform that simulates technical interviews for backend engineers. You’ll receive real-time questions, feedback, and scoring — just like a real interview.</p>
   
             <p><strong>👨‍💻 Who made this?</strong><br />
-            "Hi! I'm Michael, a backend engineer, currently based in Thailand. Reach me at: <a href="mailto:support@mail.interviewer.dev" className="underline text-green-300">support@mail.interviewer.dev</a></p>
+            Hi! I'm Michael, a backend engineer, currently based in Thailand. Reach me at: <a href="mailto:support@mail.interviewer.dev" className="underline text-green-300">support@mail.interviewer.dev</a></p>
   
             <p><strong>📬 Want early access?</strong><br />
             Email me and I’ll personally notify you when it launches.</p>

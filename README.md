@@ -333,7 +333,7 @@ Tests are run consistently during development and are integrated into the CI pip
 - Github login
 
 
-### Upcoming Improvements
+### Upcoming Additional Improvements
 - Enhancing error handling and recovery mechanisms
 - Structured logging for better observability
 - Implement a single active session policy
