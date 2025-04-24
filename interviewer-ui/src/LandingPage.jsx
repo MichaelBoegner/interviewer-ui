@@ -10,12 +10,7 @@ export default function LandingPage() {
             Built for backend engineers, by a backend engineer.
           </p>
   
-          <a 
-            href="/login"
-            className="bg-black border border-green-500 text-green-500 px-6 py-3 hover:bg-green-800 hover:text-black transition-colors retro-button"
-          >
-            [ ENTER TERMINAL ]
-          </a>
+
   
           <div className="mt-10 text-sm text-green-400 space-y-4 text-left">
             <p><strong>✅ What is it?</strong><br />
@@ -27,6 +22,13 @@ export default function LandingPage() {
             <p><strong>📬 Want early access?</strong><br />
             Email me and I’ll personally notify you when it launches.</p>
           </div>
+
+          <a 
+            href="/login"
+            className="bg-black border border-green-500 text-green-500 px-6 py-3 hover:bg-green-800 hover:text-black transition-colors retro-button"
+          >
+            [ LOGIN ]
+          </a>
   
           <div className="mt-8 text-xs text-gray-500">
             © 2025 Interviewer.dev. All rights reserved.
