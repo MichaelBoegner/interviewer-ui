@@ -322,7 +322,7 @@ Tests are run consistently during development and are integrated into the CI pip
 
 ### Current Focus
 #### GTM steps: 
-- Payment integration | Stripe 
+- Payment integration  
 - Ensure interview recovery on reloads/failures
 - Dashboard of interviews and results
 - User analytics
