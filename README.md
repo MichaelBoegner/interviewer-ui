@@ -327,7 +327,6 @@ Tests are run consistently during development and are integrated into the CI pip
 - Dashboard of interviews and results
 - User analytics
 - Subscription levels rate limiting
-- Basic user security protocols  
 - Marketing for launch
 - Github login
 
