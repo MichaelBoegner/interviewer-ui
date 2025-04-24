@@ -75,7 +75,7 @@ export default function ResetRequest() {
 
         <button
           type="button"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/login")}
           className="w-full bg-black border hover:bg-blue-800 transition-colors retro-button"
         >
           [ BACK_TO_LOGIN ]

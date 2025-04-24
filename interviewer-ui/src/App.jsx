@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "r
 import ResetRequest from './ResetRequest';
 import ResetPassword from './ResetPassword';
 import MonacoEditor from "@monaco-editor/react";
+import LandingPage from "./LandingPage";
+
 import './App.css';
 
 // Add this constant at the top of the file, after imports
@@ -11,8 +13,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 // Add this ASCII art banner function for the retro vibe.
 export const AsciiHeader = ({ text }) => {
   return (
-    <div className="my-2">
-      <pre className="text-green-500 ascii-header" style={{
+      <pre className="text-green-500 text-sm mx-auto block" style={{
         fontFamily: "'Fira Code', 'Courier New', monospace",
         fontSize: "0.7rem",
         lineHeight: 1.2,
@@ -33,7 +34,6 @@ export const AsciiHeader = ({ text }) => {
                                                                        
 ${'>>'} ${text}
 `}</pre>
-    </div>
   );
 };
 
@@ -838,32 +838,36 @@ export default function App() {
   }, [token]);
   
   return (
-    <Router>
-      <Routes>
-        <Route 
-          path="/" 
-          element={
-            token ? (
-              <Navigate to="/interview" replace />
-            ) : (
-              <LoginPage setToken={updateToken} />
-            )
-          } 
-        />
-        <Route 
-          path="/interview" 
-          element={
-            token ? (
-              <InterviewScreen token={token} setToken={updateToken} />
-            ) : (
-              <Navigate to="/" replace />
-            )
-          } 
-        />
-        <Route path="/reset-request" element={<ResetRequest />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
+<Router>
+  <Routes>
+    <Route path="/" element={<LandingPage />} /> {/* NEW landing page at root */}
+
+    <Route 
+      path="/login" 
+      element={
+        token ? (
+          <Navigate to="/interview" replace />
+        ) : (
+          <LoginPage setToken={updateToken} />
+        )
+      } 
+    />
+
+    <Route 
+      path="/interview" 
+      element={
+        token ? (
+          <InterviewScreen token={token} setToken={updateToken} />
+        ) : (
+          <Navigate to="/login" replace />
+        )
+      } 
+    />
+
+    <Route path="/reset-request" element={<ResetRequest />} />
+    <Route path="/reset-password" element={<ResetPassword />} />
+    <Route path="*" element={<Navigate to="/" replace />} />
+  </Routes>
+</Router>
   );
 }

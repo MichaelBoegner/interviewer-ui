@@ -26,7 +26,7 @@ export default function ResetPassword() {
   
     if (res.ok) {
       setMessage("Password reset! You may now log in.");
-      setTimeout(() => navigate("/"), 1000); 
+      setTimeout(() => navigate("/login"), 1000); 
     } else {
       setMessage("Reset failed. Token may be invalid or expired.");
     }
@@ -79,7 +79,7 @@ export default function ResetPassword() {
 
             <button
               type="button"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/login")}
               className="w-full bg-black border border-blue-500 text-blue-500 px-4 py-3 hover:bg-blue-800 hover:text-black transition-colors retro-button"
             >
               [ BACK_TO_LOGIN ]
