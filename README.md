@@ -324,6 +324,7 @@ Tests are run consistently during development and are integrated into the CI pip
 #### GTM steps: 
 - Payment integration  
 - Ensure interview recovery on reloads/failures
+- Implement background processes/concurency for external calls
 - Dashboard of interviews and results
 - User analytics
 - Subscription levels rate limiting
