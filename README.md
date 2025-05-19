@@ -95,6 +95,7 @@ The backend is structured using a layered architecture:
 - **Structured Mock Interviews**: Dynamic interview generation
 - **Conversational AI Integration**: Seamless integration with OpenAI's GPT model
 - **Persistent Data Storage**: Complete interview history stored for future review
+- **Billing & Subscription System**: Credit-based access via Lemon Squeezy integration, supporting both one-time and recurring plans
 - **RESTful API Design**: Consistent and predictable API endpoints
 - **Middleware Pipeline**: Extensible middleware for request processing
 - **Environment-based Configuration**: Flexible configuration for different deployment environments
