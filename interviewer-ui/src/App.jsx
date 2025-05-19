@@ -4,6 +4,7 @@ import ResetRequest from './ResetRequest';
 import ResetPassword from './ResetPassword';
 import MonacoEditor from "@monaco-editor/react";
 import LandingPage from "./LandingPage";
+import Dashboard from './Dashboard';
 
 import './App.css';
 
@@ -866,6 +867,7 @@ export default function App() {
 
     <Route path="/reset-request" element={<ResetRequest />} />
     <Route path="/reset-password" element={<ResetPassword />} />
+    <Route path="/dashboard" element={<Dashboard />} />
     <Route path="*" element={<Navigate to="/" replace />} />
   </Routes>
 </Router>

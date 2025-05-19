@@ -16,6 +16,7 @@
 - [Recorded Demo](#-recorded-demo)
 - [System Architecture](#-system-architecture)
 - [Key Features](#-key-features)
+- [Billing & Subscription System](#billing-&-subscription-system)
 - [Tech Stack](#-tech-stack)
 - [API Documentation](#-api-documentation)
 - [Database Schema](#-database-schema)
@@ -99,6 +100,32 @@ The backend is structured using a layered architecture:
 - **Environment-based Configuration**: Flexible configuration for different deployment environments
 - **Integration and Unit Testing**: Broad coverage utilizing Go's stdlib testing
 - **Wired to Deploy to AWS**: ALB/ECS/Fargate configured and deployable for easy service switch from Fly.io in future
+
+## 💳 Billing & Subscription System
+
+The Interviewer platform supports both one-time purchases and recurring subscriptions using Lemon Squeezy. Credits are granted based on the user's payment plan and control access to AI-powered mock interviews.
+
+### Credit Model
+- **Individual Plan**: Buy one credit at a time. These credits never expire and persist across account changes.
+- **Subscription Plans**:
+  - **Pro**: 10 monthly credits
+  - **Premium**: 20 monthly credits
+  - Subscription credits pause when a user cancels, and reactivate upon resumption.
+  - Unused credits roll over, but require an active subscription to be used.
+
+### Webhook Integration
+- Real-time Lemon Squeezy events power the billing system:
+  - `subscription_created` → Assign plan tier + grant credits
+  - `subscription_payment_success` → Monthly credit refresh
+  - `subscription_cancelled` / `expired` → Pause credit usage
+  - `subscription_resumed` → Reinstate usage of rolled-over credits
+  - `order_created` → Grant one-time credit
+  - `subscription_plan_changed` → Upgrading or downgrading a plan
+
+### Guardrails
+- All webhook events are idempotent via tracked `webhook_id`
+- Credits are separated by type: `individual` vs `subscription`
+- System enforces credit availability before allowing interview creation
 
 ## 🛠️ Tech Stack
 
