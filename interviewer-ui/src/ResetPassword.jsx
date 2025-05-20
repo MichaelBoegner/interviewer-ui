@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { AsciiHeader } from './App';
+import { AsciiHeader } from './ASCII';
 
 export default function ResetPassword() {
   const [token, setToken] = useState("");

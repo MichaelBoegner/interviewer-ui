@@ -1,4 +1,4 @@
-import { AsciiHeader } from './App';
+import { AsciiHeader } from './ASCII';
 
 export default function LandingPage() {
     return (

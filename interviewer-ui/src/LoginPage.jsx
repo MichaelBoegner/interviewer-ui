@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AsciiHeader } from './App';
+import { AsciiHeader } from './ASCII';
 
 export default function LoginPage({ setToken }) {
   const [username, setUsername] = useState("");

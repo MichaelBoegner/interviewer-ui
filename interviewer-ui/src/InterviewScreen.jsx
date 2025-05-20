@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
-import { AsciiHeader } from './App';
+import { AsciiHeader } from './ASCII';
 
 // ✅ Interview Terminal
 export default function InterviewScreen({ token, setToken }) {
