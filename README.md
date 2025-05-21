@@ -354,6 +354,7 @@ Tests are run consistently during development and are integrated into the CI pip
 - Interview status update
 - Interview score update 
 - Ensure interview recovery on reloads/failures
+- Graceful OpenAI failures
 - User analytics
 - Marketing for launch
 
