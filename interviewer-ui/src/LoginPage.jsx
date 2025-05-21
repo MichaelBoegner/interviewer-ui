@@ -47,7 +47,7 @@ export default function LoginPage({ setToken }) {
       );
 
       setToken(data.jwtoken);
-      navigate("/interview", { replace: true });
+      navigate("/dashboard", { replace: true });
     } catch (error) {
       console.error("Login error:", error);
       setError(error.message || "Login failed. Please check your credentials.");

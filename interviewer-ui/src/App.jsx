@@ -75,7 +75,7 @@ export default function App() {
           path="/login"
           element={
             token ? (
-              <Navigate to="/interview" replace />
+              <Navigate to="/dashboard" replace />
             ) : (
               <LoginPage setToken={updateToken} />
             )
