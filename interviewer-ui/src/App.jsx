@@ -10,6 +10,7 @@ import ResetPassword from "./ResetPassword";
 import LoginPage from "./LoginPage";
 import LandingPage from "./LandingPage";
 import Dashboard from "./Dashboard";
+import ConversationScreen from "./ConversationScreen";
 import InterviewScreen from "./InterviewScreen";
 import "./App.css";
 const API_URL = import.meta.env.VITE_API_URL;
@@ -93,6 +94,10 @@ export default function App() {
         <Route path="/reset-request" element={<ResetRequest />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/conversation/:interviewId"
+          element={<ConversationScreen />}
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
