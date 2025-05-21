@@ -36,17 +36,17 @@ export default function Dashboard() {
           <strong>Email:</strong> {userData.email}
         </p>
         <p>
-          <strong>Plan:</strong> {userData.plan || "Free"}
+          <strong>Plan:</strong> {userData.plan}
         </p>
         <p>
-          <strong>Individual Credits:</strong> {userData.individaul_credits}
+          <strong>Individual Credits:</strong> {userData.individual_credits}
         </p>
         <p>
           <strong>Subscription Credits:</strong> {userData.subscription_credits}
         </p>
         <p>
           <strong>Total Credits:</strong>{" "}
-          {userData.individaul_credits + userData.subscription_credits}
+          {userData.individual_credits + userData.subscription_credits}
         </p>
       </div>
 
