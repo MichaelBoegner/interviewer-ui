@@ -357,7 +357,7 @@ Tests are run consistently during development and are integrated into the CI pip
 - Marketing for launch
 
 ### Upcoming Additional Improvements
-- Github login
+- Github/Google auth
 - Enhancing error handling and recovery mechanisms
 - Structured logging for better observability
 - Implement a single active session policy
