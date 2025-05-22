@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { AsciiHeader } from "./ASCII";
 
 export default function Dashboard() {
   const [userData, setUserData] = useState(null);
@@ -27,9 +28,10 @@ export default function Dashboard() {
 
   return (
     <div className="p-6 max-w-3xl mx-auto text-green-400 bg-black min-h-screen">
-      <h1 className="text-2xl font-bold mb-4 border-b border-green-500 pb-2">
-        DASHBOARD
-      </h1>
+      <AsciiHeader text="TECHNICAL INTERVIEW TERMINAL v1.0.0" />
+      <div className="text-yellow-400 text-xs mb-2 md:mb-0">
+        <span className="mr-2">[SYSTEM]:</span> Displaying user dashboard
+      </div>
       <button
         onClick={() => navigate("/interview")}
         className="mt-4 bg-black border border-green-500 text-green-500 px-4 py-2 hover:bg-green-800 hover:text-black transition-colors duration-300 retro-button"
