@@ -350,10 +350,9 @@ Tests are run consistently during development and are integrated into the CI pip
 
 ### Current Focus
 #### GTM steps: 
-- Webook signature
 - Dashboard of interviews, subscription, credits, and profile
 - Interview status update
-- Ensure interview recovery on reloads/failures
+- Ensure interview recovery on pause/reloads/failures
 - Graceful OpenAI failures
 - Interview introduction and expectations
 - User analytics
