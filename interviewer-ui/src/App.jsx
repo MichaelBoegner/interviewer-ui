@@ -13,7 +13,6 @@ import Dashboard from "./Dashboard";
 import ConversationScreen from "./ConversationScreen";
 import InterviewScreen from "./InterviewScreen";
 import "./App.css";
-const API_URL = import.meta.env.VITE_API_URL;
 
 function isTokenValid(token) {
   try {
@@ -26,7 +25,6 @@ function isTokenValid(token) {
 }
 
 export default function App() {
-  // Initialize token from localStorage with added safety check
   const getInitialToken = () => {
     try {
       return localStorage.getItem("token") || null;
@@ -38,9 +36,7 @@ export default function App() {
 
   const [token, setToken] = useState(getInitialToken());
 
-  // Function to update token state
   const updateToken = (newToken) => {
-    console.log("updateToken called with:", newToken);
     try {
       if (newToken) {
         localStorage.setItem("token", newToken);
@@ -53,29 +49,18 @@ export default function App() {
     }
   };
 
-  // Safe localStorage check
-  const checkToken = () => {
-    try {
+  useEffect(() => {
+    const intervalId = setInterval(() => {
       const storedToken = localStorage.getItem("token");
-      console.log("Checking stored token:", storedToken);
       if (storedToken !== token) {
-        console.log("Token mismatch, updating state");
         setToken(storedToken || null);
       }
-    } catch (e) {
-      console.error("Error checking token in localStorage:", e);
-    }
-  };
-
-  // Check token on mount and when token changes
-  useEffect(() => {
-    checkToken();
-
-    // Set up an interval to periodically check token
-    const intervalId = setInterval(checkToken, 2000);
+    }, 2000);
 
     return () => clearInterval(intervalId);
   }, [token]);
+
+  const isAuthenticated = token && isTokenValid(token);
 
   return (
     <Router>
@@ -84,7 +69,7 @@ export default function App() {
         <Route
           path="/login"
           element={
-            token && isTokenValid(token) ? (
+            isAuthenticated ? (
               <Navigate to="/dashboard" replace />
             ) : (
               <LoginPage setToken={updateToken} />
@@ -94,8 +79,8 @@ export default function App() {
         <Route
           path="/dashboard"
           element={
-            token && isTokenValid(token) ? (
-              <Dashboard token={token} />
+            isAuthenticated ? (
+              <Dashboard token={token} setToken={updateToken} />
             ) : (
               <Navigate to="/login" replace />
             )
@@ -104,14 +89,13 @@ export default function App() {
         <Route
           path="/interview"
           element={
-            token && isTokenValid(token) ? (
+            isAuthenticated ? (
               <InterviewScreen token={token} setToken={updateToken} />
             ) : (
               <Navigate to="/login" replace />
             )
           }
         />
-
         <Route path="/reset-request" element={<ResetRequest />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route

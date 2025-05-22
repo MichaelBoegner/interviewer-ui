@@ -2,26 +2,34 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AsciiHeader } from "./ASCII";
 
-export default function Dashboard() {
+export default function Dashboard({ token, setToken }) {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState("");
   const API_URL = import.meta.env.VITE_API_URL;
-  const navigate = useNavigate(); // ← Add this
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     fetch(`${API_URL}/user/dashboard`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => {
+        if (res.status === 401 || res.status === 403) {
+          // Token is no longer valid — wipe it and redirect
+          localStorage.removeItem("token");
+          setToken(null);
+          navigate("/login", { replace: true });
+          return null;
+        }
         if (!res.ok) throw new Error("Failed to fetch dashboard data");
         return res.json();
       })
-      .then((data) => setUserData(data))
+      .then((data) => {
+        if (data) setUserData(data);
+      })
       .catch((err) => setError(err.message));
-  }, []);
+  }, [token, navigate, setToken]);
 
   if (error) return <div>Error: {error}</div>;
   if (!userData) return <div>Loading...</div>;
