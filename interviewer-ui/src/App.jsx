@@ -15,6 +15,16 @@ import InterviewScreen from "./InterviewScreen";
 import "./App.css";
 const API_URL = import.meta.env.VITE_API_URL;
 
+function isTokenValid(token) {
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.exp * 1000 > Date.now(); // JWT `exp` is in seconds
+  } catch (e) {
+    console.error("Failed to parse token:", e);
+    return false;
+  }
+}
+
 export default function App() {
   // Initialize token from localStorage with added safety check
   const getInitialToken = () => {
@@ -74,7 +84,7 @@ export default function App() {
         <Route
           path="/login"
           element={
-            token ? (
+            token && isTokenValid(token) ? (
               <Navigate to="/dashboard" replace />
             ) : (
               <LoginPage setToken={updateToken} />
@@ -82,18 +92,28 @@ export default function App() {
           }
         />
         <Route
+          path="/dashboard"
+          element={
+            token && isTokenValid(token) ? (
+              <Dashboard token={token} />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
           path="/interview"
           element={
-            token ? (
+            token && isTokenValid(token) ? (
               <InterviewScreen token={token} setToken={updateToken} />
             ) : (
               <Navigate to="/login" replace />
             )
           }
         />
+
         <Route path="/reset-request" element={<ResetRequest />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route
           path="/conversation/:interviewId"
           element={<ConversationScreen />}
