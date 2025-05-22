@@ -353,7 +353,6 @@ Tests are run consistently during development and are integrated into the CI pip
 - Webook signature
 - Dashboard of interviews, subscription, credits, and profile
 - Interview status update
-- Interview score update 
 - Ensure interview recovery on reloads/failures
 - Graceful OpenAI failures
 - Interview introduction and expectations
