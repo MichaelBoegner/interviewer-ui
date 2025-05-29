@@ -351,8 +351,7 @@ Tests are run consistently during development and are integrated into the CI pip
 ### Current Focus
 #### GTM steps: 
 - Dashboard of interviews, subscription, credits, and profile
-- Interview status update
-- Ensure interview recovery on pause/reloads/failures
+- Ensure interview recovery on pause/reloads/failures for frontend
 - Graceful OpenAI failures
 - Interview introduction and expectations
 - User analytics
