@@ -1,10 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { AsciiHeader } from "./ASCII";
+import "./Conversation.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const ConversationScreen = () => {
+const Conversation = () => {
   const { interviewId } = useParams();
   const [conversation, setConversation] = useState(null);
   const [error, setError] = useState(null);
@@ -50,7 +50,6 @@ const ConversationScreen = () => {
         const question = topic.questions[qId];
         const msgs = question.messages || [];
 
-        // Reconstruct order of: Interviewer question -> User answer -> Feedback (parsed from JSON)
         const rawPrompt = msgs.find(
           (m) => m.author === "interviewer" && !m.content.trim().startsWith("{")
         );
@@ -62,12 +61,9 @@ const ConversationScreen = () => {
               m.author === "interviewer" && m.content.trim().startsWith("{")
           );
 
-        if (rawPrompt) {
+        if (rawPrompt)
           out.push({ role: "interviewer", content: rawPrompt.content });
-        }
-        if (userMsg) {
-          out.push({ role: "user", content: userMsg.content });
-        }
+        if (userMsg) out.push({ role: "user", content: userMsg.content });
         if (feedbackMsg) {
           try {
             const parsed = JSON.parse(feedbackMsg.content);
@@ -99,77 +95,53 @@ The interview has concluded.
     return out;
   };
 
-  if (error) {
-    return <div className="text-red-500">Error: {error}</div>;
-  }
-
-  if (!conversation) {
-    return <div className="text-yellow-400">Loading...</div>;
-  }
+  if (error) return <div className="error-msg">Error: {error}</div>;
+  if (!conversation) return <div className="loading-msg">Loading...</div>;
 
   return (
-    <div className="min-h-screen w-full bg-black text-green-400 p-3 md:p-6 flex flex-col items-center font-mono">
-      <div className="w-full max-w-4xl border-2 border-green-500 bg-gray-900 p-4 rounded-none relative terminal-window">
+    <div className="conversation-screen">
+      <div className="conversation-box">
         <div className="scanline"></div>
 
-        <div className="mt-8 mb-4">
-          <AsciiHeader text="TECHNICAL INTERVIEW TERMINAL v1.0.0" />
-        </div>
-
-        <div className="border-b border-green-500 pb-2 mb-4 flex flex-col md:flex-row md:justify-between items-center">
-          <div className="text-yellow-400 text-xs mb-2 md:mb-0">
-            <span className="mr-2">[SYSTEM]:</span> Displaying previous
+        <div className="header-bar">
+          <div className="system-label">
+            <span className="label-tag">[SYSTEM]:</span> Displaying previous
             interview
           </div>
           <button
             onClick={() => navigate("/dashboard")}
-            className="px-4 py-1 border border-green-400 rounded text-green-400 hover:bg-green-900"
+            className="retro-button green small"
           >
             ← Back to Dashboard
           </button>
         </div>
 
-        <div
-          className="w-full h-[40rem] overflow-y-auto p-4 bg-black border border-green-600 font-mono text-sm mb-4 retro-scrollbar"
-          ref={messagesContainerRef}
-        >
+        <div className="chat-window" ref={messagesContainerRef}>
           {messages.map((msg, index) => (
-            <div key={index} className={`message mb-6 ${msg.role}`}>
-              <div
-                className={`message-header text-xs mb-1 ${
-                  msg.role === "interviewer"
-                    ? "text-green-500"
-                    : msg.role === "user"
-                      ? "text-yellow-400"
-                      : "text-blue-400"
-                }`}
-              >
+            <div key={index} className={`message ${msg.role}`}>
+              <div className="message-header">
                 {msg.role === "interviewer"
                   ? "INTERVIEWER > "
                   : msg.role === "user"
                     ? "USER > "
                     : "SYSTEM > "}
               </div>
-              <div className="message-content pl-2 border-l-2 border-gray-700 whitespace-pre-wrap">
-                {msg.content}
-              </div>
+              <div className="message-content">{msg.content}</div>
               {msg.role === "interviewer" && msg.feedback && (
-                <div className="mt-2 border border-dashed border-yellow-500 bg-yellow-900/20 p-2 rounded text-xs">
-                  <div className="text-yellow-400 font-bold mb-1">
-                    FEEDBACK:
-                  </div>
-                  <div className="text-yellow-300">{msg.feedback}</div>
+                <div className="feedback-box">
+                  <div className="label">FEEDBACK:</div>
+                  <div className="feedback">{msg.feedback}</div>
                   {msg.score !== undefined && (
-                    <div className="mt-1">
-                      <span className="text-yellow-400 font-bold">SCORE: </span>
+                    <div className="score">
+                      SCORE:{" "}
                       <span
-                        className={`${
+                        className={
                           msg.score >= 8
-                            ? "text-green-400"
+                            ? "score-high"
                             : msg.score >= 5
-                              ? "text-yellow-400"
-                              : "text-red-400"
-                        }`}
+                              ? "score-mid"
+                              : "score-low"
+                        }
                       >
                         {msg.score}/10
                       </span>
@@ -181,7 +153,7 @@ The interview has concluded.
           ))}
         </div>
 
-        <div className="text-xs text-gray-600 mt-6 border-t border-gray-800 pt-2 w-full text-center">
+        <div className="terminal-footer">
           ====================================================================
         </div>
       </div>
@@ -189,4 +161,4 @@ The interview has concluded.
   );
 };
 
-export default ConversationScreen;
+export default Conversation;

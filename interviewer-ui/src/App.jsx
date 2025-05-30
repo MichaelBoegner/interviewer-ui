@@ -5,15 +5,15 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import ResetRequest from "./ResetRequest";
-import ResetPassword from "./ResetPassword";
-import LoginPage from "./LoginPage";
-import Landing from "./Landing";
-import Dashboard from "./Dashboard";
-import ConversationScreen from "./ConversationScreen";
-import Interview from "./Interview";
+import ResetRequest from "./pages/ResetRequest/ResetRequest";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import Login from "./pages/Login/Login";
+import Landing from "./pages/Landing/Landing";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import Conversation from "./pages/Conversation/Conversation";
+import Interview from "./pages/Interview/Interview";
 import "./App.css";
-import Header from "./Header";
+import Header from "./components/Header/Header";
 
 function isTokenValid(token) {
   try {
@@ -74,7 +74,7 @@ export default function App() {
             isAuthenticated ? (
               <Navigate to="/dashboard" replace />
             ) : (
-              <LoginPage setToken={updateToken} />
+              <Login setToken={updateToken} />
             )
           }
         />
@@ -100,10 +100,7 @@ export default function App() {
         />
         <Route path="/reset-request" element={<ResetRequest />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route
-          path="/conversation/:interviewId"
-          element={<ConversationScreen />}
-        />
+        <Route path="/conversation/:interviewId" element={<Conversation />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

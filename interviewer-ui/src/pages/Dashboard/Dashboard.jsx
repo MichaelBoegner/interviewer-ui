@@ -35,17 +35,6 @@ export default function Dashboard({ token, setToken }) {
 
   return (
     <div className="dashboard-container">
-      <div className="system-msg">
-        <span className="label">[SYSTEM]:</span> Displaying user dashboard
-      </div>
-
-      <button
-        onClick={() => navigate("/interview")}
-        className="retro-button start-btn"
-      >
-        [ START_NEW_INTERVIEW ]
-      </button>
-
       <div className="user-info">
         <p>
           <strong>Email:</strong> {userData.email}

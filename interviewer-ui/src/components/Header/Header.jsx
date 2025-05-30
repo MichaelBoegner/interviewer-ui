@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { AsciiHeader } from "./ASCII";
+import { AsciiHeader } from "../ASCII/ASCII";
 
 export default function Header() {
   return (

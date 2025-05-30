@@ -7,13 +7,10 @@ export default function Interview({ token, setToken }) {
   const [input, setInput] = useState("");
   const [isCodeMode, setIsCodeMode] = useState(false);
   const [interviewId, setInterviewId] = useState(null);
-  const [conversationId, setConversationId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState("");
   const [isInterviewEnded, setIsInterviewEnded] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(false);
-  const [totalScore, setTotalScore] = useState(0);
-  const [questionsAnswered, setQuestionsAnswered] = useState(0);
   const [username, setUsername] = useState("");
   const messagesContainerRef = useRef(null);
   const navigate = useNavigate();
@@ -36,7 +33,6 @@ export default function Interview({ token, setToken }) {
     setToken(null);
     localStorage.removeItem("token");
     setInterviewId(null);
-    setConversationId(null);
     setMessages([]);
     setInput("");
     setIsCodeMode(false);
@@ -99,12 +95,6 @@ export default function Interview({ token, setToken }) {
                   className={`retro-button red ${isLoading ? "disabled" : ""}`}
                 >
                   {isLoading ? "[ LOADING... ]" : "[ INITIALIZE_INTERVIEW ]"}
-                </button>
-                <button
-                  onClick={() => navigate("/dashboard")}
-                  className="retro-button green"
-                >
-                  [ DASHBOARD ]
                 </button>
               </div>
             </div>
