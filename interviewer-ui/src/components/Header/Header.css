@@ -1,0 +1,27 @@
+.topbar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.05rem .5rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  font-family: 'VT323', monospace;
+}
+
+.nav-links a {
+  color: var(--user-color);
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.nav-links a:hover {
+  text-shadow: 0 0 5px var(--glow-color);
+}
+
+.ascii-banner {
+  text-align: center;
+  margin-top: 0.05rem;
+  margin-bottom: 1rem;
+}
