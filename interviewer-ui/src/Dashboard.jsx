@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { AsciiHeader } from "./ASCII";
+import "./Dashboard.css";
 
 export default function Dashboard({ token, setToken }) {
   const [userData, setUserData] = useState(null);
@@ -16,7 +16,6 @@ export default function Dashboard({ token, setToken }) {
     })
       .then((res) => {
         if (res.status === 401 || res.status === 403) {
-          // Token is no longer valid — wipe it and redirect
           localStorage.removeItem("token");
           setToken(null);
           navigate("/login", { replace: true });
@@ -31,23 +30,23 @@ export default function Dashboard({ token, setToken }) {
       .catch((err) => setError(err.message));
   }, [token, navigate, setToken]);
 
-  if (error) return <div>Error: {error}</div>;
-  if (!userData) return <div>Loading...</div>;
+  if (error) return <div className="dashboard-error">Error: {error}</div>;
+  if (!userData) return <div className="dashboard-loading">Loading...</div>;
 
   return (
-    <div className="p-6 max-w-3xl mx-auto text-green-400 bg-black min-h-screen">
-      <AsciiHeader text="TECHNICAL INTERVIEW TERMINAL v1.0.0" />
-      <div className="text-yellow-400 text-xs mb-2 md:mb-0">
-        <span className="mr-2">[SYSTEM]:</span> Displaying user dashboard
+    <div className="dashboard-container">
+      <div className="system-msg">
+        <span className="label">[SYSTEM]:</span> Displaying user dashboard
       </div>
+
       <button
         onClick={() => navigate("/interview")}
-        className="mt-4 bg-black border border-green-500 text-green-500 px-4 py-2 hover:bg-green-800 hover:text-black transition-colors duration-300 retro-button"
+        className="retro-button start-btn"
       >
         [ START_NEW_INTERVIEW ]
       </button>
 
-      <div className="mb-6">
+      <div className="user-info">
         <p>
           <strong>Email:</strong> {userData.email}
         </p>
@@ -66,22 +65,23 @@ export default function Dashboard({ token, setToken }) {
         </p>
       </div>
 
-      <h2 className="text-xl font-semibold mb-2">Past Interviews</h2>
+      <h2 className="section-heading">Past Interviews</h2>
+
       {!userData.past_interviews || userData.past_interviews.length === 0 ? (
         <p>No past interviews yet.</p>
       ) : (
-        <ul className="list-none pl-0">
+        <ul className="interview-list">
           {userData.past_interviews.map((iv) => (
             <li
               key={iv.id}
               onClick={() => navigate(`/conversation/${iv.id}`)}
-              className="cursor-pointer p-2 hover:bg-green-800 rounded mb-2"
+              className="interview-item"
             >
               <div>
                 {new Date(iv.started_at).toLocaleString()} — {iv.score ?? "N/A"}
                 %
               </div>
-              <div className="text-sm text-green-300">{iv.feedback}</div>
+              <div className="interview-feedback">{iv.feedback}</div>
             </li>
           ))}
         </ul>

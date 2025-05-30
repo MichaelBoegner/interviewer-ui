@@ -1,0 +1,79 @@
+.dashboard-container {
+  padding: 1.5rem;
+  max-width: 768px;
+  margin: 0 auto;
+  background-color: black;
+  color: var(--primary-green);
+  min-height: 100vh;
+  font-family: 'VT323', monospace;
+}
+
+.system-msg {
+  color: var(--primary-green);
+  font-size: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.system-msg .label {
+  color: #ff0;
+  margin-right: 0.5rem;
+}
+
+.retro-button {
+  background: black;
+  border: 1px solid var(--primary-green);
+  color: var(--primary-green);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'VT323', monospace;
+}
+
+.retro-button:hover {
+  background: #00aa00;
+  color: black;
+}
+
+.start-btn {
+  margin-bottom: 1.5rem;
+}
+
+.user-info {
+  margin-bottom: 2rem;
+}
+
+.section-heading {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.interview-list {
+  list-style: none;
+  padding: 0;
+}
+
+.interview-item {
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.interview-item:hover {
+  background-color: #004400;
+}
+
+.interview-feedback {
+  font-size: 0.875rem;
+  color: #99ff99;
+}
+
+.dashboard-error,
+.dashboard-loading {
+  color: #ff5555;
+  font-family: 'VT323', monospace;
+  text-align: center;
+  margin-top: 2rem;
+}

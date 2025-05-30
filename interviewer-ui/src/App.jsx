@@ -8,11 +8,12 @@ import {
 import ResetRequest from "./ResetRequest";
 import ResetPassword from "./ResetPassword";
 import LoginPage from "./LoginPage";
-import LandingPage from "./LandingPage";
+import Landing from "./Landing";
 import Dashboard from "./Dashboard";
 import ConversationScreen from "./ConversationScreen";
-import InterviewScreen from "./InterviewScreen";
+import Interview from "./Interview";
 import "./App.css";
+import Header from "./Header";
 
 function isTokenValid(token) {
   try {
@@ -64,8 +65,9 @@ export default function App() {
 
   return (
     <Router>
+      <Header />
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<Landing />} />
         <Route
           path="/login"
           element={
@@ -90,7 +92,7 @@ export default function App() {
           path="/interview"
           element={
             isAuthenticated ? (
-              <InterviewScreen token={token} setToken={updateToken} />
+              <Interview token={token} setToken={updateToken} />
             ) : (
               <Navigate to="/login" replace />
             )
