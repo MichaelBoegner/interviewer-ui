@@ -3,7 +3,7 @@
   width: 100%;
   background: black;
   color: var(--primary-green);
-  padding: 1rem;
+  padding: .5rem;
   font-family: 'VT323', monospace;
   display: flex;
   flex-direction: column;
@@ -30,7 +30,7 @@
 
 .terminal-header .label {
   color: yellow;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   margin-bottom: 0.5rem;
 }
 
