@@ -1,12 +1,12 @@
 .reset-screen {
   height: 100vh;
   display: flex;
+  flex-direction: column;
+  justify-content: top;
   align-items: center;
-  justify-content: center;
   background: black;
   color: var(--primary-green);
   font-family: 'VT323', monospace;
-  padding: 1rem;
 }
 
 .reset-box {

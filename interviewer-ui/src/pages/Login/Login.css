@@ -2,7 +2,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: top;
   align-items: center;
   background: black;
   color: var(--primary-green);
@@ -21,7 +21,6 @@
 .auth-header {
   background-color: #0f0;
   color: black;
-  padding: 4px 16px;
   position: absolute;
   top: 0;
   left: 0;
@@ -31,7 +30,7 @@
 }
 
 .auth-body {
-  margin-top: 48px;
+  margin-top: 4px;
 }
 
 .auth-title {

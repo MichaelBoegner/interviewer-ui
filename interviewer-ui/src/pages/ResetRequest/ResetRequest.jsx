@@ -29,10 +29,6 @@ export default function ResetRequest() {
       <div className="reset-box">
         <div className="scanline"></div>
 
-        <div className="top-bar">
-          <div>reset.exe</div>
-        </div>
-
         <div className="reset-instructions">
           <span className="label-symbol">$</span> ENTER EMAIL TO RECEIVE
           PASSWORD RESET LINK

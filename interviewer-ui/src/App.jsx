@@ -65,7 +65,7 @@ export default function App() {
 
   return (
     <Router>
-      <Header />
+      <Header setToken={updateToken} />
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route

@@ -85,9 +85,7 @@ export default function Login({ setToken }) {
     <div className="login-container">
       <div className="terminal-window auth-box">
         <div className="scanline"></div>
-        <div className="auth-header">
-          <div>{showRegister ? "register.exe" : "login.exe"}</div>
-        </div>
+
         <div className="auth-body">
           <div className="auth-title">
             <span className="terminal-prompt">$</span>{" "}

@@ -311,7 +311,7 @@ The interview has concluded.
 
 Your final score: ${totalScore + score}/${(questionsAnswered + 1) * 10} (${(((totalScore + score) / ((questionsAnswered + 1) * 10)) * 100).toFixed(0)}%)
 
-You can start a new interview by clicking the [ INITIALIZE_INTERVIEW ] button above.
+You can start a new interview by clicking the [ START_INTERVIEW ] button above.
             `.trim(),
           },
         ]);
@@ -341,22 +341,6 @@ You can start a new interview by clicking the [ INITIALIZE_INTERVIEW ] button ab
     }
   };
 
-  // ✅ Logout function
-  const handleLogout = () => {
-    // First clear tokens and state
-    setToken(null);
-    localStorage.removeItem("token");
-    setInterviewId(null);
-    setConversationId(null);
-    setMessages([]);
-    setInput("");
-    setIsCodeMode(false);
-    setIsInterviewEnded(false);
-
-    // Then navigate to login page
-    navigate("/", { replace: true });
-  };
-
   // Handle Enter key in textarea
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -383,125 +367,108 @@ You can start a new interview by clicking the [ INITIALIZE_INTERVIEW ] button ab
           </div>
         )}
 
-        {!pageLoaded ? (
-          <div className="loading-screen">
-            <pre>
-              [ LOADING SYSTEM ] ================== Initializing interface...
-              Checking authorization... Loading terminal modules...
-            </pre>
+        <div className="terminal-header">
+          <div className="system-label">
+            <span className="label-tag">[SYSTEM]:</span> Backend Interview
+            Protocol Active
           </div>
-        ) : (
-          <>
-            <div className="terminal-header">
-              <div className="system-label">
-                <span className="label-tag">[SYSTEM]:</span> Backend Interview
-                Protocol Active
-              </div>
 
-              <div className="button-row">
-                <button
-                  onClick={startNewInterview}
-                  disabled={isLoading}
-                  className={`retro-button red ${isLoading ? "disabled" : ""}`}
-                >
-                  {isLoading ? "[ LOADING... ]" : "[ INITIALIZE_INTERVIEW ]"}
-                </button>
-              </div>
-            </div>
+          <div className="button-row">
+            <button
+              onClick={startNewInterview}
+              disabled={isLoading}
+              className={`retro-button red ${isLoading ? "disabled" : ""}`}
+            >
+              {isLoading ? "[ LOADING... ]" : "[ START_INTERVIEW ]"}
+            </button>
+          </div>
+        </div>
 
-            <div className="chat-window" ref={messagesContainerRef}>
-              {messages.length === 0 ? (
-                <div className="empty-chat" />
-              ) : (
-                messages.map((msg, i) => (
-                  <div className={`message ${msg.role}`} key={i}>
-                    <div className={`message-header`}>
-                      {msg.role === "interviewer"
-                        ? "INTERVIEWER >"
-                        : msg.role === "user"
-                          ? `${username || "USER"} >`
-                          : "SYSTEM >"}
-                    </div>
-                    <div className="message-content">
-                      {msg.content}
-                      {msg.role === "interviewer" && (
-                        <span className="cursor" />
-                      )}
-                    </div>
-                    {msg.role === "interviewer" && msg.feedback && (
-                      <div className="feedback-box">
-                        <div className="label">FEEDBACK:</div>
-                        <div className="feedback">{msg.feedback}</div>
-                        {msg.score !== undefined && (
-                          <div className="score">
-                            SCORE:{" "}
-                            <span
-                              className={
-                                msg.score >= 8
-                                  ? "score-high"
-                                  : msg.score >= 5
-                                    ? "score-mid"
-                                    : "score-low"
-                              }
-                            >
-                              {msg.score}/10
-                            </span>
-                          </div>
-                        )}
+        <div className="chat-window" ref={messagesContainerRef}>
+          {messages.length === 0 ? (
+            <div className="empty-chat" />
+          ) : (
+            messages.map((msg, i) => (
+              <div className={`message ${msg.role}`} key={i}>
+                <div className={`message-header`}>
+                  {msg.role === "interviewer"
+                    ? "INTERVIEWER >"
+                    : msg.role === "user"
+                      ? `${username || "USER"} >`
+                      : "SYSTEM >"}
+                </div>
+                <div className="message-content">
+                  {msg.content}
+                  {msg.role === "interviewer" && <span className="cursor" />}
+                </div>
+                {msg.role === "interviewer" && msg.feedback && (
+                  <div className="feedback-box">
+                    <div className="label">FEEDBACK:</div>
+                    <div className="feedback">{msg.feedback}</div>
+                    {msg.score !== undefined && (
+                      <div className="score">
+                        SCORE:{" "}
+                        <span
+                          className={
+                            msg.score >= 8
+                              ? "score-high"
+                              : msg.score >= 5
+                                ? "score-mid"
+                                : "score-low"
+                          }
+                        >
+                          {msg.score}/10
+                        </span>
                       </div>
                     )}
                   </div>
-                ))
-              )}
-            </div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
 
-            <div className="input-wrapper">
-              {interviewId && !isInterviewEnded && !authError && (
-                <>
-                  <div className="toggle-row">
-                    <button
-                      onClick={() => setIsCodeMode(!isCodeMode)}
-                      className="retro-button blue small"
-                    >
-                      [ {isCodeMode ? "TEXT_MODE" : "CODE_MODE"} ]
-                    </button>
-                  </div>
+        <div className="input-wrapper">
+          {interviewId && !isInterviewEnded && !authError && (
+            <>
+              <div className="toggle-row">
+                <button
+                  onClick={() => setIsCodeMode(!isCodeMode)}
+                  className="retro-button blue small"
+                >
+                  [ {isCodeMode ? "TEXT_MODE" : "CODE_MODE"} ]
+                </button>
+              </div>
 
-                  <div className="textarea-wrapper">
-                    <textarea
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      disabled={isLoading || isInterviewEnded}
-                      placeholder={
-                        isLoading
-                          ? "Processing response..."
-                          : "Enter your response..."
-                      }
-                      className="textarea-input"
-                    />
-                  </div>
+              <div className="textarea-wrapper">
+                <textarea
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  disabled={isLoading || isInterviewEnded}
+                  placeholder={
+                    isLoading
+                      ? "Processing response..."
+                      : "Enter your response..."
+                  }
+                  className="textarea-input"
+                />
+              </div>
 
-                  <button
-                    onClick={sendMessage}
-                    disabled={isLoading || !input.trim() || isInterviewEnded}
-                    className="retro-button green"
-                  >
-                    {isLoading ? "[ TRANSMITTING... ]" : "[ SEND_MESSAGE ]"}
-                  </button>
-                </>
-              )}
-
-              <button onClick={handleLogout} className="retro-button gray">
-                [ LOGOUT ]
+              <button
+                onClick={sendMessage}
+                disabled={isLoading || !input.trim() || isInterviewEnded}
+                className="retro-button green"
+              >
+                {isLoading ? "[ TRANSMITTING... ]" : "[ SEND_MESSAGE ]"}
               </button>
-            </div>
+            </>
+          )}
+        </div>
 
-            <div className="terminal-footer">
-              ====================================================================
-            </div>
-          </>
-        )}
+        <div className="terminal-footer">
+          ====================================================================
+        </div>
       </div>
     </div>
   );

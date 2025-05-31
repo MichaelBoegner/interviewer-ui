@@ -25,3 +25,16 @@
   margin-top: 0.05rem;
   margin-bottom: 1rem;
 }
+
+.logout-link {
+  color: var(--user-color);
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-family: 'VT323', monospace;
+  cursor: pointer;
+  transition: text-shadow 0.2s ease;
+}
+
+.logout-link:hover {
+  text-shadow: 0 0 5px var(--glow-color);
+}
