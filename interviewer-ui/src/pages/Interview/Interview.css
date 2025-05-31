@@ -10,6 +10,13 @@
   align-items: center;
 }
 
+
+.paused-message {
+  color: var(--primary-yellow);
+  padding: 1rem 0;
+  font-size: 0.975rem;
+}
+
 .terminal-box {
   width: 100%;
   max-width: 900px;
@@ -87,23 +94,32 @@
 .score-low {
   color: red;
 }
-
 .input-wrapper {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-top: 1rem;
+}
+
+.textarea-wrapper {
+  width: 100%;
+  max-width: 900px;
 }
 
 .textarea-input {
   width: 100%;
-  min-height: 10rem;
+  height: 10rem;
   padding: 1rem;
+  font-size: 1rem;
   background-color: #111;
   color: var(--primary-green);
   border: 1px solid var(--primary-green);
   resize: vertical;
+  box-sizing: border-box;
   font-family: 'VT323', monospace;
-  font-size: 1rem;
 }
+
 
 .retro-button {
   margin-top: 1rem;

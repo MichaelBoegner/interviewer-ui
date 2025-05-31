@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Interview.css";
 
 // ✅ Interview Terminal
 export default function InterviewScreen({ token, setToken }) {
@@ -10,8 +11,8 @@ export default function InterviewScreen({ token, setToken }) {
   const [conversationId, setConversationId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState("");
+  const [interviewStatus, setInterviewStatus] = useState("idle");
   const [isInterviewEnded, setIsInterviewEnded] = useState(false);
-  const [pageLoaded, setPageLoaded] = useState(false);
   const [totalScore, setTotalScore] = useState(0);
   const [questionsAnswered, setQuestionsAnswered] = useState(0);
   const [username, setUsername] = useState("");
@@ -96,6 +97,7 @@ export default function InterviewScreen({ token, setToken }) {
       const data = await response.json();
       setInterviewId(data.interview_id);
       setMessages([{ role: "interviewer", content: data.first_question }]);
+      setInterviewStatus("active");
     } catch (error) {
       console.error("Error starting interview:", error);
       setMessages([
@@ -349,6 +351,38 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
     }
   };
 
+  const toggleInterviewStatus = async () => {
+    if (!interviewId || !token) return;
+
+    const newStatus = interviewStatus === "active" ? "paused" : "active";
+
+    try {
+      const response = await fetch(`${API_URL}/interviews/${interviewId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.error || errorData.message || "Failed to update status"
+        );
+      }
+
+      setInterviewStatus(newStatus);
+    } catch (err) {
+      console.error("Status update failed:", err);
+      setMessages((prev) => [
+        ...prev,
+        { role: "system", content: `Failed to update status: ${err.message}` },
+      ]);
+    }
+  };
+
   useEffect(() => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop =
@@ -368,21 +402,33 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
         )}
 
         <div className="terminal-header">
-          <div className="system-label">
-            <span className="label-tag">[SYSTEM]:</span> Backend Interview
-            Protocol Active
-          </div>
-
           <div className="button-row">
-            <button
-              onClick={startNewInterview}
-              disabled={isLoading}
-              className={`retro-button red ${isLoading ? "disabled" : ""}`}
-            >
-              {isLoading ? "[ LOADING... ]" : "[ START_INTERVIEW ]"}
-            </button>
+            {interviewStatus === "idle" ? (
+              <button
+                onClick={startNewInterview}
+                disabled={isLoading}
+                className={`retro-button red ${isLoading ? "disabled" : ""}`}
+              >
+                {isLoading ? "[ LOADING... ]" : "[ START_INTERVIEW ]"}
+              </button>
+            ) : (
+              <button
+                onClick={toggleInterviewStatus}
+                className="retro-button yellow"
+              >
+                {interviewStatus === "active"
+                  ? "[ PAUSE_INTERVIEW ]"
+                  : "[ RESUME_INTERVIEW ]"}
+              </button>
+            )}
           </div>
         </div>
+        {interviewStatus === "paused" && (
+          <div className="paused-message">
+            <span className="label-tag">[SYSTEM]:</span> Interview is paused.
+            Resume to continue.
+          </div>
+        )}
 
         <div className="chat-window" ref={messagesContainerRef}>
           {messages.length === 0 ? (
@@ -429,41 +475,44 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
         </div>
 
         <div className="input-wrapper">
-          {interviewId && !isInterviewEnded && !authError && (
-            <>
-              <div className="toggle-row">
+          {interviewId &&
+            !isInterviewEnded &&
+            !authError &&
+            interviewStatus === "active" && (
+              <>
+                <div className="toggle-row">
+                  <button
+                    onClick={() => setIsCodeMode(!isCodeMode)}
+                    className="retro-button blue"
+                  >
+                    [ {isCodeMode ? "TEXT_MODE" : "CODE_MODE"} ]
+                  </button>
+                </div>
+
+                <div className="textarea-wrapper">
+                  <textarea
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    disabled={isLoading || isInterviewEnded}
+                    placeholder={
+                      isLoading
+                        ? "Processing response..."
+                        : "Enter your response..."
+                    }
+                    className="textarea-input"
+                  />
+                </div>
+
                 <button
-                  onClick={() => setIsCodeMode(!isCodeMode)}
-                  className="retro-button blue small"
+                  onClick={sendMessage}
+                  disabled={isLoading || !input.trim() || isInterviewEnded}
+                  className="retro-button green"
                 >
-                  [ {isCodeMode ? "TEXT_MODE" : "CODE_MODE"} ]
+                  {isLoading ? "[ TRANSMITTING... ]" : "[ SEND_MESSAGE ]"}
                 </button>
-              </div>
-
-              <div className="textarea-wrapper">
-                <textarea
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  disabled={isLoading || isInterviewEnded}
-                  placeholder={
-                    isLoading
-                      ? "Processing response..."
-                      : "Enter your response..."
-                  }
-                  className="textarea-input"
-                />
-              </div>
-
-              <button
-                onClick={sendMessage}
-                disabled={isLoading || !input.trim() || isInterviewEnded}
-                className="retro-button green"
-              >
-                {isLoading ? "[ TRANSMITTING... ]" : "[ SEND_MESSAGE ]"}
-              </button>
-            </>
-          )}
+              </>
+            )}
         </div>
 
         <div className="terminal-footer">
