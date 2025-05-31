@@ -40,7 +40,7 @@
   padding: 1rem;
   background: black;
   border: 1px solid #0f0;
-  font-size: 0.875rem;
+  font-size: 0.95rem;
   margin-bottom: 1rem;
 }
 
@@ -64,7 +64,7 @@
   border: 1px dashed yellow;
   background-color: rgba(128, 64, 0, 0.1);
   padding: 0.5rem;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
 }
 
 .feedback-box .label {
