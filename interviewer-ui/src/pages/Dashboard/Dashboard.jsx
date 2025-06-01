@@ -36,6 +36,32 @@ export default function Dashboard({ token, setToken }) {
   const totalCredits =
     userData.individual_credits + userData.subscription_credits;
 
+  const handlePurchase = async (tier) => {
+    try {
+      const res = await fetch(`${API_URL}/payment/checkout`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ tier }),
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error("Failed to start checkout:", errText);
+        return;
+      }
+
+      const data = await res.json();
+      if (data.checkout_url) {
+        window.open(data.checkout_url, "_blank");
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+    }
+  };
+
   return (
     <div className="dashboard-wrapper">
       <div className="dashboard-grid">
@@ -62,11 +88,22 @@ export default function Dashboard({ token, setToken }) {
 
           <div className="purchase-options">
             <h3 className="sub-heading">Buy / Subscribe</h3>
-            <button className="retro-button">
+            <button
+              className="retro-button"
+              onClick={() => handlePurchase("individual")}
+            >
               Buy 1 Interview (Individual)
             </button>
-            <button className="retro-button">Subscribe: 10/month (Pro)</button>
-            <button className="retro-button">
+            <button
+              className="retro-button"
+              onClick={() => handlePurchase("pro")}
+            >
+              Subscribe: 10/month (Pro)
+            </button>
+            <button
+              className="retro-button"
+              onClick={() => handlePurchase("premium")}
+            >
               Subscribe: 20/month (Premium)
             </button>
           </div>
