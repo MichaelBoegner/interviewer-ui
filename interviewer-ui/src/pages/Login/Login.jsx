@@ -112,8 +112,6 @@ export default function Login({ setToken }) {
           >
             {showRegister && (
               <div className="input-row">
-                <span className="terminal-prompt">$</span>
-                <span className="input-label">user:</span>
                 <input
                   placeholder="username"
                   value={username}
@@ -125,8 +123,6 @@ export default function Login({ setToken }) {
             )}
 
             <div className="input-row">
-              <span className="terminal-prompt">$</span>
-              <span className="input-label">mail:</span>
               <input
                 type="email"
                 placeholder="email"
@@ -138,8 +134,6 @@ export default function Login({ setToken }) {
             </div>
 
             <div className="input-row">
-              <span className="terminal-prompt">$</span>
-              <span className="input-label">pass:</span>
               <input
                 type="password"
                 placeholder="password"
