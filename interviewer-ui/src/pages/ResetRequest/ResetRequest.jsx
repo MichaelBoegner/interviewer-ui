@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import posthog from "posthog-js";
 import "./ResetRequest.css";
 
 export default function ResetRequest() {
@@ -11,6 +12,8 @@ export default function ResetRequest() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    posthog.capture("reset_request_submitted", { email });
+
     const res = await fetch(`${API_URL}/auth/request-reset`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -19,8 +22,13 @@ export default function ResetRequest() {
 
     if (res.ok) {
       setMessage("If that email exists, we sent you a reset link.");
+      posthog.capture("reset_request_success", { email });
     } else {
       setMessage("Something went wrong.");
+      posthog.capture("reset_request_failed", {
+        email,
+        status: res.status,
+      });
     }
   };
 
@@ -57,7 +65,10 @@ export default function ResetRequest() {
 
             <button
               type="button"
-              onClick={() => navigate("/login")}
+              onClick={() => {
+                posthog.capture("reset_request_back_to_login");
+                navigate("/login");
+              }}
               className="retro-button blue"
             >
               [ BACK_TO_LOGIN ]

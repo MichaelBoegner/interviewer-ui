@@ -1,15 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
+import posthog from "posthog-js";
 import { AsciiHeader } from "../ASCII/ASCII";
 import "./Header.css";
+
 export default function Header({ setToken }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    posthog.capture("logout_clicked");
+
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     setToken(null);
     navigate("/login");
   };
+
   return (
     <>
       <div className="topbar">

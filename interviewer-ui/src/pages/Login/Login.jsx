@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Login.css"; // create this file or move to App.css
+import posthog from "posthog-js";
+import "./Login.css";
 
 export default function Login({ setToken }) {
   const [username, setUsername] = useState("");
@@ -34,9 +35,23 @@ export default function Login({ setToken }) {
       localStorage.setItem("token", data.jwtoken);
       localStorage.setItem("username", username);
       setToken(data.jwtoken);
+
+      // ✅ Track successful login
+      posthog.identify(data.user_id || email, {
+        email: email,
+        login_method: "standard",
+      });
+      posthog.capture("login_successful");
+
       navigate("/dashboard", { replace: true });
     } catch (error) {
       setError(error.message || "Login failed. Please check your credentials.");
+
+      // ✅ Track login failure
+      posthog.capture("login_failed", {
+        error: error.message,
+        email_attempted: email,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -65,8 +80,20 @@ export default function Login({ setToken }) {
       setUsername("");
       setPassword("");
       setEmail("");
+
+      // ✅ Track registration success
+      posthog.capture("registration_successful", {
+        email: email,
+        username: username,
+      });
     } catch (error) {
       setError(error.message || "Registration failed. Please try again.");
+
+      // ✅ Track registration failure
+      posthog.capture("registration_failed", {
+        error: error.message,
+        email_attempted: email,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -79,6 +106,11 @@ export default function Login({ setToken }) {
     setUsername("");
     setPassword("");
     setEmail("");
+
+    // ✅ Track form toggle
+    posthog.capture(
+      showRegister ? "viewed_login_form" : "viewed_register_form"
+    );
   };
 
   return (
@@ -168,8 +200,15 @@ export default function Login({ setToken }) {
           </form>
 
           <p className="forgot-password">
-            Forgot your password? <a href="/reset-request">Reset it here</a>
+            Forgot your password?{" "}
+            <a
+              href="/reset-request"
+              onClick={() => posthog.capture("password_reset_link_clicked")}
+            >
+              Reset it here
+            </a>
           </p>
+
           <div className="footer-note">
             © 2025 Interviewer.dev. All rights reserved.
           </div>

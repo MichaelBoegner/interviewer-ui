@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import posthog from "posthog-js";
 import "./Conversation.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -14,6 +15,7 @@ const Conversation = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     fetch(`${API_URL}/conversations/${interviewId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -25,8 +27,18 @@ const Conversation = () => {
         const conv = data.conversation;
         setConversation(conv);
         setMessages(flattenConversation(conv));
+        posthog.capture("conversation_viewed", {
+          interview_id: interviewId,
+          total_topics: Object.keys(conv.topics || {}).length,
+        });
       })
-      .catch((err) => setError(err.message));
+      .catch((err) => {
+        setError(err.message);
+        posthog.capture("conversation_view_failed", {
+          interview_id: interviewId,
+          error: err.message,
+        });
+      });
   }, [interviewId]);
 
   useEffect(() => {
@@ -109,7 +121,12 @@ The interview has concluded.
             interview
           </div>
           <button
-            onClick={() => navigate("/dashboard")}
+            onClick={() => {
+              posthog.capture("conversation_back_to_dashboard", {
+                interview_id: interviewId,
+              });
+              navigate("/dashboard");
+            }}
             className="retro-button green small"
           >
             ← Back to Dashboard

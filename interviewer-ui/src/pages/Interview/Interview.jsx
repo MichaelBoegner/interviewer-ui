@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import posthog from "posthog-js";
 import "./Interview.css";
 
-// ✅ Interview Terminal
 export default function InterviewScreen({ token, setToken }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -16,6 +16,7 @@ export default function InterviewScreen({ token, setToken }) {
   const [totalScore, setTotalScore] = useState(0);
   const [questionsAnswered, setQuestionsAnswered] = useState(0);
   const [username, setUsername] = useState("");
+  const [_, setPageLoaded] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
 
   const messagesContainerRef = useRef(null);
@@ -36,14 +37,15 @@ export default function InterviewScreen({ token, setToken }) {
       console.log("No token found, redirecting to login");
       navigate("/");
     } else {
-      // Mark the page as loaded after a small delay to ensure UI is refreshed
       setTimeout(() => {
         setPageLoaded(true);
+        posthog.capture("interview_viewed", {
+          username,
+        });
       }, 300);
     }
   }, [token, navigate]);
 
-  // ✅ Start a new interview
   const startNewInterview = async () => {
     setIsLoading(true);
     setIsInterviewEnded(false);
@@ -76,6 +78,9 @@ export default function InterviewScreen({ token, setToken }) {
         const data = await response.json();
         const message = data?.error || "You do not have enough credits.";
         setMessages([{ role: "system", content: message }]);
+        posthog.capture("interview_start_failed", {
+          reason: "no_credits",
+        });
         return;
       }
 
@@ -84,6 +89,9 @@ export default function InterviewScreen({ token, setToken }) {
         setAuthError("Your session has expired. Please login again.");
         localStorage.removeItem("token");
         setTimeout(() => navigate("/"), 2000);
+        posthog.capture("interview_start_failed", {
+          reason: "unauthorized",
+        });
         return;
       }
 
@@ -98,6 +106,9 @@ export default function InterviewScreen({ token, setToken }) {
       setInterviewId(data.interview_id);
       setMessages([{ role: "interviewer", content: data.first_question }]);
       setInterviewStatus("active");
+      posthog.capture("interview_started", {
+        interview_id: data.interview_id,
+      });
     } catch (error) {
       console.error("Error starting interview:", error);
       setMessages([
@@ -106,6 +117,9 @@ export default function InterviewScreen({ token, setToken }) {
           content: `Failed to start interview: ${error.message}. Please try again or check your connection.`,
         },
       ]);
+      posthog.capture("interview_start_exception", {
+        error: error.message,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -121,6 +135,10 @@ export default function InterviewScreen({ token, setToken }) {
 
     const newMessages = [...messages, { role: "user", content: userMessage }];
     setMessages(newMessages);
+    posthog.capture("interview_message_sent", {
+      interviewId,
+      content_length: userMessage.length,
+    });
 
     if (!token) {
       setAuthError("Authentication token not found. Please login again.");
@@ -286,12 +304,22 @@ export default function InterviewScreen({ token, setToken }) {
           console.error("Error parsing conversation response:", error);
           interviewerResponse =
             "Error parsing the interview response. Please try again.";
+          posthog.capture("interview_message_exception", {
+            error: error.message,
+            interviewId,
+          });
         }
       }
 
       // Update the UI based on the response
       if (isFinished) {
         setIsInterviewEnded(true);
+        posthog.capture("interview_completed", {
+          interviewId,
+          total_score: totalScore + score,
+          questions_answered: questionsAnswered + 1,
+        });
+
         setMessages([
           ...newMessages,
           {
@@ -374,8 +402,17 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
       }
 
       setInterviewStatus(newStatus);
+      posthog.capture("interview_status_toggled", {
+        interviewId,
+        from: interviewStatus,
+        to: newStatus,
+      });
     } catch (err) {
       console.error("Status update failed:", err);
+      posthog.capture("interview_status_toggle_exception", {
+        interviewId,
+        error: err.message,
+      });
       setMessages((prev) => [
         ...prev,
         { role: "system", content: `Failed to update status: ${err.message}` },
@@ -482,7 +519,13 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
               <>
                 <div className="toggle-row">
                   <button
-                    onClick={() => setIsCodeMode(!isCodeMode)}
+                    onClick={() => {
+                      const newMode = !isCodeMode;
+                      setIsCodeMode(newMode);
+                      posthog.capture("code_mode_toggled", {
+                        mode: newMode ? "code" : "text",
+                      });
+                    }}
                     className="retro-button blue"
                   >
                     [ {isCodeMode ? "TEXT_MODE" : "CODE_MODE"} ]
