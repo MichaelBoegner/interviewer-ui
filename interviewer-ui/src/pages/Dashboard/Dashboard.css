@@ -67,6 +67,17 @@
   background: #00aa00;
   color: black;
 }
+.cancel-button {
+  margin-top: 1rem;
+  background-color: transparent;
+  color: #ff4444;
+  border: 1px solid #ff4444;
+}
+
+.cancel-button:hover {
+  background-color: #ff4444;
+  color: black;
+}
 
 .interview-scroll {
   overflow-y: auto;

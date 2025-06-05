@@ -62,6 +62,52 @@ export default function Dashboard({ token, setToken }) {
     }
   };
 
+  const handleCancel = async () => {
+    try {
+      const res = await fetch(`${API_URL}/payment/cancel`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error("Cancellation failed:", errText);
+        return;
+      }
+
+      alert(
+        "Subscription canceled. You will retain access until the end of the billing cycle."
+      );
+      window.location.reload(); // refresh dashboard
+    } catch (err) {
+      console.error("Cancel error:", err);
+    }
+  };
+
+  const handleResume = async () => {
+    try {
+      const res = await fetch(`${API_URL}/payment/resume`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error("Resume failed:", errText);
+        return;
+      }
+
+      alert("Subscription resumed successfully.");
+      window.location.reload(); // refresh dashboard
+    } catch (err) {
+      console.error("Resume error:", err);
+    }
+  };
+
   return (
     <div className="dashboard-wrapper">
       <div className="dashboard-grid">
@@ -73,6 +119,9 @@ export default function Dashboard({ token, setToken }) {
             </p>
             <p>
               <strong>Plan:</strong> {userData.plan}
+            </p>
+            <p>
+              <strong>Status:</strong> {userData.status}
             </p>
             <p>
               <strong>Individual Credits:</strong> {userData.individual_credits}
@@ -106,6 +155,22 @@ export default function Dashboard({ token, setToken }) {
             >
               Subscribe: 20/month (Premium)
             </button>
+            {userData.plan !== "free" && userData.status === "active" && (
+              <button
+                className="retro-button cancel-button"
+                onClick={handleCancel}
+              >
+                Cancel Subscription
+              </button>
+            )}
+            {userData.plan !== "free" && userData.status === "cancelled" && (
+              <button
+                className="retro-button resume-button"
+                onClick={handleResume}
+              >
+                Resume Subscription
+              </button>
+            )}
           </div>
         </div>
 
