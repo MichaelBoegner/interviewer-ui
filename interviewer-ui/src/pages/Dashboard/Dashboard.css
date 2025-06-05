@@ -1,5 +1,5 @@
 .dashboard-wrapper {
-  padding: 2rem;
+  padding: 1rem;
   background-color: black;
   color: var(--primary-green);
   min-height: 100vh;
@@ -9,7 +9,7 @@
 .dashboard-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
+  /* gap: 2rem; */
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -32,13 +32,15 @@
 
 .section-heading {
   font-size: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.1rem;
   color: var(--primary-green);
 }
 
 .sub-heading {
   font-size: 1.1rem;
-  margin: 1rem 0 0.5rem;
+  margin-bottom: 0;
+  margin-top: 0;      
+  line-height: 1.2;
   color: #00ff00;
 }
 
@@ -50,7 +52,7 @@
   margin-top: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  /* gap: 0.5rem; */
 }
 
 .retro-button {
@@ -67,6 +69,7 @@
   background: #00aa00;
   color: black;
 }
+
 .cancel-button {
   margin-top: 1rem;
   background-color: transparent;

@@ -108,6 +108,15 @@ export default function Dashboard({ token, setToken }) {
     }
   };
 
+  function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("en-US", {
+      month: "short", // "Jun"
+      day: "numeric", // "5"
+      year: "numeric", // "2025"
+    });
+  }
+
   return (
     <div className="dashboard-wrapper">
       <div className="dashboard-grid">
@@ -123,6 +132,19 @@ export default function Dashboard({ token, setToken }) {
             <p>
               <strong>Status:</strong> {userData.status}
             </p>
+            {userData.subscription_start_date && (
+              <p>
+                <strong>Subscription Start Date:</strong>{" "}
+                {formatDate(userData.subscription_start_date)}
+              </p>
+            )}
+
+            {userData.subscription_end_date && (
+              <p>
+                <strong>Subscription End Date:</strong>{" "}
+                {formatDate(userData.subscription_end_date)}
+              </p>
+            )}
             <p>
               <strong>Individual Credits:</strong> {userData.individual_credits}
             </p>
@@ -136,24 +158,27 @@ export default function Dashboard({ token, setToken }) {
           </div>
 
           <div className="purchase-options">
-            <h3 className="sub-heading">Buy / Subscribe</h3>
+            <h3 className="section-heading">Buy/Subscribe</h3>
+            <div className="sub-heading">INDIVIDUAL</div>
             <button
               className="retro-button"
               onClick={() => handlePurchase("individual")}
             >
-              Buy 1 Interview (Individual)
+              1 Interview | $5.00
             </button>
+
+            <div className="sub-heading">SUBSCRIBE</div>
             <button
               className="retro-button"
               onClick={() => handlePurchase("pro")}
             >
-              Subscribe: 10/month (Pro)
+              PRO | 10/month | $19.99
             </button>
             <button
               className="retro-button"
               onClick={() => handlePurchase("premium")}
             >
-              Subscribe: 20/month (Premium)
+              PREMIUM | 20/month | $29.99
             </button>
             {userData.plan !== "free" && userData.status === "active" && (
               <button

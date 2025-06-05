@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
 
-/* Force hardware acceleration and create new stacking context for the entire app */
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -48,7 +48,7 @@
   color: #888;
 }
 
-/* Reset and base styles */
+
 :root {
   --primary-green: #00ff00;
   --dark-green: #003300;
@@ -67,7 +67,7 @@ body {
   line-height: 1.4;
 }
 
-/* Terminal window - Create new stacking context */
+
 .terminal-window {
   position: relative;
   transform: translateZ(0);
@@ -77,7 +77,7 @@ body {
   background: var(--terminal-black);
 }
 
-/* Move all visual effects to a separate layer */
+
 .effects-layer {
   position: absolute;
   top: 0;
@@ -88,7 +88,7 @@ body {
   z-index: 1;
 }
 
-/* Move scanline and flicker into effects layer */
+
 .effects-layer .scanline {
   position: absolute;
   top: 0;
@@ -116,21 +116,20 @@ body {
   animation: flicker 0.3s infinite;
 }
 
-/* Content layer - Always above effects */
+
 .content-layer {
   position: relative;
   z-index: 2;
 }
 
-/* Button styles with guaranteed interaction */
+
 .retro-button {
   position: relative;
   font-family: 'VT323', monospace;
   text-transform: uppercase;
   letter-spacing: 1px;
   padding: 0.25em 0.5em;
-  margin: 0.1em;
-  margin-top: 1rem;
+  margin: 0.25em;
   background: var(--terminal-black);
   border: 1px solid currentColor;
   color: inherit;
