@@ -47,8 +47,41 @@ export default function InterviewScreen({ token, setToken }) {
           setMessages(flattened);
           setConversationId(conv.id);
         })
-        .catch((err) => {
+        .catch(async (err) => {
           console.error("Error resuming conversation:", err.message);
+
+          try {
+            const interviewRes = await fetch(
+              `${API_URL}/interviews/${resumeId}`,
+              {
+                headers: { Authorization: `Bearer ${token}` },
+              }
+            );
+
+            if (!interviewRes.ok)
+              throw new Error("Failed to fetch interview fallback");
+
+            const interviewData = await interviewRes.json();
+
+            setMessages([
+              {
+                role: "interviewer",
+                content: interviewData.first_question,
+              },
+            ]);
+
+            posthog.capture("resume_used_fallback_first_question", {
+              interview_id: resumeId,
+            });
+          } catch (fallbackErr) {
+            console.error("Fallback failed:", fallbackErr.message);
+            setMessages([
+              {
+                role: "system",
+                content: "Failed to load this interview. Try again later.",
+              },
+            ]);
+          }
         });
     }
   }, []);

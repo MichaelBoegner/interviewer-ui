@@ -8,7 +8,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const Conversation = () => {
   const { interviewId } = useParams();
-  const [conversation, setConversation] = useState(null);
+  const [_, setConversation] = useState(null);
   const [error, setError] = useState(null);
   const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
@@ -50,11 +50,37 @@ const Conversation = () => {
         });
       })
       .catch((err) => {
-        setError(err.message);
         posthog.capture("conversation_view_failed", {
           interview_id: interviewId,
           error: err.message,
         });
+
+        fetch(`${API_URL}/interviews/${interviewId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+          .then((res) => {
+            if (!res.ok) throw new Error("Fallback failed to fetch interview.");
+            return res.json();
+          })
+          .then((data) => {
+            setConversation(null);
+            setMessages([
+              {
+                role: "interviewer",
+                content: data.first_question,
+              },
+            ]);
+            posthog.capture("fallback_first_question_used", {
+              interview_id: interviewId,
+            });
+          })
+          .catch((err2) => {
+            setError("Unable to load interview.");
+            posthog.capture("fallback_failed", {
+              interview_id: interviewId,
+              error: err2.message,
+            });
+          });
       });
   }, [interviewId]);
 
@@ -66,7 +92,6 @@ const Conversation = () => {
   }, [messages]);
 
   if (error) return <div className="error-msg">Error: {error}</div>;
-  if (!conversation) return <div className="loading-msg">Loading...</div>;
 
   return (
     <div className="conversation-screen">
