@@ -53,8 +53,23 @@
   color: black;
 }
 
-.footer-text {
-  margin-top: 2rem;
-  font-size: 0.75rem;
-  color: #888;
+.pricing-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-family: 'VT323', monospace;
+  text-align: left;
+  color: var(--primary-green);
 }
+
+.pricing-table th,
+.pricing-table td {
+  padding: 0.5rem;
+  border: 1px solid var(--primary-green);
+}
+
+.pricing-table th {
+  background-color: rgba(0, 255, 0, 0.1);
+}
+

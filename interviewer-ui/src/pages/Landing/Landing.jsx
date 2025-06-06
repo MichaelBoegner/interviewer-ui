@@ -23,24 +23,46 @@ export default function Landing() {
           <p>
             <strong>💸 Pricing</strong>
             <br />
-            Start for just <strong>$4.99</strong> per interview. Upgrade to
-            bundles or subscriptions once you're ready to go deeper. Transparent
-            pricing. No surprises.
+            Start for just <strong>$4.99</strong> per interview. Or choose a
+            subscription to lower the cost per interview:
           </p>
 
-          <p>
-            <strong>🧪 Version 1.0.0</strong>
-            <br />
-            This is the first public version. I'm going to work my hardest to
-            keep up rapid iteration, with more features and polish coming soon,
-            but please bear with me. It's just me and the robots for now. ^_^
-          </p>
+          <table className="pricing-table">
+            <thead>
+              <tr>
+                <th>Plan</th>
+                <th>Price</th>
+                <th>Interviews</th>
+                <th>Per Interview</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Pay-as-you-go</td>
+                <td>$4.99</td>
+                <td>1</td>
+                <td>$4.99</td>
+              </tr>
+              <tr>
+                <td>Pro</td>
+                <td>$19.99 / mo</td>
+                <td>10 / mo</td>
+                <td>$2.00</td>
+              </tr>
+              <tr>
+                <td>Premium</td>
+                <td>$29.99 / mo</td>
+                <td>20 / mo</td>
+                <td>$1.50</td>
+              </tr>
+            </tbody>
+          </table>
 
           <p>
-            <strong>💬 Feedback welcome</strong>
+            <strong>🧪 Version 1.0.0 Coming</strong>
             <br />
-            I’m building this to hopefully help others. If something breaks or
-            feels off, let me know. I’m listening and improving constantly.
+            Public version coming soon! Reach out below if you'd like early
+            access or to be notified when it's live.
           </p>
 
           <p>
@@ -58,7 +80,7 @@ export default function Landing() {
         </div>
 
         <a href="/login" className="login-button">
-          [ LOGIN ]
+          [ LOGIN/SIGNUP ]
         </a>
       </div>
     </div>
