@@ -1,3 +1,5 @@
+
+
 .interview-screen {
   min-height: 100vh;
   width: 100%;
@@ -33,6 +35,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  
 }
 
 .terminal-header .label {
@@ -52,22 +55,31 @@
 }
 
 .message {
-  margin-bottom: 1.5rem;
+  margin: .95rem;  
+  padding: .25rem; 
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+  text-align: left;
+  z-index: 50;
 }
 
 .message-header {
   font-size: 0.75rem;
-  margin-bottom: 0.25rem;
+  margin: 0;
+  padding: 0;
 }
 
 .message-content {
-  padding-left: 0.5rem;
+  /* padding-left: 0.5rem; */
   border-left: 2px solid #333;
   white-space: pre-wrap;
+  margin: 0;
+  padding: 0;
 }
 
 .feedback-box {
-  margin-top: 0.5rem;
+  /* margin-top: 0.5rem; */
   border: 1px dashed yellow;
   background-color: rgba(128, 64, 0, 0.1);
   padding: 0.5rem;

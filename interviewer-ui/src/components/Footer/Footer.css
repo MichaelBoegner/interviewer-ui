@@ -1,0 +1,29 @@
+.footer-wrapper {
+  padding: 1rem 0.5rem;
+  background-color: black;
+  border-top: 1px solid var(--primary-green);
+  text-align: center;
+  font-family: 'VT323', monospace;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+  color: var(--user-color);
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+.footer-links a:hover {
+  text-shadow: 0 0 5px var(--glow-color);
+}
+
+.footer-note {
+  color: var(--user-color);
+  font-size: 1rem;
+}

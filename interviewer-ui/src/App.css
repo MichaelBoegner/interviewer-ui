@@ -1,9 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
 
-
 #root {
-  max-width: 1280px;
+  
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -11,43 +10,6 @@
   -webkit-transform: translateZ(0);
   backface-visibility: hidden;
 }
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
 
 :root {
   --primary-green: #00ff00;
@@ -59,69 +21,43 @@
   --interviewer-color: #00ff00;
 }
 
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
 body {
   margin: 0;
   font-family: 'VT323', monospace;
   background-color: var(--terminal-black);
   color: var(--primary-green);
-  line-height: 1.4;
+  line-height: 1;
 }
 
-
-.terminal-window {
-  position: relative;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  will-change: transform;
-  isolation: isolate;
-  background: var(--terminal-black);
+header {
+  width: 100vw;
 }
 
-
-.effects-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-  z-index: 1;
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
 }
-
-
-.effects-layer .scanline {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    to bottom,
-    transparent 50%,
-    rgba(0, 0, 0, 0.1) 51%
-  );
-  background-size: 100% 4px;
-  animation: scanline 10s linear infinite;
-  opacity: 0.3;
+button:hover {
+  border-color: #646cff;
 }
-
-.effects-layer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 255, 0, 0.03);
-  animation: flicker 0.3s infinite;
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
 }
-
-
-.content-layer {
-  position: relative;
-  z-index: 2;
-}
-
 
 .retro-button {
   position: relative;
@@ -158,299 +94,6 @@ body {
   transform: translateZ(0) translateY(1px);
 }
 
-/* Ensure interactive elements are always accessible */
-.interactive-layer {
-  position: relative;
-  z-index: 3;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-}
-
-button,
-input,
-textarea,
-.monaco-editor {
-  position: relative;
-  z-index: 3;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-}
-
-/* Chat container with proper stacking */
-.chat-container {
-  position: relative;
-  z-index: 2;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-}
-
-/* Cursor animation */
-.cursor {
-  display: inline-block;
-  width: 8px;
-  height: 1em;
-  background-color: var(--primary-green);
-  margin-left: 4px;
-  animation: blink 1s step-end infinite;
-}
-
-/* Retro button styles */
-.retro-button {
-  position: relative;
-  font-family: 'VT323', monospace;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  z-index: 10;
-}
-
-/* Remove pointer-events: none from all overlay elements */
-.terminal-window *::before {
-  pointer-events: none;
-}
-
-/* Chat window and messages */
-.retro-scrollbar {
-  position: relative;
-  z-index: 3;
-}
-
-.message {
-  position: relative;
-  z-index: 3;
-}
-
-/* Animations */
-@keyframes bootSequence {
-  0% {
-    opacity: 0;
-    transform: scale(0.98);
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes scanline {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(100%);
-  }
-}
-
-@keyframes blink {
-  0%, 50% {
-    opacity: 1;
-  }
-  51%, 100% {
-    opacity: 0;
-  }
-}
-
-@keyframes typing {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-@keyframes blink-caret {
-  from, to {
-    border-color: transparent;
-  }
-  50% {
-    border-color: var(--primary-green);
-  }
-}
-
-/* Screen flicker effect */
-@keyframes flicker {
-  0% {
-    opacity: 0.1;
-  }
-  50% {
-    opacity: 0.2;
-  }
-  100% {
-    opacity: 0.1;
-  }
-}
-
-/* Input field styles */
-input, textarea {
-  font-family: 'VT323', monospace;
-  background-color: var(--terminal-black);
-  color: var(--primary-green);
-  border: 1px solid var(--primary-green);
-  padding: 8px;
-  font-size: 1rem;
-}
-
-input:focus, textarea:focus {
-  outline: none;
-  box-shadow: 0 0 8px var(--glow-color);
-}
-
-/* Message styles - Updated spacing */
-.message {
-  margin: 24px 0;  /* Increased from 12px to 24px */
-  padding: 16px;   /* Increased from 12px to 16px */
-  position: relative;
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 2px;
-  text-align: left;
-  z-index: 50;
-}
-
-/* User message styling - Updated spacing */
-.message[data-role="user"] {
-  margin-left: 40px;
-  margin-top: 32px;  /* Added explicit top margin */
-  border-left: 2px solid var(--user-color);
-  background-color: rgba(74, 158, 255, 0.1);
-}
-
-.message[data-role="user"]::before {
-  content: "YOU@terminal:~$";
-  color: var(--user-color);
-  font-size: 0.85em;
-  position: absolute;
-  top: -24px;  /* Increased from -18px to -24px */
-  left: 0;
-}
-
-/* Interviewer message styling - Updated spacing */
-.message[data-role="interviewer"] {
-  margin-right: 40px;
-  margin-top: 32px;  /* Added explicit top margin */
-  border-left: 2px solid var(--interviewer-color);
-  background-color: rgba(0, 255, 0, 0.1);
-}
-
-.message[data-role="interviewer"]::before {
-  content: "INTERVIEWER@remote:~$";
-  color: var(--interviewer-color);
-  font-size: 0.85em;
-  position: absolute;
-  top: -24px;  /* Increased from -18px to -24px */
-  left: 0;
-}
-
-/* System message styling - Updated spacing */
-.message[data-role="system"] {
-  margin: 32px auto;  /* Increased from 20px to 32px */
-  max-width: 80%;
-  text-align: center;
-  border-left: 2px solid var(--system-color);
-  background-color: rgba(255, 71, 71, 0.1);
-}
-
-.message[data-role="system"]::before {
-  content: "SYSTEM::";
-  color: var(--system-color);
-  font-size: 0.85em;
-  position: absolute;
-  top: -24px;  /* Increased from -18px to -24px */
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-/* Updated cursor animation - only show on the latest interviewer message */
-.message[data-role="interviewer"]:last-of-type .cursor {
-  display: inline-block;
-  width: 8px;
-  height: 1em;
-  background-color: var(--interviewer-color);
-  margin-left: 4px;
-  animation: blink 1s step-end infinite;
-  vertical-align: middle;
-}
-
-.message:not([data-role="interviewer"]:last-of-type) .cursor {
-  display: none;
-}
-
-/* Chat window styling */
-.chat-window {
-  padding: 20px;
-  margin: 20px 0;
-  border: 1px solid var(--primary-green);
-  background-color: rgba(0, 0, 0, 0.8);
-  height: 400px;
-  overflow-y: auto;
-}
-
-/* Message content spacing - Updated */
-.message-content {
-  margin-top: 4px;  /* Reduced from 8px to 4px since we increased message padding */
-  line-height: 1.5;
-  white-space: pre-wrap;
-  padding: 4px;  /* Added padding around content */
-}
-
-/* System message animation */
-@keyframes glitch {
-  0% {
-    transform: translate(0);
-  }
-  20% {
-    transform: translate(-2px, 2px);
-  }
-  40% {
-    transform: translate(-2px, -2px);
-  }
-  60% {
-    transform: translate(2px, 2px);
-  }
-  80% {
-    transform: translate(2px, -2px);
-  }
-  100% {
-    transform: translate(0);
-  }
-}
-
-.system-message {
-  animation: glitch 0.3s linear infinite;
-  animation-play-state: paused;
-}
-
-.system-message:hover {
-  animation-play-state: running;
-}
-
-/* Loading animation */
-.loading::after {
-  content: '';
-  animation: loading 1s steps(4, end) infinite;
-}
-
-@keyframes loading {
-  0% { content: ''; }
-  25% { content: '.'; }
-  50% { content: '..'; }
-  75% { content: '...'; }
-  100% { content: ''; }
-}
-
-/* Monaco editor customization */
-.monaco-editor {
-  border: 1px solid var(--primary-green) !important;
-}
-
-.monaco-editor .margin {
-  background-color: var(--terminal-black) !important;
-}
-
 /* Error message styling */
 .error-message {
   border-left: 4px solid #ff0000;
@@ -458,118 +101,6 @@ input:focus, textarea:focus {
   padding: 8px;
   margin: 8px 0;
   animation: errorBlink 2s infinite;
-}
-
-@keyframes errorBlink {
-  0%, 100% {
-    border-color: #ff0000;
-  }
-  50% {
-    border-color: #800000;
-  }
-}
-
-/* Status indicators */
-.status-indicator {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  margin-right: 8px;
-  animation: pulse 2s infinite;
-}
-
-.status-active {
-  background-color: var(--primary-green);
-}
-
-.status-error {
-  background-color: #ff0000;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 0.7;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* Ensure scanline and other effects don't interfere with buttons */
-.scanline, .terminal-window::before {
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Ensure all interactive elements are above effects */
-button, input, textarea, .monaco-editor {
-  position: relative;
-  z-index: 100 !important;
-  pointer-events: auto !important;
-}
-
-/* Container for buttons to ensure they're clickable */
-.terminal-window > div {
-  position: relative;
-  z-index: 2;
-}
-
-/* Message container z-index */
-.message {
-  position: relative;
-  z-index: 50;
-}
-
-/* Override any pointer-events: none that might be affecting buttons */
-.retro-button,
-button[type="submit"],
-[role="button"] {
-  pointer-events: auto;
-  position: relative;
-  z-index: 10;
-}
-
-/* Ensure disabled states work properly */
-.retro-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Remove any transforms that might affect clicking */
-.retro-button:not(:disabled):active {
-  transform: translateY(1px);
-}
-
-/* Clean up conflicting styles */
-.scanline, .terminal-window::before {
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Add these at the end to ensure they take precedence */
-.terminal-window {
-  contain: layout style;
-}
-
-.terminal-window > * {
-  position: relative;
-  z-index: auto;
-}
-
-/* Force new stacking context for button containers */
-.button-container {
-  position: relative;
-  z-index: 3;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  isolation: isolate;
 }
 
 /* Ensure ASCII art renders properly */

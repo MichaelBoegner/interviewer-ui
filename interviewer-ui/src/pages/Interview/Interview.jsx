@@ -42,7 +42,8 @@ export default function InterviewScreen({ token, setToken }) {
         })
         .then((data) => {
           const conv = data.conversation;
-          const flattened = flattenConversation(conv); // use your existing flatten logic
+          const flattened = flattenConversation(conv);
+
           setMessages(flattened);
           setConversationId(conv.id);
         })
@@ -386,13 +387,15 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
         ]);
       } else {
         setMessages([
-          ...newMessages,
+          ...newMessages.slice(0, -1),
+          {
+            ...newMessages[newMessages.length - 1],
+            feedback,
+            score,
+          },
           {
             role: "interviewer",
             content: interviewerResponse,
-            score,
-            feedback,
-            parsedData: parsedResponseData,
           },
         ]);
       }
@@ -515,35 +518,39 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                   {msg.role === "interviewer"
                     ? "INTERVIEWER >"
                     : msg.role === "user"
-                      ? `${username || "USER"} >`
+                      ? `${username || "YOU"} >`
                       : "SYSTEM >"}
                 </div>
                 <div className="message-content">
                   {msg.content}
                   {msg.role === "interviewer" && <span className="cursor" />}
                 </div>
-                {msg.role === "interviewer" && msg.feedback && (
-                  <div className="feedback-box">
-                    <div className="label">FEEDBACK:</div>
-                    <div className="feedback">{msg.feedback}</div>
-                    {msg.score !== undefined && (
-                      <div className="score">
-                        SCORE:{" "}
-                        <span
-                          className={
-                            msg.score >= 8
-                              ? "score-high"
-                              : msg.score >= 5
-                                ? "score-mid"
-                                : "score-low"
-                          }
-                        >
-                          {msg.score}/10
-                        </span>
+                {msg.role === "user" &&
+                  (Object.prototype.hasOwnProperty.call(msg, "feedback") ||
+                    Object.prototype.hasOwnProperty.call(msg, "score")) && (
+                    <div className="feedback-box">
+                      <div className="label">FEEDBACK:</div>
+                      <div className="feedback">
+                        {msg.feedback?.trim() || "(no feedback provided)"}
                       </div>
-                    )}
-                  </div>
-                )}
+                      {msg.score !== undefined && (
+                        <div className="score">
+                          SCORE:{" "}
+                          <span
+                            className={
+                              msg.score >= 8
+                                ? "score-high"
+                                : msg.score >= 5
+                                  ? "score-mid"
+                                  : "score-low"
+                            }
+                          >
+                            {msg.score}/10
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
               </div>
             ))
           )}

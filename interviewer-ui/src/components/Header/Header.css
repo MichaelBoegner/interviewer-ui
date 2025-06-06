@@ -1,7 +1,9 @@
 .topbar {
   display: flex;
   justify-content: flex-end;
-  padding: 0.05rem .5rem;
+  padding: 0.05rem 0.5rem;
+    box-sizing: border-box; /* ✅ prevent overflow */
+  position: relative;
 }
 
 .nav-links {
@@ -23,7 +25,7 @@
 .ascii-banner {
   text-align: center;
   margin-top: 0.05rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .logout-link {

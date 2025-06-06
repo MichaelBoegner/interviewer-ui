@@ -21,6 +21,7 @@ export default function Header({ setToken }) {
         <div className="nav-links">
           <Link to="/dashboard">Dashboard</Link>
           <Link to="/interview">Interview</Link>
+          <Link to="/about">About</Link>
           <span onClick={handleLogout} className="logout-link">
             Logout
           </span>

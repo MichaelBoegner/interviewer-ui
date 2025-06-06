@@ -208,10 +208,6 @@ export default function Login({ setToken }) {
               Reset it here
             </a>
           </p>
-
-          <div className="footer-note">
-            © 2025 Interviewer.dev. All rights reserved.
-          </div>
         </div>
       </div>
     </div>

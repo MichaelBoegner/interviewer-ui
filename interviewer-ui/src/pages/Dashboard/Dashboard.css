@@ -3,13 +3,15 @@
   background-color: black;
   color: var(--primary-green);
   min-height: 100vh;
-  font-family: 'VT323', monospace;
+  font-family: 'VT323', monospace;  
 }
 
 .dashboard-grid {
+  border: 2px solid var(--primary-green);
+  padding: 1.5rem;
   display: flex;
   flex-wrap: wrap;
-  /* gap: 2rem; */
+  gap: 2rem;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -19,7 +21,7 @@
   min-width: 280px;
   max-width: 350px;
   border-right: 1px solid var(--primary-green);
-  padding-right: 1rem;
+  padding-right: 1.5rem;
 }
 
 .right-panel {

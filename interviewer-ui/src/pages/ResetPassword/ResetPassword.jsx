@@ -82,10 +82,6 @@ export default function ResetPassword() {
             </button>
           </div>
         </form>
-
-        <div className="footer-note">
-          © 2025 Interviewer.dev. All rights reserved.
-        </div>
       </div>
     </div>
   );

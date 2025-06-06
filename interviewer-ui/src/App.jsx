@@ -14,6 +14,9 @@ import Conversation from "./pages/Conversation/Conversation";
 import Interview from "./pages/Interview/Interview";
 import "./App.css";
 import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
+import Terms from "./components/Footer/Terms";
+import Privacy from "./components/Footer/Privacy";
 
 function isTokenValid(token) {
   try {
@@ -65,9 +68,12 @@ export default function App() {
 
   return (
     <Router>
-      <Header setToken={updateToken} />
+      <div className="header">
+        <Header setToken={updateToken} />
+      </div>
+
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/about" element={<Landing />} />
         <Route
           path="/login"
           element={
@@ -101,8 +107,11 @@ export default function App() {
         <Route path="/reset-request" element={<ResetRequest />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/conversation/:interviewId" element={<Conversation />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="*" element={<Navigate to="/about" replace />} />
       </Routes>
+      <Footer />
     </Router>
   );
 }

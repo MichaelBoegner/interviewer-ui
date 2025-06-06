@@ -89,7 +89,7 @@ const Conversation = () => {
           >
             ← Back to Dashboard
           </button>
-          {interviewStatus === "active" && (
+          {(interviewStatus === "active" || interviewStatus === "paused") && (
             <button
               className="retro-button yellow small"
               onClick={() =>
@@ -112,28 +112,32 @@ const Conversation = () => {
                     : "SYSTEM > "}
               </div>
               <div className="message-content">{msg.content}</div>
-              {msg.role === "interviewer" && msg.feedback && (
-                <div className="feedback-box">
-                  <div className="label">FEEDBACK:</div>
-                  <div className="feedback">{msg.feedback}</div>
-                  {msg.score !== undefined && (
-                    <div className="score">
-                      SCORE:{" "}
-                      <span
-                        className={
-                          msg.score >= 8
-                            ? "score-high"
-                            : msg.score >= 5
-                              ? "score-mid"
-                              : "score-low"
-                        }
-                      >
-                        {msg.score}/10
-                      </span>
+              {msg.role === "user" &&
+                (Object.prototype.hasOwnProperty.call(msg, "feedback") ||
+                  Object.prototype.hasOwnProperty.call(msg, "score")) && (
+                  <div className="feedback-box">
+                    <div className="label">FEEDBACK:</div>
+                    <div className="feedback">
+                      {msg.feedback?.trim() || "(no feedback provided)"}
                     </div>
-                  )}
-                </div>
-              )}
+                    {msg.score !== undefined && (
+                      <div className="score">
+                        SCORE:{" "}
+                        <span
+                          className={
+                            msg.score >= 8
+                              ? "score-high"
+                              : msg.score >= 5
+                                ? "score-mid"
+                                : "score-low"
+                          }
+                        >
+                          {msg.score}/10
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
             </div>
           ))}
         </div>

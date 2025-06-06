@@ -206,7 +206,7 @@ export default function Dashboard({ token, setToken }) {
               className="retro-button"
               onClick={() => handlePurchase("individual")}
             >
-              1 Interview | $5.00
+              1 Interview | $4.99
             </button>
 
             <div className="sub-heading">SUBSCRIBE</div>
