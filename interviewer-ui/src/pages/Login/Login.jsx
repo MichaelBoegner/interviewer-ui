@@ -73,7 +73,7 @@ export default function Login({ setToken }) {
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Registration failed");
+      if (!response.ok) throw new Error(data.error || "Registration failed");
 
       setSuccessMessage("Account created successfully! You can now log in.");
       setShowRegister(false);

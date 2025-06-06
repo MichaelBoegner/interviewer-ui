@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import posthog from "posthog-js";
+import flattenConversation from "../../helpers/flattenConversation";
 import "./Conversation.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -12,6 +13,22 @@ const Conversation = () => {
   const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
   const messagesContainerRef = useRef(null);
+  const [interviewStatus, setInterviewStatus] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    fetch(`${API_URL}/interviews/${interviewId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) =>
+        res.ok ? res.json() : Promise.reject("Failed to fetch interview")
+      )
+      .then((data) => {
+        setInterviewStatus(data.status);
+      })
+      .catch((err) => console.error("Interview status error:", err));
+  }, [interviewId]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -48,65 +65,6 @@ const Conversation = () => {
     }
   }, [messages]);
 
-  const flattenConversation = (conv) => {
-    const out = [];
-    const topicOrder = Object.keys(conv.topics || {}).sort(
-      (a, b) => Number(a) - Number(b)
-    );
-    for (const topicId of topicOrder) {
-      const topic = conv.topics[topicId];
-      const questionOrder = Object.keys(topic.questions || {}).sort(
-        (a, b) => Number(a) - Number(b)
-      );
-      for (const qId of questionOrder) {
-        const question = topic.questions[qId];
-        const msgs = question.messages || [];
-
-        const rawPrompt = msgs.find(
-          (m) => m.author === "interviewer" && !m.content.trim().startsWith("{")
-        );
-        const userMsg = msgs.find((m) => m.author === "user");
-        const feedbackMsg = [...msgs]
-          .reverse()
-          .find(
-            (m) =>
-              m.author === "interviewer" && m.content.trim().startsWith("{")
-          );
-
-        if (rawPrompt)
-          out.push({ role: "interviewer", content: rawPrompt.content });
-        if (userMsg) out.push({ role: "user", content: userMsg.content });
-        if (feedbackMsg) {
-          try {
-            const parsed = JSON.parse(feedbackMsg.content);
-            out.push({
-              role: "interviewer",
-              content: parsed.next_question || parsed.question || "",
-              feedback: parsed.feedback || "",
-              score: parsed.score,
-            });
-          } catch (err) {
-            console.warn("Failed to parse feedback JSON:", err.message);
-          }
-        }
-      }
-    }
-
-    out.push({
-      role: "system",
-      content: `
-=================================
-    INTERVIEW COMPLETED
-=================================
-
-Thank you for participating in our technical interview process! 
-The interview has concluded.
-      `.trim(),
-    });
-
-    return out;
-  };
-
   if (error) return <div className="error-msg">Error: {error}</div>;
   if (!conversation) return <div className="loading-msg">Loading...</div>;
 
@@ -131,6 +89,16 @@ The interview has concluded.
           >
             ← Back to Dashboard
           </button>
+          {interviewStatus === "active" && (
+            <button
+              className="retro-button yellow small"
+              onClick={() =>
+                navigate(`/interview?resume=true&interviewId=${interviewId}`)
+              }
+            >
+              → Resume Interview
+            </button>
+          )}
         </div>
 
         <div className="chat-window" ref={messagesContainerRef}>

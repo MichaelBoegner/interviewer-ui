@@ -1,13 +1,11 @@
-import "./Landing.css"; // create this file
+import "./Landing.css";
 
 export default function Landing() {
   return (
     <div className="landing-page">
       <div className="landing-content">
         <p className="intro-text">
-          Practice mock technical interviews with AI.
-          <br />
-          Built for backend engineers, by a backend engineer.
+          AI driven backend engineering practice interviews.
         </p>
 
         <div className="info-section">
@@ -16,7 +14,7 @@ export default function Landing() {
             <br />
             Interviewer is a solo-built, AI-powered platform that simulates
             technical interviews for backend engineers. You’ll receive real-time
-            questions, feedback, and scoring — just like a real interview.
+            questions, feedback, and scoring, just like a real interview.
           </p>
 
           <p>

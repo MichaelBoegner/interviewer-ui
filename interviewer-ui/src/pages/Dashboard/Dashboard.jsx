@@ -262,7 +262,7 @@ export default function Dashboard({ token, setToken }) {
                     className="interview-item"
                   >
                     <div>
-                      {new Date(iv.started_at).toLocaleString()} —{" "}
+                      {new Date(iv.started_at).toLocaleString()} —{" Score:"}
                       {iv.score ?? "N/A"}%
                     </div>
                     <div className="interview-feedback">{iv.feedback}</div>

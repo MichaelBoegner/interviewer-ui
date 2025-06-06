@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import posthog from "posthog-js";
+import flattenConversation from "../../helpers/flattenConversation";
 import "./Interview.css";
 
 export default function InterviewScreen({ token, setToken }) {
@@ -23,7 +24,46 @@ export default function InterviewScreen({ token, setToken }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Get username from localStorage for display in messages
+    const queryParams = new URLSearchParams(window.location.search);
+    const resume = queryParams.get("resume") === "true";
+    const resumeId = queryParams.get("interviewId");
+
+    if (resume && resumeId) {
+      const token = localStorage.getItem("token");
+      setInterviewId(Number(resumeId));
+      setInterviewStatus("active");
+
+      fetch(`${API_URL}/conversations/${resumeId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error("Failed to fetch conversation");
+          return res.json();
+        })
+        .then((data) => {
+          const conv = data.conversation;
+          const flattened = flattenConversation(conv); // use your existing flatten logic
+          setMessages(flattened);
+          setConversationId(conv.id);
+        })
+        .catch((err) => {
+          console.error("Error resuming conversation:", err.message);
+        });
+    }
+  }, []);
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const resume = queryParams.get("resume") === "true";
+    const resumeId = queryParams.get("interviewId");
+
+    if (resume && resumeId) {
+      setInterviewId(Number(resumeId));
+      setInterviewStatus("active");
+    }
+  }, []);
+
+  useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     if (storedUsername) {
       setUsername(storedUsername);
@@ -125,7 +165,6 @@ export default function InterviewScreen({ token, setToken }) {
     }
   };
 
-  // ✅ Send message to backend
   const sendMessage = async () => {
     if (!input.trim() || !interviewId || isLoading || isInterviewEnded) return;
 
@@ -371,7 +410,6 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
     }
   };
 
-  // Handle Enter key in textarea
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
