@@ -35,10 +35,6 @@ export default function Dashboard({ token, setToken }) {
             plan: data.plan,
             status: data.status,
           });
-          posthog.capture("dashboard_viewed", {
-            plan: data.plan,
-            total_credits: data.individual_credits + data.subscription_credits,
-          });
         }
       })
       .catch((err) => setError(err.message));

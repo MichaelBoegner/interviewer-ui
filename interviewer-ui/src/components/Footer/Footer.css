@@ -1,5 +1,5 @@
 .footer-wrapper {
-  padding: 1rem 0.5rem;
+  padding: 1rem; 
   background-color: black;
   border-top: 1px solid var(--primary-green);
   text-align: center;
@@ -10,7 +10,6 @@
   display: flex;
   justify-content: center;
   gap: 2rem;
-  margin-bottom: 0.5rem;
 }
 
 .footer-links a {

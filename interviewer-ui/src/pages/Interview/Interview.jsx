@@ -77,7 +77,20 @@ export default function InterviewScreen({ token, setToken }) {
     if (resume && resumeId) {
       const token = localStorage.getItem("token");
       setInterviewId(Number(resumeId));
-      setInterviewStatus("active");
+      fetch(`${API_URL}/interviews/${resumeId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error("Failed to fetch interview status");
+          return res.json();
+        })
+        .then((interviewData) => {
+          setInterviewStatus(interviewData.status);
+        })
+        .catch((err) => {
+          console.error("Error getting interview status:", err.message);
+          setInterviewStatus("active"); // fallback if necessary
+        });
 
       fetch(`${API_URL}/conversations/${resumeId}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -148,9 +161,6 @@ export default function InterviewScreen({ token, setToken }) {
     } else {
       setTimeout(() => {
         setPageLoaded(true);
-        posthog.capture("interview_viewed", {
-          username,
-        });
       }, 300);
     }
   }, [token, navigate]);
@@ -605,13 +615,13 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
           </div>
         </div>
         {interviewStatus === "paused" && (
-          <div className="paused-message">
+          <div className="system-message reset-pause-notice">
             <span className="label-tag">[SYSTEM]:</span> Interview is paused.
             Resume to continue.
           </div>
         )}
         {resetNotice && (
-          <div className="system-message reset-notice">
+          <div className="system-message reset-pause-notice">
             <span className="label-tag">[SYSTEM]:</span> {resetNotice}
           </div>
         )}

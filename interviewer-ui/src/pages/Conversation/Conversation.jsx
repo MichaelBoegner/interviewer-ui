@@ -44,10 +44,6 @@ const Conversation = () => {
         const conv = data.conversation;
         setConversation(conv);
         setMessages(flattenConversation(conv));
-        posthog.capture("conversation_viewed", {
-          interview_id: interviewId,
-          total_topics: Object.keys(conv.topics || {}).length,
-        });
       })
       .catch((err) => {
         posthog.capture("conversation_view_failed", {
