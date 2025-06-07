@@ -20,6 +20,7 @@ export default function InterviewScreen({ token, setToken }) {
   const [_, setPageLoaded] = useState(false);
   const messagesContainerRef = useRef(null);
   const navigate = useNavigate();
+  const [resetNotice, setResetNotice] = useState("");
   const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -153,6 +154,27 @@ export default function InterviewScreen({ token, setToken }) {
       }, 300);
     }
   }, [token, navigate]);
+
+  const resetInterview = () => {
+    const userId = localStorage.getItem("userId");
+
+    localStorage.removeItem(`${userId}_interviewId`);
+    localStorage.removeItem(`${userId}_conversationId`);
+
+    posthog.capture("interview_reset", {
+      interviewId,
+      reason: "user_initiated",
+    });
+
+    setInterviewId(null);
+    setConversationId(null);
+    setInterviewStatus("idle");
+    setIsInterviewEnded(false);
+    setMessages([]);
+    setResetNotice(
+      "Interview moved to Past Interviews. You can resume it anytime from your dashboard."
+    );
+  };
 
   const startNewInterview = async () => {
     setIsLoading(true);
@@ -561,14 +583,24 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                 {isLoading ? "[ LOADING... ]" : "[ START_INTERVIEW ]"}
               </button>
             ) : (
-              <button
-                onClick={toggleInterviewStatus}
-                className="retro-button yellow"
-              >
-                {interviewStatus === "active"
-                  ? "[ PAUSE_INTERVIEW ]"
-                  : "[ RESUME_INTERVIEW ]"}
-              </button>
+              <>
+                <button
+                  onClick={toggleInterviewStatus}
+                  className="retro-button yellow"
+                >
+                  {interviewStatus === "active"
+                    ? "[ PAUSE_INTERVIEW ]"
+                    : "[ RESUME_INTERVIEW ]"}
+                </button>
+
+                <button
+                  onClick={resetInterview}
+                  className="retro-button red"
+                  style={{ marginLeft: "1rem" }}
+                >
+                  [ SAVE AND RESET ]
+                </button>
+              </>
             )}
           </div>
         </div>
@@ -578,7 +610,11 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
             Resume to continue.
           </div>
         )}
-
+        {resetNotice && (
+          <div className="system-message reset-notice">
+            <span className="label-tag">[SYSTEM]:</span> {resetNotice}
+          </div>
+        )}
         <div className="chat-window" ref={messagesContainerRef}>
           {messages.length === 0 ? (
             <div className="empty-chat" />
