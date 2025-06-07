@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import posthog from "posthog-js";
 import flattenConversation from "../../helpers/flattenConversation";
+import Editor from "@monaco-editor/react";
 import "./Interview.css";
 
 export default function InterviewScreen({ token, setToken }) {
@@ -21,6 +22,7 @@ export default function InterviewScreen({ token, setToken }) {
   const messagesContainerRef = useRef(null);
   const navigate = useNavigate();
   const [resetNotice, setResetNotice] = useState("");
+  const [language, setLanguage] = useState("plaintext");
   const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -694,19 +696,53 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                   </button>
                 </div>
 
+                {isCodeMode && (
+                  <div className="language-select-row">
+                    <label htmlFor="language-select">Language:</label>
+                    <select
+                      id="language-select"
+                      value={language}
+                      onChange={(e) => setLanguage(e.target.value)}
+                      className="language-dropdown"
+                    >
+                      <option value="python">python</option>
+                      <option value="go">go</option>
+                      <option value="javascript">javaScript</option>
+                      <option value="typescript">typeScript</option>
+                      <option value="java">java</option>
+                      <option value="c">C</option>
+                      <option value="csharp">C#</option>
+                      <option value="cpp">C++</option>
+                      <option value="shell">bash</option>
+                    </select>
+                  </div>
+                )}
+
                 <div className="textarea-wrapper">
-                  <textarea
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    disabled={isLoading || isInterviewEnded}
-                    placeholder={
-                      isLoading
-                        ? "Processing response..."
-                        : "Type your response. Use Enter for new lines. Click [ SEND_MESSAGE ] or use Shift+Enter to send."
-                    }
-                    className="textarea-input"
-                  />
+                  {isCodeMode ? (
+                    <Editor
+                      height="300px"
+                      language={language}
+                      value={input}
+                      onChange={(val) => setInput(val || "")}
+                      theme="vs-dark"
+                      options={{
+                        fontSize: 14,
+                        fontFamily: "monospace",
+                        minimap: { enabled: false },
+                        lineNumbers: "on",
+                      }}
+                    />
+                  ) : (
+                    <textarea
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      disabled={isLoading || isInterviewEnded}
+                      placeholder="Enter = newline, Shift+Enter = send"
+                      className="textarea-input"
+                    />
+                  )}
                 </div>
 
                 <button

@@ -199,3 +199,19 @@
   color: #ffc;
   font-family: monospace;
 }
+
+.language-select-row {
+  margin-bottom: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-family: monospace;
+}
+
+.language-dropdown {
+  padding: 0.25rem 0.5rem;
+  font-family: monospace;
+  background-color: #111;
+  color: #0f0;
+  border: 1px solid #0f0;
+}
