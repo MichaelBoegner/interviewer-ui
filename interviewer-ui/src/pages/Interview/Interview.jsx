@@ -517,7 +517,7 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter" && e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
@@ -703,7 +703,7 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                     placeholder={
                       isLoading
                         ? "Processing response..."
-                        : "Enter your response..."
+                        : "Type your response. Use Enter for new lines. Click [ SEND_MESSAGE ] or use Shift+Enter to send."
                     }
                     className="textarea-input"
                   />
