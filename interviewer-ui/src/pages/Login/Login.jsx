@@ -34,6 +34,7 @@ export default function Login({ setToken }) {
 
       localStorage.setItem("token", data.jwtoken);
       localStorage.setItem("username", username);
+      localStorage.setItem("userId", data.user_id);
       setToken(data.jwtoken);
 
       // ✅ Track successful login

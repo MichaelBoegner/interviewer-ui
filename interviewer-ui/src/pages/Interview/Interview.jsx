@@ -18,10 +18,55 @@ export default function InterviewScreen({ token, setToken }) {
   const [questionsAnswered, setQuestionsAnswered] = useState(0);
   const [username, setUsername] = useState("");
   const [_, setPageLoaded] = useState(false);
-  const API_URL = import.meta.env.VITE_API_URL;
-
   const messagesContainerRef = useRef(null);
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    const storedInterviewId = localStorage.getItem(`${userId}_interviewId`);
+    const storedConversationId = localStorage.getItem(
+      `${userId}_conversationId`
+    );
+    const token = localStorage.getItem("token");
+
+    if (!storedInterviewId || !token) return;
+
+    setInterviewId(Number(storedInterviewId));
+
+    // Fetch interview metadata including the current status
+    fetch(`${API_URL}/interviews/${storedInterviewId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) =>
+        res.ok ? res.json() : Promise.reject("Failed to fetch interview status")
+      )
+      .then((interviewData) => {
+        setInterviewStatus(interviewData.status);
+
+        const conversationUrl = storedConversationId
+          ? `${API_URL}/conversations/${storedInterviewId}`
+          : `${API_URL}/interviews/${storedInterviewId}`;
+
+        return fetch(conversationUrl, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      })
+      .then((res) =>
+        res.ok ? res.json() : Promise.reject("Failed to fetch conversation")
+      )
+      .then((data) => {
+        if (storedConversationId && data.conversation) {
+          setConversationId(data.conversation.id);
+          setMessages(flattenConversation(data.conversation));
+        } else if (data.first_question) {
+          setMessages([{ role: "interviewer", content: data.first_question }]);
+        }
+      })
+      .catch((err) => {
+        console.error("Auto-resume failed:", err);
+      });
+  }, []);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
@@ -83,17 +128,6 @@ export default function InterviewScreen({ token, setToken }) {
             ]);
           }
         });
-    }
-  }, []);
-
-  useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const resume = queryParams.get("resume") === "true";
-    const resumeId = queryParams.get("interviewId");
-
-    if (resume && resumeId) {
-      setInterviewId(Number(resumeId));
-      setInterviewStatus("active");
     }
   }, []);
 
@@ -178,6 +212,8 @@ export default function InterviewScreen({ token, setToken }) {
       // At this point, we're guaranteed OK response
       const data = await response.json();
       setInterviewId(data.interview_id);
+      const userId = localStorage.getItem("userId");
+      localStorage.setItem(`${userId}_interviewId`, data.interview_id);
       setMessages([{ role: "interviewer", content: data.first_question }]);
       setInterviewStatus("active");
       posthog.capture("interview_started", {
@@ -274,6 +310,8 @@ export default function InterviewScreen({ token, setToken }) {
       if (isFirstMessage && data.conversation && data.conversation.id) {
         console.log("Setting conversation ID:", data.conversation.id);
         setConversationId(data.conversation.id);
+        const userId = localStorage.getItem("userId");
+        localStorage.setItem(`${userId}_conversationId`, data.conversation.id);
       }
 
       // Process the response from the server

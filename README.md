@@ -354,10 +354,12 @@ Tests are run consistently during development and are integrated into the CI pip
 - Graceful OpenAI failures
 - Interview introduction and expectations
 - User analytics for backend
+- Survey for feedback
 - Marketing for launch
 
 ### Upcoming Additional Improvements
 - Github/Google auth
+- Deduplicating questions accross interviews
 - Strengths/weaknesses summary
 - Line graph (progress tracker)
 - Interview readiness meter
