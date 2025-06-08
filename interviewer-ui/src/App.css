@@ -2,9 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
 
 #root {
-  
-  margin: auto;
-  padding: 2rem;
+  margin: 0 auto;
+  width: 1200px;
   text-align: center;
   backface-visibility: hidden;
   border: 4px solid purple;

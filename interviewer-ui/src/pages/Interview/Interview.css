@@ -2,7 +2,6 @@
 
 .interview-screen {
   height: 100vh;
-  width: 75rem;
   background: black;
   color: var(--primary-green);
   padding: .5rem;
@@ -143,7 +142,7 @@
   background-color: #111;
   color: var(--primary-green);
   border: 1px solid var(--primary-green);
-  resize: both;
+  resize: none;
   box-sizing: border-box;
   font-family: 'VT323', monospace;
 }

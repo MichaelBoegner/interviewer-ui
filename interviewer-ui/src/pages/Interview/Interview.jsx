@@ -647,10 +647,9 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                     <div
                       style={{
                         display: "flex",
-                        resize: "both",
                         overflow: "auto",
                         width: "100%",
-                        height: "300px",
+                        height: "100%",
                         // marginTop: "1.5rem",
                         // marginBottom: "1rem",
                         border: "1px solid var(--primary-green)",
