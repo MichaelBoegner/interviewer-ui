@@ -7,6 +7,8 @@ import {
 } from "react-router-dom";
 import ResetRequest from "./pages/ResetRequest/ResetRequest";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import UserSignUp from "./pages/UserSignUp/UserSignUp";
+import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
 import Login from "./pages/Login/Login";
 import Landing from "./pages/Landing/Landing";
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -21,7 +23,7 @@ import Privacy from "./components/Footer/Privacy";
 function isTokenValid(token) {
   try {
     const payload = JSON.parse(atob(token.split(".")[1]));
-    return payload.exp * 1000 > Date.now(); // JWT `exp` is in seconds
+    return payload.exp * 1000 > Date.now();
   } catch (e) {
     console.error("Failed to parse token:", e);
     return false;
@@ -68,12 +70,11 @@ export default function App() {
 
   return (
     <Router>
-      <div className="header">
-        <Header setToken={updateToken} />
-      </div>
-
+      <Header setToken={updateToken} isAuthenticated={isAuthenticated} />
       <Routes>
         <Route path="/about" element={<Landing />} />
+        <Route path="/signup" element={<UserSignUp />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
         <Route
           path="/login"
           element={

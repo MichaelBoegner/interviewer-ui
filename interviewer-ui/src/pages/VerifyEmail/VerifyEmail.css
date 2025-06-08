@@ -1,0 +1,144 @@
+.login-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+  align-items: center;
+  background: black;
+  color: var(--primary-green);
+  font-family: 'VT323', monospace;
+}
+
+.auth-box {
+  width: 100%;
+  max-width: 480px;
+  border: 2px solid var(--primary-green);
+  background: #111;
+  padding: 24px;
+  position: relative;
+}
+
+.auth-header {
+  background-color: #0f0;
+  color: black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.auth-body {
+  margin-top: 4px;
+}
+
+.auth-title {
+  margin-bottom: 16px;
+  font-size: 1rem;
+  color: #77ff77;
+}
+
+.terminal-prompt {
+  color: #ff0;
+  margin-right: 8px;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.input-label {
+  color: var(--primary-green);
+  margin-right: 8px;
+}
+
+input {
+  flex: 1;
+  padding: 4px;
+  background: black;
+  border: none;
+  border-bottom: 1px solid var(--primary-green);
+  color: var(--primary-green);
+}
+
+input:focus {
+  outline: none;
+  border-bottom: 1px solid #0f0;
+  box-shadow: 0 0 4px var(--glow-color);
+}
+
+.error-box, .success-box {
+  padding: 8px;
+  margin-bottom: 16px;
+  font-size: 0.875rem;
+}
+
+.error-box {
+  color: #f77;
+  border: 1px solid #f44;
+  background: rgba(255, 0, 0, 0.1);
+}
+
+.success-box {
+  color: #7f7;
+  border: 1px solid #0f0;
+  background: rgba(0, 255, 0, 0.1);
+}
+
+.error-label, .success-label {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.retro-button {
+  margin-top: 12px;
+  padding: 8px;
+  border: 1px solid var(--primary-green);
+  background: black;
+  color: var(--primary-green);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.retro-button:hover {
+  background: var(--primary-green);
+  color: black;
+}
+
+.retro-button.secondary {
+  border-color: #4af;
+  color: #4af;
+}
+
+.retro-button.secondary:hover {
+  background: #4af;
+  color: black;
+}
+
+.forgot-password {
+  margin-top: 16px;
+  font-size: 0.875rem;
+}
+
+.footer-note {
+  margin-top: 24px;
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.error-box {
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  background-color: #222;
+  border: 1px solid #555;
+  color: #ffc;
+  font-family: monospace;
+}

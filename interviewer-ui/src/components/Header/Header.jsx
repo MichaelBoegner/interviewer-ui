@@ -3,12 +3,11 @@ import posthog from "posthog-js";
 import { AsciiHeader } from "../ASCII/ASCII";
 import "./Header.css";
 
-export default function Header({ setToken }) {
+export default function Header({ setToken, isAuthenticated }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
     posthog.capture("logout_clicked");
-
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     setToken(null);
@@ -22,9 +21,16 @@ export default function Header({ setToken }) {
           <Link to="/dashboard">Dashboard</Link>
           <Link to="/interview">Interview</Link>
           <Link to="/about">About</Link>
-          <span onClick={handleLogout} className="logout-link">
-            Logout
-          </span>
+
+          {isAuthenticated ? (
+            <span onClick={handleLogout} className="logout-link">
+              Logout
+            </span>
+          ) : (
+            <Link to="/login" className="logout-link">
+              Login
+            </Link>
+          )}
         </div>
       </div>
       <div className="ascii-banner">

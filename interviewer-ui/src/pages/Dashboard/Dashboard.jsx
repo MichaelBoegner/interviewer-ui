@@ -10,6 +10,23 @@ export default function Dashboard({ token, setToken }) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        fetch(`${API_URL}/user/dashboard`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+          .then((res) => (res.ok ? res.json() : null))
+          .then((data) => data && setUserData(data))
+          .catch((err) => console.error("Refresh on tab return failed:", err));
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () =>
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, [API_URL, token]);
+
+  useEffect(() => {
     fetch(`${API_URL}/user/dashboard`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -29,7 +46,6 @@ export default function Dashboard({ token, setToken }) {
         if (data) {
           setUserData(data);
 
-          // ✅ Track dashboard view
           posthog.identify(data.user_id || data.email, {
             email: data.email,
             plan: data.plan,
@@ -38,7 +54,7 @@ export default function Dashboard({ token, setToken }) {
         }
       })
       .catch((err) => setError(err.message));
-  }, [token, navigate, setToken]);
+  }, [API_URL, token, navigate, setToken]);
 
   if (error) return <div className="dashboard-error">Error: {error}</div>;
   if (!userData) return <div className="dashboard-loading">Loading...</div>;

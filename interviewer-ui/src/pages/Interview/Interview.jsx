@@ -13,7 +13,7 @@ export default function InterviewScreen({ token, setToken }) {
   const [conversationId, setConversationId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState("");
-  const [interviewStatus, setInterviewStatus] = useState("idle");
+  const [hasInterviewStarted, setHasInterviewStarted] = useState(false);
   const [isInterviewEnded, setIsInterviewEnded] = useState(false);
   const [totalScore, setTotalScore] = useState(0);
   const [questionsAnswered, setQuestionsAnswered] = useState(0);
@@ -44,8 +44,8 @@ export default function InterviewScreen({ token, setToken }) {
       .then((res) =>
         res.ok ? res.json() : Promise.reject("Failed to fetch interview status")
       )
-      .then((interviewData) => {
-        setInterviewStatus(interviewData.status);
+      .then(() => {
+        setHasInterviewStarted(true);
 
         const conversationUrl = storedConversationId
           ? `${API_URL}/conversations/${storedInterviewId}`
@@ -86,12 +86,12 @@ export default function InterviewScreen({ token, setToken }) {
           if (!res.ok) throw new Error("Failed to fetch interview status");
           return res.json();
         })
-        .then((interviewData) => {
-          setInterviewStatus(interviewData.status);
+        .then(() => {
+          setHasInterviewStarted(true);
         })
         .catch((err) => {
           console.error("Error getting interview status:", err.message);
-          setInterviewStatus("active"); // fallback if necessary
+          setHasInterviewStarted(true);
         });
 
       fetch(`${API_URL}/conversations/${resumeId}`, {
@@ -180,7 +180,7 @@ export default function InterviewScreen({ token, setToken }) {
 
     setInterviewId(null);
     setConversationId(null);
-    setInterviewStatus("idle");
+    setHasInterviewStarted(false);
     setIsInterviewEnded(false);
     setMessages([]);
     setResetNotice(
@@ -249,7 +249,7 @@ export default function InterviewScreen({ token, setToken }) {
       const userId = localStorage.getItem("userId");
       localStorage.setItem(`${userId}_interviewId`, data.interview_id);
       setMessages([{ role: "interviewer", content: data.first_question }]);
-      setInterviewStatus("active");
+      setHasInterviewStarted(true);
       posthog.capture("interview_started", {
         interview_id: data.interview_id,
       });
@@ -518,47 +518,6 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
     }
   };
 
-  const toggleInterviewStatus = async () => {
-    if (!interviewId || !token) return;
-
-    const newStatus = interviewStatus === "active" ? "paused" : "active";
-
-    try {
-      const response = await fetch(`${API_URL}/interviews/${interviewId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          errorData.error || errorData.message || "Failed to update status"
-        );
-      }
-
-      setInterviewStatus(newStatus);
-      posthog.capture("interview_status_toggled", {
-        interviewId,
-        from: interviewStatus,
-        to: newStatus,
-      });
-    } catch (err) {
-      console.error("Status update failed:", err);
-      posthog.capture("interview_status_toggle_exception", {
-        interviewId,
-        error: err.message,
-      });
-      setMessages((prev) => [
-        ...prev,
-        { role: "system", content: `Failed to update status: ${err.message}` },
-      ]);
-    }
-  };
-
   useEffect(() => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop =
@@ -575,12 +534,6 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
           </div>
         )}
 
-        {interviewStatus === "paused" && (
-          <div className="system-message reset-pause-notice">
-            <span className="label-tag">[SYSTEM]:</span> Interview is paused.
-            Resume to continue.
-          </div>
-        )}
         {resetNotice && (
           <div className="system-message reset-pause-notice">
             <span className="label-tag">[SYSTEM]:</span> {resetNotice}
@@ -638,9 +591,9 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
 
         <div className="input-wrapper">
           {interviewId &&
-            !isInterviewEnded &&
+            hasInterviewStarted &&
             !authError &&
-            interviewStatus === "active" && (
+            !isInterviewEnded && (
               <>
                 <div className="textarea-wrapper">
                   {isCodeMode ? (
@@ -709,33 +662,18 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
         </button>
       </div>
       <div className="button-row">
-        {interviewStatus === "idle" ? (
+        {!hasInterviewStarted ? (
           <button
             onClick={startNewInterview}
             disabled={isLoading}
             className={`retro-button red ${isLoading ? "disabled" : ""}`}
           >
-            [ START_INTERVIEW ]
+            [ START_NEW_INTERVIEW ]
           </button>
         ) : (
-          <>
-            <button
-              onClick={toggleInterviewStatus}
-              className="retro-button yellow"
-            >
-              {interviewStatus === "active"
-                ? "[ PAUSE_INTERVIEW ]"
-                : "[ RESUME_INTERVIEW ]"}
-            </button>
-
-            <button
-              onClick={resetInterview}
-              className="retro-button red"
-              style={{ marginLeft: "1rem" }}
-            >
-              [ SAVE AND RESET ]
-            </button>
-          </>
+          <button onClick={resetInterview} className="retro-button red">
+            [ SAVE AND RESET ]
+          </button>
         )}
       </div>
       {isCodeMode && (

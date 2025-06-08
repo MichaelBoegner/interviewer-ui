@@ -9,10 +9,14 @@ posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_KEY, {
   api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
   autocapture: false,
   capture_pageview: true,
-  capture_exceptions: true,
+  capture_exceptions: false,
   capture_performance: false,
+  capture_console_log_exceptions: false,
+  disable_session_recording: true,
   debug: import.meta.env.MODE === "development",
 });
+
+console.log("Recording disabled?", posthog.sessionRecording?.started);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
