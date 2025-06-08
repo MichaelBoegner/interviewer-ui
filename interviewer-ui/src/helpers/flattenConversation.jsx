@@ -76,6 +76,62 @@ export default function flattenConversation(conv) {
       }
     }
   }
+  if (
+    conv.current_topic === 0 &&
+    conv.current_subtopic === "finished" &&
+    conv.current_question_number === 0
+  ) {
+    let totalScore = 0;
+    let totalQuestions = 0;
+
+    for (const topicId of topicOrder) {
+      const topic = conv.topics[topicId];
+      const questionOrder = Object.keys(topic.questions || {});
+
+      for (const qId of questionOrder) {
+        const question = topic.questions[qId];
+        const msgs = question.messages || [];
+
+        for (const msg of msgs) {
+          if (
+            msg.author === "interviewer" &&
+            msg.content.trim().startsWith("{")
+          ) {
+            try {
+              const parsed = JSON.parse(msg.content);
+              if (typeof parsed.score === "number") {
+                totalScore += parsed.score;
+                totalQuestions++;
+              }
+            } catch (_) {
+              continue;
+            }
+          }
+        }
+      }
+    }
+
+    const percentage =
+      totalQuestions > 0
+        ? Math.round((totalScore / (totalQuestions * 10)) * 100)
+        : 0;
+
+    out.push({
+      role: "system",
+      content: `
+=================================
+    INTERVIEW COMPLETED
+=================================
+
+Total Score: ${totalScore}/${totalQuestions * 10}
+Percentage: ${percentage}%
+
+Thank you for participating. I hope you found it useful. 
+If you have a moment, please fill out the short survey so I can keep improving the experience for you! ^_^
+
+`,
+    });
+  }
 
   return out;
 }

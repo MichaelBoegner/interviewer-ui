@@ -2,7 +2,7 @@
   display: flex;
   justify-content: flex-end;
   padding: 0.05rem 0.5rem;
-    box-sizing: border-box; /* ✅ prevent overflow */
+  box-sizing: border-box; /* ✅ prevent overflow */
   position: relative;
 }
 
@@ -26,6 +26,8 @@
   text-align: center;
   margin-top: 0.05rem;
   margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid var(--primary-green);
 }
 
 .logout-link {
