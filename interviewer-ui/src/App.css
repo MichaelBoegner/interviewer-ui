@@ -3,7 +3,8 @@
 
 #root {
   margin: 0 auto;
-  width: 1200px;
+  max-width: 1600px;
+  width: 100%;
   text-align: center;
   backface-visibility: hidden;
   border: 4px solid purple;
@@ -31,10 +32,6 @@ body {
   background-color: var(--terminal-black);
   color: var(--primary-green);
   line-height: 1;
-}
-
-header {
-  width: 100vw;
 }
 
 button {
