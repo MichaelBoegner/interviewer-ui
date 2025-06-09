@@ -179,15 +179,17 @@ export default function Dashboard({ token, setToken }) {
         <p className="dashboard-subtext">
           Buy interview credits and see past interviews and account info.
         </p>
-        <button
-          onClick={() => {
-            posthog.capture("dashboard_to_interview", {});
-            navigate("/interview");
-          }}
-          className="retro-button go-to-interview"
-        >
-          Go to Interview
-        </button>
+        <div className="go-to-interview-row">
+          <button
+            onClick={() => {
+              posthog.capture("dashboard_to_interview", {});
+              navigate("/interview");
+            }}
+            className="retro-button"
+          >
+            [ Go_to_Interview ]
+          </button>
+        </div>
       </div>
       <div className="dashboard-grid">
         <div className="left-panel">
