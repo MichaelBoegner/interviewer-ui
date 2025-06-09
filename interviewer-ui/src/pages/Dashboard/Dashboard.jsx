@@ -174,6 +174,12 @@ export default function Dashboard({ token, setToken }) {
 
   return (
     <div className="dashboard-wrapper">
+      <div className="dashboard-header">
+        <h1>DASHBOARD</h1>
+        <p className="dashboard-subtext">
+          Buy interview credits and see past interviews and account info.
+        </p>
+      </div>
       <div className="dashboard-grid">
         <div className="left-panel">
           <h2 className="section-heading">Account Info</h2>
@@ -213,6 +219,7 @@ export default function Dashboard({ token, setToken }) {
 
           <div className="purchase-options">
             <h3 className="section-heading">Buy/Subscribe</h3>
+            <p className="section-sub-heading">1 Credit == 1 Interview</p>
             <div className="sub-heading">INDIVIDUAL</div>
             <button
               className="retro-button"

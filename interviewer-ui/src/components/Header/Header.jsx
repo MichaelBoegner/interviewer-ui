@@ -16,25 +16,27 @@ export default function Header({ setToken, isAuthenticated }) {
 
   return (
     <>
-      <div className="topbar">
-        <div className="nav-links">
-          <Link to="/dashboard">Dashboard</Link>
-          <Link to="/interview">Interview</Link>
-          <Link to="/about">About</Link>
+      <div className="header-wrapper">
+        <div className="topbar">
+          <div className="nav-links">
+            <Link to="/dashboard">Dashboard</Link>
+            <Link to="/interview">Interview</Link>
+            <Link to="/about">About</Link>
 
-          {isAuthenticated ? (
-            <span onClick={handleLogout} className="logout-link">
-              Logout
-            </span>
-          ) : (
-            <Link to="/login" className="logout-link">
-              Login
-            </Link>
-          )}
+            {isAuthenticated ? (
+              <span onClick={handleLogout} className="logout-link">
+                Logout
+              </span>
+            ) : (
+              <Link to="/login" className="logout-link">
+                Login
+              </Link>
+            )}
+          </div>
         </div>
-      </div>
-      <div className="ascii-banner">
-        <AsciiHeader text="TECHNICAL INTERVIEW TERMINAL v1.0.0" />
+        <div className="ascii-banner">
+          <AsciiHeader text="TECHNICAL INTERVIEW TERMINAL v1.0.0" />
+        </div>
       </div>
     </>
   );

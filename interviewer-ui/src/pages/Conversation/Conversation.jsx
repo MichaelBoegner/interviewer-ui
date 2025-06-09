@@ -113,9 +113,12 @@ const Conversation = () => {
           {(interviewStatus === "active" || interviewStatus === "paused") && (
             <button
               className="retro-button yellow small"
-              onClick={() =>
-                navigate(`/interview?resume=true&interviewId=${interviewId}`)
-              }
+              onClick={() => {
+                const userId = localStorage.getItem("userId");
+                localStorage.removeItem(`${userId}_interviewId`);
+                localStorage.removeItem(`${userId}_conversationId`);
+                navigate(`/interview?resume=true&interviewId=${interviewId}`);
+              }}
             >
               → Resume Interview
             </button>

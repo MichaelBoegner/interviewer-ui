@@ -1,9 +1,15 @@
+.header-wrapper{
+  border: 4px solid blue;
+margin-bottom: 2rem;
+}
+
 .topbar {
+  border: 4px solid blue;
   display: flex;
   justify-content: flex-end;
-  padding: 0.05rem 0.5rem;
-  box-sizing: border-box; /* ✅ prevent overflow */
+  padding: 1rem 1.25rem 0 0;
   position: relative;
+  margin-bottom: 0;
 }
 
 .nav-links {
@@ -15,7 +21,7 @@
 .nav-links a {
   color: var(--user-color);
   text-decoration: none;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
 }
 
 .nav-links a:hover {
@@ -23,11 +29,11 @@
 }
 
 .ascii-banner {
-  text-align: center;
-  margin-top: 0.05rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
+  border: 4px solid blue;
   border-bottom: 1px solid var(--primary-green);
+  padding-bottom: 1rem;
+  margin: 0;
+  padding-top: 0;
 }
 
 .logout-link {
