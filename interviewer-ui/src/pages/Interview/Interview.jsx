@@ -194,6 +194,7 @@ export default function InterviewScreen({ token, setToken }) {
     setIsInterviewEnded(false);
     setMessages([]);
     setAuthError("");
+    setResetNotice("");
     setConversationId(null);
     setTotalScore(0);
     setQuestionsAnswered(0);
@@ -532,9 +533,28 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
     <div className="interview-page">
       <div className="interview-header">
         <h1>INTERVIEW</h1>
-        <p className="interview-subtext">
-          Click START_NEW_INTERVIEW below to begin your interview.
-        </p>
+        <div className="button-row-start-save">
+          {!hasInterviewStarted ? (
+            <button
+              onClick={startNewInterview}
+              disabled={isLoading}
+              className={`retro-button green ${isLoading ? "disabled" : ""}`}
+            >
+              [ START_NEW_INTERVIEW ]
+            </button>
+          ) : (
+            <button onClick={resetInterview} className="retro-button red">
+              [ SAVE_AND_RESET ]
+            </button>
+          )}
+        </div>
+      </div>
+      <div className="reset-pause-notice-row">
+        {resetNotice && (
+          <div className="reset-pause-notice">
+            <span className="label-tag">[SYSTEM]:</span> {resetNotice}
+          </div>
+        )}
       </div>
 
       <div className="interview-screen">
@@ -545,11 +565,6 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
             </div>
           )}
 
-          {resetNotice && (
-            <div className="system-message reset-pause-notice">
-              <span className="label-tag">[SYSTEM]:</span> {resetNotice}
-            </div>
-          )}
           <div className="chat-window-wrapper">
             <div className="chat-window" ref={messagesContainerRef}>
               {messages.length === 0 ? (
@@ -602,118 +617,100 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
             </div>
           </div>
 
-          <div className="input-wrapper">
-            {interviewId &&
-              hasInterviewStarted &&
-              !authError &&
-              !isInterviewEnded && (
-                <>
-                  <div className="textarea-wrapper">
-                    {isCodeMode ? (
-                      <div
-                        style={{
-                          display: "flex",
-                          overflow: "auto",
-                          width: "100%",
-                          height: "100%",
-                          // marginTop: "1.5rem",
-                          // marginBottom: "1rem",
-                          border: "1px solid var(--primary-green)",
-                          transition: "none",
-                          animation: "none",
-                        }}
-                      >
-                        <Editor
-                          language={language}
-                          defaultLanguage={language}
-                          value={input}
-                          onChange={(val) => setInput(val || "")}
-                          theme="vs-dark"
-                          loading={null}
-                          options={{
-                            fontSize: 14,
-                            fontFamily: "monospace",
-                            minimap: { enabled: false },
-                            lineNumbers: "on",
+          <div className="user-entry-wrapper">
+            <div className="input-wrapper">
+              {interviewId &&
+                hasInterviewStarted &&
+                !authError &&
+                !isInterviewEnded && (
+                  <>
+                    <div className="textarea-wrapper">
+                      {isCodeMode ? (
+                        <div
+                          style={{
+                            display: "flex",
+                            overflow: "auto",
+                            width: "100%",
+                            height: "100%",
+                            // marginTop: "1.5rem",
+                            // marginBottom: "1rem",
+                            border: "1px solid var(--primary-green)",
+                            transition: "none",
+                            animation: "none",
                           }}
+                        >
+                          <Editor
+                            language={language}
+                            defaultLanguage={language}
+                            value={input}
+                            onChange={(val) => setInput(val || "")}
+                            theme="vs-dark"
+                            loading={null}
+                            options={{
+                              fontSize: 14,
+                              fontFamily: "monospace",
+                              minimap: { enabled: false },
+                              lineNumbers: "on",
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <textarea
+                          value={input}
+                          onChange={(e) => setInput(e.target.value)}
+                          disabled={isLoading || isInterviewEnded}
+                          placeholder="Enter your response here. Click [ SEND_MESSAGE ] below to send."
+                          className="textarea-input"
                         />
-                      </div>
-                    ) : (
-                      <textarea
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        disabled={isLoading || isInterviewEnded}
-                        placeholder="Enter your response here. Click [ SEND_MESSAGE ] below to send."
-                        className="textarea-input"
-                      />
-                    )}
-                  </div>
-                </>
-              )}
-          </div>
-        </div>
-        <div className="button-container-interview">
-          <div className="button-row-input">
-            <button
-              onClick={sendMessage}
-              disabled={isLoading || !input.trim() || isInterviewEnded}
-              className="retro-button green"
-            >
-              {isLoading ? "[ TRANSMITTING... ]" : "[ SEND_MESSAGE ]"}
-            </button>
-
-            <button
-              onClick={() => {
-                const newMode = !isCodeMode;
-                setIsCodeMode(newMode);
-                posthog.capture("code_mode_toggled", {
-                  mode: newMode ? "code" : "text",
-                });
-              }}
-              className="retro-button blue"
-            >
-              [ {isCodeMode ? "TEXT_MODE" : "CODE_MODE"} ]
-            </button>
-            <div className="button-is-code">
-              <div
-                className="language-select-row"
-                style={{ visibility: isCodeMode ? "visible" : "hidden" }}
+                      )}
+                    </div>
+                  </>
+                )}
+            </div>
+            <div className="button-container-interview">
+              <button
+                onClick={sendMessage}
+                disabled={isLoading || !input.trim() || isInterviewEnded}
+                className="retro-button green"
               >
-                <label htmlFor="language-select">Language:</label>
-                <select
-                  id="language-select"
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
-                  className="language-dropdown"
-                >
-                  <option value="python">python</option>
-                  <option value="go">go</option>
-                  <option value="javascript">javaScript</option>
-                  <option value="typescript">typeScript</option>
-                  <option value="java">java</option>
-                  <option value="c">C</option>
-                  <option value="csharp">C#</option>
-                  <option value="cpp">C++</option>
-                  <option value="shell">bash</option>
-                </select>
+                {isLoading ? "[ TRANSMITTING... ]" : "[ SEND_MESSAGE ]"}
+              </button>
+
+              <button
+                onClick={() => {
+                  const newMode = !isCodeMode;
+                  setIsCodeMode(newMode);
+                  posthog.capture("code_mode_toggled", {
+                    mode: newMode ? "code" : "text",
+                  });
+                }}
+                className="retro-button blue"
+              >
+                [ {isCodeMode ? "TEXT_MODE" : "CODE_MODE"} ]
+              </button>
+              <div className="button-is-code">
+                <div className="language-select-row">
+                  <label htmlFor="language-select">Language:</label>
+                  <select
+                    id="language-select"
+                    value={language}
+                    onChange={(e) => setLanguage(e.target.value)}
+                    className="language-dropdown"
+                    disabled={!isCodeMode}
+                  >
+                    <option value="python">python</option>
+                    <option value="go">go</option>
+                    <option value="javascript">javaScript</option>
+                    <option value="typescript">typeScript</option>
+                    <option value="java">java</option>
+                    <option value="c">C</option>
+                    <option value="csharp">C#</option>
+                    <option value="cpp">C++</option>
+                    <option value="shell">bash</option>
+                  </select>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="button-row-start-save">
-            {!hasInterviewStarted ? (
-              <button
-                onClick={startNewInterview}
-                disabled={isLoading}
-                className={`retro-button red ${isLoading ? "disabled" : ""}`}
-              >
-                [ START_NEW_INTERVIEW ]
-              </button>
-            ) : (
-              <button onClick={resetInterview} className="retro-button red">
-                [ SAVE AND RESET ]
-              </button>
-            )}
           </div>
         </div>
 

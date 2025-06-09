@@ -5,12 +5,15 @@
 .interview-header {
   border: 4px solid white;
   text-align: center;
-  padding-bottom: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .interview-header h1 {
+  color: #77ff77;
   font-family: 'VT323', monospace;
-  color: var(--primary-green);
   font-size: 2.5rem;
   margin: 0;
 }
@@ -27,12 +30,12 @@
   height: 100vh;
   background: black;
   color: var(--primary-green);
-  padding: .5rem;
+  margin-top: 0;
+  /* padding: .5rem; */
   font-family: 'VT323', monospace;
-  border: 20px solid pink;
+  /* border: 20px solid pink; */
   display: flex;
   flex-direction: column;
-
 }
 
 
@@ -53,14 +56,13 @@
 
 .terminal-box {
   width: 100%;
-  height: 80%;
+  height: 100%;
   background-color: #111;
   border: 10px solid var(--primary-green);
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   flex-direction: row;
-
 }
 
 .terminal-header {
@@ -82,13 +84,17 @@
   justify-content: center;
 }
 
-
 .button-row-start-save,
 .button-row-input,
 .language-select-row {
   display: flex;
   justify-content: center;
   border: 4px solid blue;
+}
+
+.button-row-start-save {
+  margin-bottom: 0;
+  width: 20rem;
 }
 
 .terminal-header .label {
@@ -171,13 +177,26 @@
   color: red;
 }
 
-.input-wrapper {
-  border: 4px solid orange;
+
+
+
+
+
+.user-entry-wrapper {
+  border: 8px solid white;
   width: 50%;
+  height: 100%;
+  display:flex;
+  flex-direction: column;
+}
+
+.input-wrapper {
+  border: 8px solid blue;
+  height: 100%;
 }
 
 .textarea-wrapper {
-  border: 4px solid blue;
+  border: 8px solid orange;
   height: 100%;
 }
 
@@ -196,20 +215,14 @@
 
 
 .retro-button {
-  
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: black;
+  background: black;
   border: 1px solid var(--primary-green);
   color: var(--primary-green);
+  padding: 0.5rem;
   cursor: pointer;
-  font-family: 'VT323', monospace;
   transition: all 0.2s;
-}
+  font-family: 'VT323', monospace;
 
-.retro-button:hover {
-  background-color: #0f0;
-  color: black;
 }
 
 .retro-button.red {
@@ -251,9 +264,13 @@
   color: #777;
 }
 
+.reset-pause-notice-row{
+  height: 27px;
+  margin-bottom: 0;
+}
+
 .reset-pause-notice {
-  margin: 1rem 0;
-  padding: 0.75rem 1rem;
+  padding: .4rem;
   background-color: #222;
   border: 1px solid #555;
   color: #ffc;

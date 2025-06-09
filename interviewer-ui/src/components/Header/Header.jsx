@@ -1,10 +1,21 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import posthog from "posthog-js";
 import { AsciiHeader } from "../ASCII/ASCII";
 import "./Header.css";
 
 export default function Header({ setToken, isAuthenticated }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const path = location.pathname;
+
+  const shouldUseCenteredLayout = [
+    "/about",
+    "/signup",
+    "/verify-email",
+    "/login",
+    "/reset-request",
+    "/reset-password",
+  ].includes(path);
 
   const handleLogout = () => {
     posthog.capture("logout_clicked");
@@ -16,13 +27,24 @@ export default function Header({ setToken, isAuthenticated }) {
 
   return (
     <>
-      <div className="header-wrapper">
+      <div
+        className={`header-wrapper ${shouldUseCenteredLayout ? "centered-layout" : ""}`}
+      >
         <div className="topbar">
+          {!shouldUseCenteredLayout && (
+            <div className="header-logo-row">
+              <img
+                src="/interviewer-logo.png"
+                alt="Interviewer Logo"
+                className="header-logo"
+              />
+            </div>
+          )}
+
           <div className="nav-links">
             <Link to="/dashboard">Dashboard</Link>
             <Link to="/interview">Interview</Link>
             <Link to="/about">About</Link>
-
             {isAuthenticated ? (
               <span onClick={handleLogout} className="logout-link">
                 Logout
@@ -34,9 +56,12 @@ export default function Header({ setToken, isAuthenticated }) {
             )}
           </div>
         </div>
-        <div className="ascii-banner">
-          <AsciiHeader text="TECHNICAL INTERVIEW TERMINAL v1.0.0" />
-        </div>
+
+        {shouldUseCenteredLayout && (
+          <div className="ascii-banner">
+            <AsciiHeader text="TECHNICAL INTERVIEW TERMINAL v1.0.0" />
+          </div>
+        )}
       </div>
     </>
   );

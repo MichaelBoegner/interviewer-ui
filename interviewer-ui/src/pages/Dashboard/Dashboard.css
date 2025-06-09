@@ -12,8 +12,8 @@
 }
 
 .dashboard-header h1 {
+  color: #77ff77;
   font-family: 'VT323', monospace;
-  color: var(--primary-green);
   font-size: 2.5rem;
   margin: 0;
 }
@@ -81,21 +81,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-}
-
-.retro-button {
-  background: black;
-  border: 1px solid var(--primary-green);
-  color: var(--primary-green);
-  padding: 0.5rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: 'VT323', monospace;
-}
-
-.retro-button:hover {
-  background: #00aa00;
-  color: black;
 }
 
 .cancel-button {
