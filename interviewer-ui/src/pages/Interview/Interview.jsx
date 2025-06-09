@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import posthog from "posthog-js";
 import flattenConversation from "../../helpers/flattenConversation";
 import Editor from "@monaco-editor/react";
@@ -23,6 +23,7 @@ export default function InterviewScreen({ token, setToken }) {
   const navigate = useNavigate();
   const [resetNotice, setResetNotice] = useState("");
   const [language, setLanguage] = useState("plaintext");
+  const location = useLocation();
   const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -69,7 +70,7 @@ export default function InterviewScreen({ token, setToken }) {
       .catch((err) => {
         console.error("Auto-resume failed:", err);
       });
-  }, []);
+  }, [API_URL, location.pathname]);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
