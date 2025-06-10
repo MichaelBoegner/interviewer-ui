@@ -15,6 +15,8 @@ export default function Header({ setToken, isAuthenticated }) {
     "/login",
     "/reset-request",
     "/reset-password",
+    "/terms",
+    "/privacy",
   ].includes(path);
 
   const handleLogout = () => {

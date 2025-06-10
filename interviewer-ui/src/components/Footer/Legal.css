@@ -1,22 +1,27 @@
 .legal-wrapper {
-  padding: .5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.legal-text {
   background-color: black;
   color: var(--primary-green);
   font-family: 'VT323', monospace;
   max-width: 800px;
 }
 
-.legal-wrapper h1 {
+.legal-text h1 {
   font-size: 2rem;
   margin-bottom: .25rem;
 }
 
-.legal-wrapper h2 {
+.legal-text h2 {
   font-size: 1.4rem;
   text-align: left;
 }
 
-.legal-wrapper p {
+.legal-text p {
   font-size: 1.1rem;
   line-height: .75;
   text-align: left;
