@@ -121,7 +121,11 @@ background-color: #111;
   font-size: 0.95rem;
 }
 
-
+.intro-header {
+  color: #00cc66;
+  font-weight: bold;
+  font-size: 1.45rem;;
+}
 
 
 .message {
