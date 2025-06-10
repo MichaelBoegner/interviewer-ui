@@ -534,7 +534,77 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
           <div className="chat-window-wrapper">
             <div className="chat-window" ref={messagesContainerRef}>
               {messages.length === 0 ? (
-                <div className="empty-chat" />
+                <div className="message interviewer">
+                  <div className="message-header">{`INTERVIEWER >`}</div>
+                  <div className="message-content">
+                    Welcome to the backend interview, and thanks so much for
+                    taking the time to join me today! ^_^
+                    <br />
+                    <br />
+                    As you probably noticed, above the chat window here, there's
+                    a [ START_NEW_INTERVIEW ] button. That button will, of
+                    course, start a new interview, but it will also deduct a
+                    credit from your current credit total. If you don't have
+                    credits, you can purchase them on your Dashboard page.
+                    <br />
+                    <br />
+                    About the Interview Process Itself:
+                    <br />
+                    * Each interview covers 6 topics, with 2 questions for each
+                    topic:
+                    <br />
+                    1. Introduction <br />
+                    2. Coding <br />
+                    3. System Design <br />
+                    4. Databases <br />
+                    5. Behavioral <br />
+                    6. General backend knowledge <br />
+                    <br />
+                    * For each response you give, I will provide a score out of
+                    10 and feedback.
+                    <br />
+                    <br />
+                    * At the end of an interview, I will let you know the
+                    interview has finished and give you your total score as a
+                    percentage.
+                    <br />
+                    <br />
+                    * Once you start an interview, you may leave the page at any
+                    time, as conversations are asynchronous. <br />
+                    <br />
+                    * You may also resume any previously unfinished interviews
+                    in your Dashboard by clicking on one under "Past
+                    Interviews". <br />
+                    <br />
+                    Important Notes about Usage: <br />
+                    * Make sure you answer each question directly. Asking
+                    clarifying questions like “Can you explain?” or “I don’t
+                    understand” may confuse me and cause repeated prompts or
+                    incorrect feedback.
+                    <br />
+                    <br />
+                    * Once you enter your response, there is no further editing
+                    it, meaning you will have wasted a question. As a result I
+                    have ensured messages can only be sent by clicking the [
+                    SEND_MESSAGE ] button you'll see at the bottom of the input
+                    screen on the right.
+                    <br />
+                    <br />I made Interviewer as a solo dev because I wanted to
+                    provide something useful to the world. As a result, you'll
+                    get a survey at the end of each interview. As this is
+                    v1.0.0, it's far from perfect, but I wanted to get it out
+                    into the world so I could more quickly figure out what users
+                    like yourself really want.
+                    <br />
+                    <br />
+                    In short, if you can take the time to fill out the survey
+                    that will go a long ways towards me making this better for
+                    everyone, yourself included.
+                    <br /> <br />
+                    Thanks again for stopping by and best of luck on the
+                    interview!
+                  </div>
+                </div>
               ) : (
                 (() => {
                   let interviewerCount = 0;

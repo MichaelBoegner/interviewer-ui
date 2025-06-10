@@ -350,8 +350,6 @@ Tests are run consistently during development and are integrated into the CI pip
 
 ### Current Focus
 #### GTM steps: 
-- Email address verification Resend
-- Double password check on registration
 - Graceful OpenAI failures
 - Interview introduction and expectations
 - User analytics for backend
