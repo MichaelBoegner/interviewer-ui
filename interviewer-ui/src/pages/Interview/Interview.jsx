@@ -538,7 +538,7 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                   <div className="message-header">{`INTERVIEWER >`}</div>
                   <div className="message-content">
                     Welcome to the backend interview, and thanks so much for
-                    taking the time to join me today! ^_^
+                    taking the time to join me today!
                     <br />
                     <br />
                     As you probably noticed, above the chat window here, there's
@@ -600,7 +600,7 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                     for everyone, yourself included.
                     <br /> <br />
                     Thanks again for stopping by and best of luck on the
-                    interview!{" "}
+                    interview! ^_^
                   </div>
                 </div>
               ) : (

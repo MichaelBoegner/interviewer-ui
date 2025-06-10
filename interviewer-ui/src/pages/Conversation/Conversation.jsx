@@ -99,7 +99,7 @@ const Conversation = () => {
             }}
             className="retro-button green small"
           >
-            ← Back to Dashboard
+            [ Back_to_Dashboard ]
           </button>
           {(interviewStatus === "active" || interviewStatus === "paused") && (
             <button
@@ -111,7 +111,7 @@ const Conversation = () => {
                 navigate(`/interview?resume=true&interviewId=${interviewId}`);
               }}
             >
-              → Resume Interview
+              [ Resume_Interview ]
             </button>
           )}
         </div>

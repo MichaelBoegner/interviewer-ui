@@ -61,7 +61,7 @@ export default function Header({ setToken, isAuthenticated }) {
 
         {shouldUseCenteredLayout && (
           <div className="ascii-banner">
-            <AsciiHeader text="TECHNICAL INTERVIEW TERMINAL v1.0.0" />
+            <AsciiHeader text="BACKEND INTERVIEW TERMINAL v1.0.0" />
           </div>
         )}
       </div>
