@@ -600,7 +600,7 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                     this better for everyone, yourself included.
                     <br /> <br />
                     Thanks again for stopping by and best of luck on the
-                    interview!
+                    interview!{" "}
                   </div>
                 </div>
               ) : (

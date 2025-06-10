@@ -26,7 +26,7 @@
 
 
 .interview-screen {
-  /* border: 20px solid pink; */
+  /* border: 10px solid pink; */
   height: 100vh;
   background: black;
   color: var(--primary-green);
@@ -54,9 +54,9 @@
 
 .terminal-box {
   width: 100%;
-  height: 100%;
+  height: 90%;
   background-color: #111;
-  border: 1px solid var(--primary-green);
+  border: 2px solid var(--primary-green);
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -272,7 +272,7 @@ background-color: #111;
 
 .reset-pause-notice-row{
   height: 27px;
-margin: 0 1rem 0 1rem;
+  margin: 0 1rem 0 1rem;
 }
 
 .reset-pause-notice {
