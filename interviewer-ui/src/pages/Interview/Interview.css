@@ -69,6 +69,8 @@
 
 .button-container-interview{
   /* border: 8px solid turquoise; */
+  border-top: 3px solid var(--primary-green);
+  padding: 0.25rem;
   display: flex;
   flex-direction:row-reverse;
   justify-items: flex-end;
@@ -212,7 +214,6 @@ background-color: #111;
   font-size: 1.25rem;
   background-color: #111;
   color: var(--primary-green);
-  border: 1px solid var(--primary-green);
   resize: none;
   box-sizing: border-box;
   font-family: 'VT323', monospace;
@@ -270,8 +271,8 @@ background-color: #111;
 }
 
 .reset-pause-notice-row{
-  height: 27px;
-  margin: 0 1rem 0 1rem;
+  height: 30px;
+  margin: 0 2rem 0.25rem;
 }
 
 .reset-pause-notice {
