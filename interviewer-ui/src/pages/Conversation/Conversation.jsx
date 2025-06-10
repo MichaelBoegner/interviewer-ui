@@ -8,8 +8,8 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const Conversation = () => {
   const { interviewId } = useParams();
-  const [_, setConversation] = useState(null);
-  const [error, setError] = useState(null);
+  const [conversation, setConversation] = useState(null);
+  const [error, _] = useState(null);
   const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
   const messagesContainerRef = useRef(null);
@@ -33,50 +33,42 @@ const Conversation = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch(`${API_URL}/conversations/${interviewId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch conversation.");
-        return res.json();
-      })
-      .then((data) => {
-        const conv = data.conversation;
+    Promise.all([
+      fetch(`${API_URL}/interviews/${interviewId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      }).then((res) =>
+        res.ok ? res.json() : Promise.reject("Failed to fetch interview")
+      ),
+      fetch(`${API_URL}/conversations/${interviewId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      }).then((res) =>
+        res.ok ? res.json() : Promise.reject("Failed to fetch conversation")
+      ),
+    ])
+      .then(([interviewData, conversationData]) => {
+        const conv = conversationData.conversation;
         setConversation(conv);
-        setMessages(flattenConversation(conv));
+
+        const flattened = flattenConversation(conv);
+
+        if (flattened.length === 0 && interviewData.first_question) {
+          setMessages([
+            {
+              role: "interviewer",
+              content: interviewData.first_question,
+            },
+          ]);
+        } else {
+          setMessages(flattened);
+        }
+
+        setInterviewStatus(interviewData.status);
       })
       .catch((err) => {
         posthog.capture("conversation_view_failed", {
           interview_id: interviewId,
           error: err.message,
         });
-
-        fetch(`${API_URL}/interviews/${interviewId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-          .then((res) => {
-            if (!res.ok) throw new Error("Fallback failed to fetch interview.");
-            return res.json();
-          })
-          .then((data) => {
-            setConversation(null);
-            setMessages([
-              {
-                role: "interviewer",
-                content: data.first_question,
-              },
-            ]);
-            posthog.capture("fallback_first_question_used", {
-              interview_id: interviewId,
-            });
-          })
-          .catch((err2) => {
-            setError("Unable to load interview.");
-            posthog.capture("fallback_failed", {
-              interview_id: interviewId,
-              error: err2.message,
-            });
-          });
       });
   }, [interviewId]);
 
@@ -91,14 +83,13 @@ const Conversation = () => {
 
   return (
     <div className="conversation-screen">
+      <div className="dashboard-header">
+        <h1>Past Interview</h1>
+      </div>
       <div className="conversation-box">
         <div className="scanline"></div>
 
         <div className="header-bar">
-          <div className="system-label">
-            <span className="label-tag">[SYSTEM]:</span> Displaying previous
-            interview
-          </div>
           <button
             onClick={() => {
               posthog.capture("conversation_back_to_dashboard", {

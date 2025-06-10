@@ -29,9 +29,6 @@ export default function InterviewScreen({ token, setToken }) {
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     const storedInterviewId = localStorage.getItem(`${userId}_interviewId`);
-    const storedConversationId = localStorage.getItem(
-      `${userId}_conversationId`
-    );
     const token = localStorage.getItem("token");
 
     if (!storedInterviewId || !token) return;
@@ -47,10 +44,7 @@ export default function InterviewScreen({ token, setToken }) {
       )
       .then(() => {
         setHasInterviewStarted(true);
-
-        const conversationUrl = storedConversationId
-          ? `${API_URL}/conversations/${storedInterviewId}`
-          : `${API_URL}/interviews/${storedInterviewId}`;
+        const conversationUrl = `${API_URL}/conversations/${storedInterviewId}`;
 
         return fetch(conversationUrl, {
           headers: { Authorization: `Bearer ${token}` },
@@ -60,12 +54,8 @@ export default function InterviewScreen({ token, setToken }) {
         res.ok ? res.json() : Promise.reject("Failed to fetch conversation")
       )
       .then((data) => {
-        if (storedConversationId && data.conversation) {
-          setConversationId(data.conversation.id);
-          setMessages(flattenConversation(data.conversation));
-        } else if (data.first_question) {
-          setMessages([{ role: "interviewer", content: data.first_question }]);
-        }
+        setConversationId(data.conversation.id);
+        setMessages(flattenConversation(data.conversation));
       })
       .catch((err) => {
         console.error("Auto-resume failed:", err);
@@ -109,41 +99,14 @@ export default function InterviewScreen({ token, setToken }) {
           setMessages(flattened);
           setConversationId(conv.id);
         })
-        .catch(async (err) => {
+        .catch((err) => {
           console.error("Error resuming conversation:", err.message);
-
-          try {
-            const interviewRes = await fetch(
-              `${API_URL}/interviews/${resumeId}`,
-              {
-                headers: { Authorization: `Bearer ${token}` },
-              }
-            );
-
-            if (!interviewRes.ok)
-              throw new Error("Failed to fetch interview fallback");
-
-            const interviewData = await interviewRes.json();
-
-            setMessages([
-              {
-                role: "interviewer",
-                content: interviewData.first_question,
-              },
-            ]);
-
-            posthog.capture("resume_used_fallback_first_question", {
-              interview_id: resumeId,
-            });
-          } catch (fallbackErr) {
-            console.error("Fallback failed:", fallbackErr.message);
-            setMessages([
-              {
-                role: "system",
-                content: "Failed to load this interview. Try again later.",
-              },
-            ]);
-          }
+          setMessages([
+            {
+              role: "system",
+              content: "Failed to load this interview. Try again later.",
+            },
+          ]);
         });
     }
   }, [API_URL]);
@@ -248,8 +211,10 @@ export default function InterviewScreen({ token, setToken }) {
       // At this point, we're guaranteed OK response
       const data = await response.json();
       setInterviewId(data.interview_id);
+      setConversationId(data.conversation_id);
       const userId = localStorage.getItem("userId");
       localStorage.setItem(`${userId}_interviewId`, data.interview_id);
+      localStorage.setItem(`${userId}_conversationId`, data.conversation_id);
       setMessages([{ role: "interviewer", content: data.first_question }]);
       setHasInterviewStarted(true);
       posthog.capture("interview_started", {
@@ -294,7 +259,8 @@ export default function InterviewScreen({ token, setToken }) {
 
     try {
       // Determine if this is the first message in the conversation
-      const isFirstMessage = !conversationId;
+      const userMessages = messages.filter((msg) => msg.role === "user");
+      const isFirstMessage = userMessages.length === 0;
 
       // Log the current state for debugging
       console.log("Sending message to interview:", interviewId);
