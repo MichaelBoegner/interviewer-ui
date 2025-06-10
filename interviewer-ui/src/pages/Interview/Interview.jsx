@@ -595,9 +595,9 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                     As a solo dev, I made Interviewer because I wanted to
                     provide something useful to the world. As a result, you'll
                     get a survey at the end of each interview. As this is
-                    v1.0.0, if you can please take the time to fill out the
-                    survey that will go a long ways towards more quickly making
-                    this better for everyone, yourself included.
+                    v1.0.0, if you can please take the time to fill it out, that
+                    will go a long ways towards more quickly making this better
+                    for everyone, yourself included.
                     <br /> <br />
                     Thanks again for stopping by and best of luck on the
                     interview!{" "}

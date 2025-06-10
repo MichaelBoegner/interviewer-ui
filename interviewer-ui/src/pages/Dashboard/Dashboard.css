@@ -32,11 +32,11 @@
 
 .dashboard-grid {
   border: 2px solid var(--primary-green);
-    background: #111;
+  background: #111;
   padding: 1.5rem;
+  padding-top: 2rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -45,14 +45,15 @@
   flex: 1;
   min-width: 280px;
   max-width: 350px;
-  border-right: 1px solid var(--primary-green);
   padding-right: 1.5rem;
+  margin-right: 4.75rem;
+  margin-left: 3.75rem;
 }
 
 .right-panel {
+  border-left: 1px solid var(--primary-green);
   flex: 2;
   min-width: 400px;
-  max-height: 500px;
   display: flex;
   flex-direction: column;
 }
@@ -109,14 +110,13 @@
   overflow-y: auto;
   flex: 1;
   padding-right: 0.5rem;
-  /* border-left: 1px solid var(--primary-green); */
   padding-left: 1rem;
 }
 
 .interview-list {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 5rem;
 }
 
 .interview-item {
