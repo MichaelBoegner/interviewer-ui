@@ -196,35 +196,37 @@ export default function Dashboard({ token, setToken }) {
           <h2 className="section-heading">Account Info</h2>
           <div className="user-info">
             <p>
-              <strong>Email:</strong> {userData.email}
+              <span className="account-label">Email:</span> {userData.email}
             </p>
             <p>
-              <strong>Plan:</strong> {userData.plan}
+              <span className="account-label">Plan:</span> {userData.plan}
             </p>
             <p>
-              <strong>Status:</strong> {userData.status}
+              <span className="account-label">Status:</span> {userData.status}
             </p>
             {userData.subscription_start_date && (
               <p>
-                <strong>Subscription Start Date:</strong>{" "}
+                <span className="account-label">Subscription Start Date:</span>{" "}
                 {formatDate(userData.subscription_start_date)}
               </p>
             )}
             {userData.subscription_end_date && (
               <p>
-                <strong>Subscription End Date:</strong>{" "}
+                <span className="account-label">Subscription End Date:</span>{" "}
                 {formatDate(userData.subscription_end_date)}
               </p>
             )}
             <p>
-              <strong>Individual Credits:</strong> {userData.individual_credits}
+              <span className="account-label">Individual Credits:</span>{" "}
+              {userData.individual_credits}
             </p>
             <p>
-              <strong>Subscription Credits:</strong>{" "}
+              <span className="account-label">Subscription Credits:</span>{" "}
               {userData.subscription_credits}
             </p>
             <p>
-              <strong>Total Credits:</strong> {totalCredits}
+              <span className="account-label">Total Credits:</span>{" "}
+              {totalCredits}
             </p>
           </div>
 

@@ -146,7 +146,7 @@ export default function InterviewScreen({ token, setToken }) {
           }
         });
     }
-  }, []);
+  }, [API_URL]);
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -570,49 +570,62 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
               {messages.length === 0 ? (
                 <div className="empty-chat" />
               ) : (
-                messages.map((msg, i) => (
-                  <div className={`message ${msg.role}`} key={i}>
-                    <div className={`message-header`}>
-                      {msg.role === "interviewer"
-                        ? "INTERVIEWER >"
-                        : msg.role === "user"
-                          ? `${username || "YOU"} >`
-                          : "SYSTEM >"}
-                    </div>
-                    <div className="message-content">
-                      {msg.content}
-                      {msg.role === "interviewer" && (
-                        <span className="cursor" />
-                      )}
-                    </div>
-                    {msg.role === "user" &&
-                      (Object.prototype.hasOwnProperty.call(msg, "feedback") ||
-                        Object.prototype.hasOwnProperty.call(msg, "score")) && (
-                        <div className="feedback-box">
-                          <div className="label">FEEDBACK:</div>
-                          <div className="feedback">
-                            {msg.feedback?.trim() || "(no feedback provided)"}
-                          </div>
-                          {msg.score !== undefined && (
-                            <div className="score">
-                              SCORE:{" "}
-                              <span
-                                className={
-                                  msg.score >= 8
-                                    ? "score-high"
-                                    : msg.score >= 5
-                                      ? "score-mid"
-                                      : "score-low"
-                                }
-                              >
-                                {msg.score}/10
-                              </span>
+                (() => {
+                  let interviewerCount = 0;
+                  return messages.map((msg, i) => {
+                    const isInterviewer = msg.role === "interviewer";
+                    if (isInterviewer) interviewerCount++;
+
+                    return (
+                      <div className={`message ${msg.role}`} key={i}>
+                        <div className="message-header">
+                          {isInterviewer
+                            ? `INTERVIEWER [${interviewerCount}] >`
+                            : msg.role === "user"
+                              ? `${msg.username || username || "YOU"} >`
+                              : "SYSTEM >"}
+                        </div>
+                        <div className="message-content">
+                          {msg.content}
+                          {isInterviewer && <span className="cursor" />}
+                        </div>
+                        {msg.role === "user" &&
+                          (Object.prototype.hasOwnProperty.call(
+                            msg,
+                            "feedback"
+                          ) ||
+                            Object.prototype.hasOwnProperty.call(
+                              msg,
+                              "score"
+                            )) && (
+                            <div className="feedback-box">
+                              <div className="label">FEEDBACK:</div>
+                              <div className="feedback">
+                                {msg.feedback?.trim() ||
+                                  "(no feedback provided)"}
+                              </div>
+                              {msg.score !== undefined && (
+                                <div className="score">
+                                  SCORE:{" "}
+                                  <span
+                                    className={
+                                      msg.score >= 8
+                                        ? "score-high"
+                                        : msg.score >= 5
+                                          ? "score-mid"
+                                          : "score-low"
+                                    }
+                                  >
+                                    {msg.score}/10
+                                  </span>
+                                </div>
+                              )}
                             </div>
                           )}
-                        </div>
-                      )}
-                  </div>
-                ))
+                      </div>
+                    );
+                  });
+                })()
               )}
             </div>
           </div>
