@@ -564,8 +564,9 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                     5. Behavioral <br />
                     6. General backend knowledge <br />
                     <br />
-                    - For each response you give, you will get a score out of 10
-                    and feedback. <br />
+                    - For each response you give, you will get a score and
+                    feedback, including what was done well, what was missing,
+                    and one clear suggestion for improvement. <br />
                     - At the end of an interview, a message will appear
                     indicating interview has finished and give you your total
                     score as a percentage. <br />
@@ -574,6 +575,17 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                     - You may also resume any previously unfinished interviews
                     in your Dashboard by clicking on one under "Past
                     Interviews". <br />
+                    <br />
+                    <span className="intro-header">Scoring Guide:</span> <br />
+                    - Each response is scored from 1 to 10. <br />
+                    - A score of 7 or above means your answer meets or exceeds
+                    senior-level expectations in clarity, completeness, and
+                    technical depth. <br />
+                    - Scores between 4 and 6 signal that the response is
+                    functional but missing important details, edge cases, or
+                    deeper insight. <br />
+                    - Scores from 1 to 3 indicate an inadequate or vague answer
+                    that failed to address the question meaningfully. <br />
                     <br />
                     <span className="intro-header">
                       Important Notes about Usage:
