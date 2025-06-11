@@ -281,23 +281,58 @@ export default function Dashboard({ token, setToken }) {
           ) : (
             <div className="interview-scroll">
               <ul className="interview-list">
-                {userData.past_interviews.map((iv) => (
+                {userData.past_interviews.map((interviewMap) => (
                   <li
-                    key={iv.id}
-                    onClick={() => {
+                    key={interviewMap.id}
+                    onClick={async () => {
+                      const userId = localStorage.getItem("userId");
                       posthog.capture("past_interview_clicked", {
-                        interview_id: iv.id,
-                        score: iv.score ?? null,
+                        interview_id: interviewMap.id,
+                        score: interviewMap.score ?? null,
                       });
-                      navigate(`/conversation/${iv.id}`);
+                      console.log("INTERVIEWMAP", interviewMap);
+                      // Clear stale data
+                      localStorage.removeItem(`${userId}_interviewId`);
+                      localStorage.removeItem(`${userId}_conversationId`);
+
+                      try {
+                        const res = await fetch(
+                          `${API_URL}/interviews/${interviewMap.id}`,
+                          {
+                            headers: { Authorization: `Bearer ${token}` },
+                          }
+                        );
+
+                        if (!res.ok)
+                          throw new Error("Failed to fetch interview");
+
+                        const data = await res.json();
+                        const interview = data.interview;
+
+                        localStorage.setItem(
+                          `${userId}_interviewId`,
+                          interviewMap.id
+                        );
+                        localStorage.setItem(
+                          `${userId}_conversationId`,
+                          interview.conversation_id
+                        );
+
+                        navigate("/conversation");
+                      } catch (err) {
+                        console.error("Error loading past interview:", err);
+                      }
                     }}
                     className="interview-item"
                   >
                     <div>
-                      {new Date(iv.started_at).toLocaleString()} —{" Score:"}
-                      {iv.score ?? "N/A"}%
+                      {new Date(interviewMap.started_at).toLocaleString()} —
+                      {" Score:"}
+                      {interviewMap.score ?? "N/A"}%
                     </div>
-                    <div className="interview-feedback">{iv.feedback}</div>
+                    <div className="interview-feedback">
+                      {interviewMap.feedback}
+                    </div>
                   </li>
                 ))}
               </ul>

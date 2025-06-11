@@ -107,7 +107,7 @@ export default function App() {
         />
         <Route path="/reset-request" element={<ResetRequest />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/conversation/:interviewId" element={<Conversation />} />
+        <Route path="/conversation" element={<Conversation />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="*" element={<Navigate to="/about" replace />} />

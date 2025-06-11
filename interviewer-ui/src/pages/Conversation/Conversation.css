@@ -25,7 +25,6 @@
 }
 
 .header-bar {
-  border-bottom: 1px solid var(--primary-green);
   padding-bottom: 0.75rem;
   margin-bottom: 1rem;
   display: flex;

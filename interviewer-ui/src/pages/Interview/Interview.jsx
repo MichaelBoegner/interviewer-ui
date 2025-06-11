@@ -27,6 +27,19 @@ export default function InterviewScreen({ token, setToken }) {
   const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
+    console.log("InterviewScreen received token:", token);
+
+    if (!token) {
+      console.log("No token found, redirecting to login");
+      navigate("/");
+    } else {
+      setTimeout(() => {
+        setPageLoaded(true);
+      }, 300);
+    }
+  }, [token, navigate]);
+
+  useEffect(() => {
     const userId = localStorage.getItem("userId");
     const storedInterviewId = localStorage.getItem(`${userId}_interviewId`);
     const token = localStorage.getItem("token");
@@ -55,61 +68,37 @@ export default function InterviewScreen({ token, setToken }) {
       )
       .then((data) => {
         setConversationId(data.conversation.id);
-        setMessages(flattenConversation(data.conversation));
+        const flattened = flattenConversation(data.conversation);
+
+        if (flattened.length === 0) {
+          // fetch first_question again from local interview context
+          fetch(`${API_URL}/interviews/${storedInterviewId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+            .then((res) =>
+              res.ok ? res.json() : Promise.reject("Failed to fetch interview")
+            )
+            .then((interviewData) => {
+              if (interviewData.interview?.first_question) {
+                setMessages([
+                  {
+                    role: "interviewer",
+                    content: interviewData.interview.first_question,
+                  },
+                ]);
+              } else {
+                setMessages([]);
+              }
+            });
+        } else {
+          setMessages(flattened);
+        }
       })
+
       .catch((err) => {
         console.error("Auto-resume failed:", err);
       });
   }, [API_URL, location.pathname]);
-
-  useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const resume = queryParams.get("resume") === "true";
-    const resumeId = queryParams.get("interviewId");
-
-    if (resume && resumeId) {
-      const token = localStorage.getItem("token");
-      setInterviewId(Number(resumeId));
-      fetch(`${API_URL}/interviews/${resumeId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((res) => {
-          if (!res.ok) throw new Error("Failed to fetch interview status");
-          return res.json();
-        })
-        .then(() => {
-          setHasInterviewStarted(true);
-        })
-        .catch((err) => {
-          console.error("Error getting interview status:", err.message);
-          setHasInterviewStarted(true);
-        });
-
-      fetch(`${API_URL}/conversations/${resumeId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((res) => {
-          if (!res.ok) throw new Error("Failed to fetch conversation");
-          return res.json();
-        })
-        .then((data) => {
-          const conv = data.conversation;
-          const flattened = flattenConversation(conv);
-
-          setMessages(flattened);
-          setConversationId(conv.id);
-        })
-        .catch((err) => {
-          console.error("Error resuming conversation:", err.message);
-          setMessages([
-            {
-              role: "system",
-              content: "Failed to load this interview. Try again later.",
-            },
-          ]);
-        });
-    }
-  }, [API_URL]);
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -119,17 +108,11 @@ export default function InterviewScreen({ token, setToken }) {
   }, []);
 
   useEffect(() => {
-    console.log("InterviewScreen received token:", token);
-
-    if (!token) {
-      console.log("No token found, redirecting to login");
-      navigate("/");
-    } else {
-      setTimeout(() => {
-        setPageLoaded(true);
-      }, 300);
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight;
     }
-  }, [token, navigate]);
+  }, [messages]);
 
   const resetInterview = () => {
     const userId = localStorage.getItem("userId");
@@ -488,13 +471,6 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
     }
   };
 
-  useEffect(() => {
-    if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop =
-        messagesContainerRef.current.scrollHeight;
-    }
-  }, [messages]);
-
   return (
     <div className="interview-page">
       <div className="interview-header">
@@ -583,7 +559,7 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                     incorrect feedback.
                     <br />
                     - Once you enter your response, there is no further editing
-                    it, meaning you will have wasted a question. As a result I
+                    it, meaning you will have wasted a question. As a result, I
                     have ensured messages can only be sent by clicking the [
                     SEND_MESSAGE ] button you'll see at the bottom of the input
                     screen on the right.
@@ -593,11 +569,11 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                     <br />
                     <br />
                     As a solo dev, I made Interviewer because I wanted to
-                    provide something useful to the world. As a result, you'll
-                    get a survey at the end of each interview. As this is
-                    v1.0.0, if you can please take the time to fill it out, that
-                    will go a long ways towards more quickly making this better
-                    for everyone, yourself included.
+                    provide something useful to the world, so your feedback is
+                    everything to me. You'll get a survey at the end of each
+                    interview. If you can please take the time to fill it out,
+                    it will go a long ways towards making this better for
+                    everyone, yourself included.
                     <br /> <br />
                     Thanks again for stopping by and best of luck on the
                     interview! ^_^
@@ -679,8 +655,6 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                             overflow: "auto",
                             width: "100%",
                             height: "100%",
-                            // marginTop: "1.5rem",
-                            // marginBottom: "1rem",
                             border: "1px solid var(--primary-green)",
                             transition: "none",
                             animation: "none",

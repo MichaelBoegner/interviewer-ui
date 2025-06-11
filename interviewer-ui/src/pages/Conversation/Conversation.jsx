@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import posthog from "posthog-js";
 import flattenConversation from "../../helpers/flattenConversation";
 import "./Conversation.css";
@@ -7,7 +7,6 @@ import "./Conversation.css";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const Conversation = () => {
-  const { interviewId } = useParams();
   const [conversation, setConversation] = useState(null);
   const [error, _] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -17,6 +16,8 @@ const Conversation = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const interviewId = localStorage.getItem(`${userId}_interviewId`);
 
     fetch(`${API_URL}/interviews/${interviewId}`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -25,13 +26,15 @@ const Conversation = () => {
         res.ok ? res.json() : Promise.reject("Failed to fetch interview")
       )
       .then((data) => {
-        setInterviewStatus(data.status);
+        setInterviewStatus(data.interview.status);
       })
       .catch((err) => console.error("Interview status error:", err));
-  }, [interviewId]);
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const interviewId = localStorage.getItem(`${userId}_interviewId`);
 
     Promise.all([
       fetch(`${API_URL}/interviews/${interviewId}`, {
@@ -51,18 +54,18 @@ const Conversation = () => {
 
         const flattened = flattenConversation(conv);
 
-        if (flattened.length === 0 && interviewData.first_question) {
+        if (flattened.length === 0 && interviewData.interview.first_question) {
           setMessages([
             {
               role: "interviewer",
-              content: interviewData.first_question,
+              content: interviewData.interview.first_question,
             },
           ]);
         } else {
           setMessages(flattened);
         }
 
-        setInterviewStatus(interviewData.status);
+        setInterviewStatus(interviewData.interview.status);
       })
       .catch((err) => {
         posthog.capture("conversation_view_failed", {
@@ -70,7 +73,7 @@ const Conversation = () => {
           error: err.message,
         });
       });
-  }, [interviewId]);
+  }, []);
 
   useEffect(() => {
     if (messagesContainerRef.current) {
@@ -92,6 +95,8 @@ const Conversation = () => {
         <div className="header-bar">
           <button
             onClick={() => {
+              const userId = localStorage.getItem("userId");
+              const interviewId = localStorage.getItem(`${userId}_interviewId`);
               posthog.capture("conversation_back_to_dashboard", {
                 interview_id: interviewId,
               });
@@ -103,15 +108,13 @@ const Conversation = () => {
           </button>
           {(interviewStatus === "active" || interviewStatus === "paused") && (
             <button
-              className="retro-button yellow small"
               onClick={() => {
-                const userId = localStorage.getItem("userId");
-                localStorage.removeItem(`${userId}_interviewId`);
-                localStorage.removeItem(`${userId}_conversationId`);
-                navigate(`/interview?resume=true&interviewId=${interviewId}`);
+                posthog.capture("resume_interview_clicked", {});
+                navigate("/interview");
               }}
+              className="retro-button green small"
             >
-              [ Resume_Interview ]
+              Resume Interview
             </button>
           )}
         </div>
