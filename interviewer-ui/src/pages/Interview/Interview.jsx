@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import posthog from "posthog-js";
 import flattenConversation from "../../helpers/flattenConversation";
 import Editor from "@monaco-editor/react";
+import useNavigationGuard from "./useNavigationGuard";
 import "./Interview.css";
 
 export default function InterviewScreen({ token, setToken }) {
@@ -25,6 +26,22 @@ export default function InterviewScreen({ token, setToken }) {
   const [language, setLanguage] = useState("plaintext");
   const location = useLocation();
   const API_URL = import.meta.env.VITE_API_URL;
+
+  useNavigationGuard(isLoading);
+
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (isLoading) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [isLoading]);
 
   useEffect(() => {
     console.log("InterviewScreen received token:", token);
@@ -538,11 +555,11 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                     5. Behavioral <br />
                     6. General backend knowledge <br />
                     <br />
-                    - For each response you give, I will provide a score out of
-                    10 and feedback. <br />
-                    - At the end of an interview, I will let you know the
-                    interview has finished and give you your total score as a
-                    percentage. <br />
+                    - For each response you give, you will get a score out of 10
+                    and feedback. <br />
+                    - At the end of an interview, a message will appear
+                    indicating interview has finished and give you your total
+                    score as a percentage. <br />
                     - Once you start an interview, you may leave the page at any
                     time, as conversations are asynchronous. <br />
                     - You may also resume any previously unfinished interviews
@@ -559,10 +576,10 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                     incorrect feedback.
                     <br />
                     - Once you enter your response, there is no further editing
-                    it, meaning you will have wasted a question. As a result, I
-                    have ensured messages can only be sent by clicking the [
-                    SEND_MESSAGE ] button you'll see at the bottom of the input
-                    screen on the right.
+                    it, meaning you will have wasted a question. As a result,
+                    messages can only be sent by clicking the [ SEND_MESSAGE ]
+                    button you'll see at the bottom of the input screen on the
+                    right.
                     <br />
                     <br />
                     --------------
@@ -573,7 +590,7 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                     everything to me. You'll get a survey at the end of each
                     interview. If you can please take the time to fill it out,
                     it will go a long ways towards making this better for
-                    everyone, yourself included.
+                    everyone.
                     <br /> <br />
                     Thanks again for stopping by and best of luck on the
                     interview! ^_^
@@ -679,6 +696,14 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                         <textarea
                           value={input}
                           onChange={(e) => setInput(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" && !e.shiftKey) {
+                              e.preventDefault();
+                              if (!isLoading && input.trim()) {
+                                sendMessage();
+                              }
+                            }
+                          }}
                           disabled={isLoading || isInterviewEnded}
                           placeholder="Enter your response here. Click [ SEND_MESSAGE ] below to send."
                           className="textarea-input"
