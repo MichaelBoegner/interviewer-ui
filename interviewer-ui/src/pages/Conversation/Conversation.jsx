@@ -120,44 +120,55 @@ const Conversation = () => {
         </div>
 
         <div className="chat-window" ref={messagesContainerRef}>
-          {messages.map((msg, index) => (
-            <div key={index} className={`message ${msg.role}`}>
-              <div className="message-header">
-                {msg.role === "interviewer"
-                  ? "INTERVIEWER > "
-                  : msg.role === "user"
-                    ? "USER > "
-                    : "SYSTEM > "}
-              </div>
-              <div className="message-content">{msg.content}</div>
-              {msg.role === "user" &&
-                (Object.prototype.hasOwnProperty.call(msg, "feedback") ||
-                  Object.prototype.hasOwnProperty.call(msg, "score")) && (
-                  <div className="feedback-box">
-                    <div className="label">FEEDBACK:</div>
-                    <div className="feedback">
-                      {msg.feedback?.trim() || "(no feedback provided)"}
-                    </div>
-                    {msg.score !== undefined && (
-                      <div className="score">
-                        SCORE:{" "}
-                        <span
-                          className={
-                            msg.score >= 8
-                              ? "score-high"
-                              : msg.score >= 5
-                                ? "score-mid"
-                                : "score-low"
-                          }
-                        >
-                          {msg.score}/10
-                        </span>
+          {(() => {
+            let interviewerCount = 0;
+
+            return messages.map((msg, index) => {
+              if (msg.role === "interviewer") {
+                interviewerCount += 1;
+              }
+
+              return (
+                <div key={index} className={`message ${msg.role}`}>
+                  <div className="message-header">
+                    {msg.role === "interviewer"
+                      ? `INTERVIEWER [${interviewerCount}] >`
+                      : msg.role === "user"
+                        ? "USER > "
+                        : "SYSTEM > "}
+                  </div>
+                  <div className="message-content">{msg.content}</div>
+
+                  {msg.role === "user" &&
+                    (Object.prototype.hasOwnProperty.call(msg, "feedback") ||
+                      Object.prototype.hasOwnProperty.call(msg, "score")) && (
+                      <div className="feedback-box">
+                        <div className="label">FEEDBACK:</div>
+                        <div className="feedback">
+                          {msg.feedback?.trim() || "(no feedback provided)"}
+                        </div>
+                        {msg.score !== undefined && (
+                          <div className="score">
+                            SCORE:{" "}
+                            <span
+                              className={
+                                msg.score >= 8
+                                  ? "score-high"
+                                  : msg.score >= 5
+                                    ? "score-mid"
+                                    : "score-low"
+                              }
+                            >
+                              {msg.score}/10
+                            </span>
+                          </div>
+                        )}
                       </div>
                     )}
-                  </div>
-                )}
-            </div>
-          ))}
+                </div>
+              );
+            });
+          })()}
         </div>
 
         <div className="terminal-footer">

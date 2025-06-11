@@ -156,20 +156,21 @@ background-color: #111;
 }
 
 .feedback-box {
-  /* margin-top: 0.5rem; */
-  border: 1px dashed yellow;
+  margin-top: 0.5rem;
+  border: 1px dashed #99ff99;
   background-color: rgba(128, 64, 0, 0.1);
   padding: 0.5rem;
   font-size: 1rem;
 }
 
 .feedback-box .label {
-  color: yellow;
+  color: #99ff99;
   font-weight: bold;
 }
 
 .feedback-box .score {
   font-weight: bold;
+  color: #99ff99;
 }
 
 .score-high {

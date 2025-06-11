@@ -153,6 +153,11 @@ export default function InterviewScreen({ token, setToken }) {
   };
 
   const startNewInterview = async () => {
+    const confirmed = window.confirm(
+      "Starting a new interview costs 1 credit. Are you sure you want to start the interview now?"
+    );
+    if (!confirmed) return;
+
     setIsLoading(true);
     setIsInterviewEnded(false);
     setMessages([]);
@@ -534,8 +539,8 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                 <div className="message interviewer">
                   <div className="message-header">{`INTERVIEWER >`}</div>
                   <div className="message-content">
-                    Welcome to the backend interview, and thanks so much for
-                    taking the time to join me today!
+                    Hey there {username}! Welcome to the backend interview, and
+                    thanks so much for taking the time to join me today!
                     <br />
                     <br />
                     As you probably noticed, above the chat window here, there's
@@ -640,7 +645,7 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
                                   SCORE:{" "}
                                   <span
                                     className={
-                                      msg.score >= 8
+                                      msg.score >= 7
                                         ? "score-high"
                                         : msg.score >= 5
                                           ? "score-mid"
