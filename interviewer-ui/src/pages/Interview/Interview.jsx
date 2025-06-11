@@ -502,8 +502,12 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
               [ START_NEW_INTERVIEW ]
             </button>
           ) : (
-            <button onClick={resetInterview} className="retro-button red">
-              [ SAVE_AND_RESET ]
+            <button
+              onClick={resetInterview}
+              disabled={isLoading}
+              className={`retro-button red ${isLoading ? "disabled" : ""}`}
+            >
+              {isLoading ? "[ TRANSMITTING... ]" : "[ SAVE_AND_RESET ]"}
             </button>
           )}
         </div>
