@@ -98,6 +98,12 @@
   gap: 0.25rem;
 }
 
+.retro-button:disabled {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
 .cancel-button {
   margin-top: 1rem;
   background-color: transparent;

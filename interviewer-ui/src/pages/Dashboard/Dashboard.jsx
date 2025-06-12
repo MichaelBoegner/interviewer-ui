@@ -245,12 +245,19 @@ export default function Dashboard({ token, setToken }) {
             <button
               className="retro-button"
               onClick={() => handlePurchase("pro")}
+              disabled={
+                userData.status === "active" || userData.status === "cancelled"
+              }
             >
               PRO | 10/month | $19.99/month
             </button>
+
             <button
               className="retro-button"
               onClick={() => handlePurchase("premium")}
+              disabled={
+                userData.status === "active" || userData.status === "cancelled"
+              }
             >
               PREMIUM | 20/month | $29.99/month
             </button>
