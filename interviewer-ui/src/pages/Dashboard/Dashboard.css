@@ -121,6 +121,7 @@
   flex: 1;
   padding-right: 0.5rem;
   padding-left: 1rem;
+   max-height: 60vh; 
 }
 
 .interview-list {
