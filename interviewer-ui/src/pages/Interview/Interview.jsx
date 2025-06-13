@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import posthog from "posthog-js/dist/module.full";
+import posthog from "posthog-js";
 import flattenConversation from "../../helpers/flattenConversation";
 import Editor from "@monaco-editor/react";
 import useNavigationGuard from "./useNavigationGuard";
@@ -28,7 +28,7 @@ export default function InterviewScreen({ token, setToken }) {
   const API_URL = import.meta.env.VITE_API_URL;
 
   useNavigationGuard(isLoading);
-  // posthog.showSurvey("0197635e-f2e5-0000-2179-44899936b2d3");
+
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       if (isLoading) {
@@ -157,8 +157,6 @@ export default function InterviewScreen({ token, setToken }) {
       "Starting a new interview costs 1 credit. Are you sure you want to start the interview now?"
     );
     if (!confirmed) return;
-
-    window.__surveyShownForInterview = false;
 
     setIsLoading(true);
     setIsInterviewEnded(false);
@@ -434,13 +432,8 @@ export default function InterviewScreen({ token, setToken }) {
       }
 
       // Update the UI based on the response
-      if (isFinished && !window.__surveyShownForInterview) {
+      if (isFinished) {
         setIsInterviewEnded(true);
-        posthog.capture("interview_completed", {
-          interviewId,
-          total_score: totalScore + score,
-          questions_answered: questionsAnswered + 1,
-        });
 
         setMessages([
           ...newMessages,
@@ -467,16 +460,17 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
             `.trim(),
           },
         ]);
+        console.log("Firing interview_completed", {
+          interviewId,
+          total_score: totalScore + score,
+          questions_answered: questionsAnswered + 1,
+        });
 
-        window.__surveyShownForInterview = true;
-        setTimeout(() => {
-          if (typeof posthog.showSurvey === "function") {
-            posthog.showSurvey("0197635e-f2e5-0000-2179-44899936b2d3");
-            console.log("SURVEY FIRED");
-          } else {
-            console.warn("PostHog survey function not ready yet.");
-          }
-        }, 500);
+        posthog.capture("interview_completed", {
+          interviewId,
+          total_score: totalScore + score,
+          questions_answered: questionsAnswered + 1,
+        });
       } else {
         setMessages([
           ...newMessages.slice(0, -1),
@@ -516,7 +510,9 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
               disabled={isLoading}
               className={`retro-button green ${isLoading ? "disabled" : ""}`}
             >
-              [ START_NEW_INTERVIEW ]
+              {isLoading
+                ? "[ STARTING NEW INTERVIEW... ]"
+                : "[ START_NEW_INTERVIEW ]"}
             </button>
           ) : (
             <button
@@ -792,7 +788,14 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
             </div>
           </div>
         </div>
-
+        <button
+          onClick={() => {
+            console.log("Test capture firing...");
+            posthog.capture("interview_completed", { test: true });
+          }}
+        >
+          [ Test PostHog Event ]
+        </button>
         <p className="system-message warning">
           <strong>
             {" "}
