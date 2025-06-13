@@ -13,7 +13,7 @@
     "@monaco-editor/react": "^4.7.0",
     "@shadcn/ui": "^0.0.4",
     "framer-motion": "^12.4.10",
-    "posthog-js": "^1.249.4",
+    "posthog-js": "^1.250.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.3.0",
