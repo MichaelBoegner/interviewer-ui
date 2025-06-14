@@ -435,6 +435,51 @@ export default function InterviewScreen({ token, setToken }) {
       if (isFinished) {
         setIsInterviewEnded(true);
 
+        let topicSummary = "";
+        if (data.conversation?.topics) {
+          const topics = data.conversation.topics;
+          const topicScores = [];
+
+          Object.values(topics).forEach((topic) => {
+            let topicScore = 0;
+            let questionsCount = 0;
+
+            Object.values(topic.questions || {}).forEach((q) => {
+              const lastMsg = q.messages?.find(
+                (m) =>
+                  m.author === "interviewer" &&
+                  typeof m.content === "string" &&
+                  m.content.trim().startsWith("{")
+              );
+              if (lastMsg) {
+                try {
+                  const parsed = JSON.parse(lastMsg.content);
+                  if (typeof parsed.score === "number") {
+                    topicScore += parsed.score;
+                    questionsCount++;
+                  }
+                } catch (err) {
+                  // Ignore malformed JSON
+                }
+              }
+            });
+
+            if (questionsCount > 0) {
+              topicScores.push({
+                topic: topic.name,
+                score: topicScore,
+                total: questionsCount * 10,
+              });
+            }
+          });
+
+          topicSummary = "\n\nTopic Breakdown:\n";
+          topicScores.forEach((t) => {
+            const percent = ((t.score / t.total) * 100).toFixed(0);
+            topicSummary += `- ${t.topic}: ${t.score}/${t.total} (${percent}%)\n`;
+          });
+        }
+
         setMessages([
           ...newMessages,
           {
@@ -454,10 +499,8 @@ export default function InterviewScreen({ token, setToken }) {
 Thank you for participating in our technical interview process! 
 The interview has concluded.
 
-Your final score: ${totalScore + score}/${(questionsAnswered + 1) * 10} (${(((totalScore + score) / ((questionsAnswered + 1) * 10)) * 100).toFixed(0)}%)
-
-You can start a new interview by clicking the [ START_INTERVIEW ] button above.
-            `.trim(),
+Your final score: ${totalScore + score}/${(questionsAnswered + 1) * 10} (${(((totalScore + score) / ((questionsAnswered + 1) * 10)) * 100).toFixed(0)}%)${topicSummary}
+  `.trim(),
           },
         ]);
         console.log("Firing interview_completed", {
@@ -788,14 +831,7 @@ You can start a new interview by clicking the [ START_INTERVIEW ] button above.
             </div>
           </div>
         </div>
-        <button
-          onClick={() => {
-            console.log("Test capture firing...");
-            posthog.capture("interview_completed", { test: true });
-          }}
-        >
-          [ Test PostHog Event ]
-        </button>
+
         <p className="system-message warning">
           <strong>
             {" "}

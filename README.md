@@ -67,8 +67,8 @@ I maintain a [daily learning log](./learninglog/) as part of this project to doc
 ```
 ┌─────────────────┐      ┌──────────────────────────────────────┐      ┌───────────────┐
 │                 │      │                                      │      │               │
-│   Client App    │◄────►│   Go Backend API (This Repository)   │◄────►│   PostgreSQL  │
-│   (React.js)    │      │                                      │      │   Database    │
+│     React       │◄────►│          Go Backend API              │◄────►│   PostgreSQL  │
+│   Client App    │      │                                      │      │   Database    │
 │                 │      │                                      │      │               │
 └─────────────────┘      └───────────────┬──────────────────────┘      └───────────────┘
                                          │
@@ -76,7 +76,7 @@ I maintain a [daily learning log](./learninglog/) as part of this project to doc
                                          ▼
                            ┌─────────────────────────┐
                            │                         │
-                           │   OpenAI API (ChatGPT)  │
+                           │       OpenAI API        │
                            │                         │
                            └─────────────────────────┘
 ```
@@ -351,9 +351,7 @@ Tests are run consistently during development and are integrated into the CI pip
 ### Current Focus
 #### GTM steps: 
 - Graceful OpenAI failures
-- Interview introduction and expectations
 - User analytics for backend
-- Survey for feedback
 - Marketing for launch
 
 ### Upcoming Additional Improvements
