@@ -104,14 +104,14 @@
   cursor: not-allowed;
 }
 
-.cancel-button {
+.cancel-change-button {
   margin-top: 1rem;
   background-color: transparent;
   color: #ff4444;
   border: 1px solid #ff4444;
 }
 
-.cancel-button:hover {
+.cancel-change-button:hover {
   background-color: #ff4444;
   color: black;
 }
@@ -121,7 +121,7 @@
   flex: 1;
   padding-right: 0.5rem;
   padding-left: 1rem;
-   max-height: 60vh; 
+   max-height: 50vh; 
 }
 
 .interview-list {

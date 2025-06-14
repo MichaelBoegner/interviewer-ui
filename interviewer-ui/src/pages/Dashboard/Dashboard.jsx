@@ -6,6 +6,7 @@ import "./Dashboard.css";
 export default function Dashboard({ token, setToken }) {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState("");
+  const [isChangingPlan, setIsChangingPlan] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
@@ -129,6 +130,59 @@ export default function Dashboard({ token, setToken }) {
       posthog.capture("subscription_cancel_exception", {
         error: err.message,
       });
+    }
+  };
+
+  const handleChangePlan = async () => {
+    if (isChangingPlan) return;
+    setIsChangingPlan(true);
+
+    const tier = userData.plan === "pro" ? "premium" : "pro";
+
+    posthog.capture("subscription_change_plan_clicked", {
+      from: userData.plan,
+      to: tier,
+    });
+
+    try {
+      const res = await fetch(`${API_URL}/payment/change-plan`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ tier }),
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error("Change plan failed:", errText);
+        posthog.capture("subscription_change_plan_failed", {
+          error: errText,
+        });
+        setIsChangingPlan(false);
+        return;
+      }
+
+      posthog.capture("subscription_change_plan_successful", {
+        to: tier,
+      });
+
+      alert(
+        `Subscription updated to ${tier.toUpperCase()}! 
+
+NOTE: It may take a couple seconds for the update to occur. Try refreshing your browser if needed.`
+      );
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    } catch (err) {
+      console.error("Change plan error:", err);
+      posthog.capture("subscription_change_plan_exception", {
+        error: err.message,
+      });
+      setIsChangingPlan(false);
     }
   };
 
@@ -263,7 +317,7 @@ export default function Dashboard({ token, setToken }) {
             </button>
             {userData.plan !== "free" && userData.status === "active" && (
               <button
-                className="retro-button cancel-button"
+                className="retro-button cancel-change-button"
                 onClick={handleCancel}
               >
                 Cancel Subscription
@@ -277,6 +331,20 @@ export default function Dashboard({ token, setToken }) {
                 Resume Subscription
               </button>
             )}
+            {userData.status === "active" &&
+              (userData.plan === "pro" || userData.plan === "premium") && (
+                <button
+                  className="retro-button cancel-change-button"
+                  onClick={handleChangePlan}
+                  disabled={isChangingPlan}
+                >
+                  {isChangingPlan
+                    ? "Processing..."
+                    : userData.plan === "pro"
+                      ? "Upgrade to Premium"
+                      : "Downgrade to Pro"}
+                </button>
+              )}
           </div>
         </div>
 
