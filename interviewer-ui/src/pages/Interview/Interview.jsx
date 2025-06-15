@@ -453,25 +453,61 @@ export default function InterviewScreen({ token, setToken }) {
             let topicScore = 0;
             let questionsCount = 0;
 
-            Object.values(topic.questions || {}).forEach((q) => {
-              const lastMsg = q.messages?.find(
-                (m) =>
-                  m.author === "interviewer" &&
-                  typeof m.content === "string" &&
-                  m.content.trim().startsWith("{")
-              );
-              if (lastMsg) {
-                try {
-                  const parsed = JSON.parse(lastMsg.content);
-                  if (typeof parsed.score === "number") {
-                    topicScore += parsed.score;
-                    questionsCount++;
+            const questionEntries = Object.entries(topic.questions || {}).sort(
+              ([a], [b]) => Number(a) - Number(b)
+            );
+
+            for (let i = 0; i < questionEntries.length; i++) {
+              const [qId, q] = questionEntries[i];
+              const [_, nextQ] = questionEntries[i + 1] || [];
+
+              let scoreFound = false;
+
+              // Prefer: score from next question's first interviewer message
+              if (nextQ?.messages?.length) {
+                for (const msg of nextQ.messages) {
+                  if (
+                    msg.author === "interviewer" &&
+                    typeof msg.content === "string" &&
+                    msg.content.trim().startsWith("{")
+                  ) {
+                    try {
+                      const parsed = JSON.parse(msg.content);
+                      if (typeof parsed.score === "number") {
+                        topicScore += parsed.score;
+                        questionsCount++;
+                        scoreFound = true;
+                        break;
+                      }
+                    } catch (err) {
+                      console.log("malformed json from nextQ:", err);
+                    }
                   }
-                } catch (err) {
-                  console.log("malformed json: ", err);
                 }
               }
-            });
+
+              // Fallback: last question’s own messages
+              if (!scoreFound && i === questionEntries.length - 1) {
+                for (const msg of q.messages || []) {
+                  if (
+                    msg.author === "interviewer" &&
+                    typeof msg.content === "string" &&
+                    msg.content.trim().startsWith("{")
+                  ) {
+                    try {
+                      const parsed = JSON.parse(msg.content);
+                      if (typeof parsed.score === "number") {
+                        topicScore += parsed.score;
+                        questionsCount++;
+                        break;
+                      }
+                    } catch (err) {
+                      console.log("malformed json from fallback:", err);
+                    }
+                  }
+                }
+              }
+            }
 
             if (questionsCount > 0) {
               topicScores.push({
