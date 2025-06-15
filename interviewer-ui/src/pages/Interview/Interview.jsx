@@ -382,10 +382,19 @@ export default function InterviewScreen({ token, setToken }) {
                 ) {
                   try {
                     parsedResponseData = JSON.parse(latestMessage.content);
-                    interviewerResponse =
-                      parsedResponseData.next_question ||
-                      parsedResponseData.question ||
-                      latestMessage.content;
+                    const isFinalMessage =
+                      parsedResponseData.next_question === "" &&
+                      parsedResponseData.next_topic === "" &&
+                      parsedResponseData.next_subtopic === "";
+
+                    if (isFinalMessage) {
+                      interviewerResponse = ""; // or null — signal to skip display
+                    } else {
+                      interviewerResponse =
+                        parsedResponseData.next_question ||
+                        parsedResponseData.question ||
+                        latestMessage.content;
+                    }
 
                     // Extract score and feedback
                     if (parsedResponseData.score !== undefined) {
@@ -459,7 +468,7 @@ export default function InterviewScreen({ token, setToken }) {
                     questionsCount++;
                   }
                 } catch (err) {
-                  // Ignore malformed JSON
+                  console.log("malformed json: ", err);
                 }
               }
             });
@@ -480,15 +489,27 @@ export default function InterviewScreen({ token, setToken }) {
           });
         }
 
+        const isFinalMessage =
+          (!parsedResponseData?.next_question ||
+            parsedResponseData.next_question.trim() === "") &&
+          (!parsedResponseData?.next_topic ||
+            parsedResponseData.next_topic.trim() === "") &&
+          (!parsedResponseData?.next_subtopic ||
+            parsedResponseData.next_subtopic.trim() === "");
+
         setMessages([
           ...newMessages,
-          {
-            role: "interviewer",
-            content: interviewerResponse,
-            score,
-            feedback,
-            parsedData: parsedResponseData,
-          },
+          ...(isFinalMessage
+            ? []
+            : [
+                {
+                  role: "interviewer",
+                  content: interviewerResponse,
+                  score,
+                  feedback,
+                  parsedData: parsedResponseData,
+                },
+              ]),
           {
             role: "system",
             content: `
@@ -500,9 +521,10 @@ Thank you for participating in our technical interview process!
 The interview has concluded.
 
 Your final score: ${totalScore + score}/${(questionsAnswered + 1) * 10} (${(((totalScore + score) / ((questionsAnswered + 1) * 10)) * 100).toFixed(0)}%)${topicSummary}
-  `.trim(),
+    `.trim(),
           },
         ]);
+
         console.log("Firing interview_completed", {
           interviewId,
           total_score: totalScore + score,

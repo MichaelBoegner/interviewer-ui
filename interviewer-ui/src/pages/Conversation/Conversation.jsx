@@ -7,7 +7,7 @@ import "./Conversation.css";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const Conversation = () => {
-  const [conversation, setConversation] = useState(null);
+  const [, setConversation] = useState(null);
   const [error, _] = useState(null);
   const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
