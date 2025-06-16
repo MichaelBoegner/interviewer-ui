@@ -140,8 +140,33 @@ background-color: #111;
   z-index: 50;
 }
 
+/* .message.interviewer {
+  color: #00ffff; /* Cyan */
+/*}
+
+/* .message.user {
+  color: #90ee90; Light green */
+/*}
+
+.message.system {
+  color: #ffd700; /* Gold/yellow */
+/*}*/
+
+.message.interviewer {
+  color: #00ffff; /* Bright cyan */
+  font-weight: bold;
+}
+
+.message.user {
+  color: #b8ffb8; /* Pale green */
+}
+
+.message.system {
+  color: #ffd700; /* Gold/yellow */
+}
+
 .message-header {
-  color: #99ff99;
+  font-weight:900;
   font-size: 1.1rem;
   margin: 0;
   padding: 0;
@@ -160,7 +185,7 @@ background-color: #111;
   border: 1px dashed #99ff99;
   background-color: rgba(128, 64, 0, 0.1);
   padding: 0.5rem;
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 
 .feedback-box .label {

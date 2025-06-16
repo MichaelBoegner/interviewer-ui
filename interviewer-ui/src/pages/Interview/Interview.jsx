@@ -458,7 +458,7 @@ export default function InterviewScreen({ token, setToken }) {
             );
 
             for (let i = 0; i < questionEntries.length; i++) {
-              const [qId, q] = questionEntries[i];
+              const [, q] = questionEntries[i];
               const [_, nextQ] = questionEntries[i + 1] || [];
 
               let scoreFound = false;
