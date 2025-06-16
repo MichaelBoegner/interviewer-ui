@@ -239,7 +239,8 @@ background-color: #111;
   padding: 1rem;
   font-size: 1.25rem;
   background-color: #111;
-  color: var(--primary-green);
+color: #66ff66;
+
   resize: none;
   box-sizing: border-box;
   font-family: 'VT323', monospace;
