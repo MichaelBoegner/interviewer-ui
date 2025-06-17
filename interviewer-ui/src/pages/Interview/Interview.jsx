@@ -649,14 +649,14 @@ Your final score: ${totalScore + score}/${(questionsAnswered + 1) * 10} (${(((to
                   <div className="message-header">{`INTERVIEWER >`}</div>
                   <div className="message-content">
                     Hey there {username}! Welcome to the backend interview, and
-                    thanks so much for taking the time to join me today!
+                    thanks so much for taking the time!
                     <br />
                     <br />
                     As you probably noticed, above the chat window here, there's
                     a [ START_NEW_INTERVIEW ] button. That button will, of
-                    course, start a new interview, but it will also deduct a
-                    credit from your current credit total. If you don't have
-                    credits, you can purchase them on your Dashboard page.
+                    course, start a new interview. It will also deduct a credit
+                    from your current credit total. If you don't have credits,
+                    you can purchase them on your Dashboard page.
                     <br />
                     <br />
                     <span className="intro-header">

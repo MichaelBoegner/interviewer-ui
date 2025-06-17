@@ -4,112 +4,102 @@ export default function flattenConversation(conv) {
     (a, b) => Number(a) - Number(b)
   );
 
-  for (const topicId of topicOrder) {
+  let prevUserEntry = null;
+
+  for (let tIndex = 0; tIndex < topicOrder.length; tIndex++) {
+    const topicId = topicOrder[tIndex];
     const topic = conv.topics[topicId];
     const questionOrder = Object.keys(topic.questions || {}).sort(
       (a, b) => Number(a) - Number(b)
     );
 
-    for (let i = 0; i < questionOrder.length; i++) {
-      const qId = questionOrder[i];
+    for (let qIndex = 0; qIndex < questionOrder.length; qIndex++) {
+      const qId = questionOrder[qIndex];
       const question = topic.questions[qId];
       const msgs = question.messages || [];
 
-      const nextQId = questionOrder[i + 1];
-      const nextQuestion = topic.questions[nextQId];
-      const nextMsgs = nextQuestion?.messages || [];
-
-      let interviewerPrompt = null;
+      const interviewerPrompt = question.prompt;
       let userMessage = null;
-      let feedback = null;
-      let score = null;
 
-      // STEP 1: Extract interviewer prompt
+      const isLastTopic = tIndex === topicOrder.length - 1;
+      const isLastQuestion = qIndex === questionOrder.length - 1;
+      const isFinalQuestion = isLastTopic && isLastQuestion;
+
+      // STEP 1: Extract feedback from first interviewer message
+      let feedbackToApply = null;
       for (const msg of msgs) {
         if (msg.author === "interviewer") {
           const trimmed = msg.content.trim();
-          if (!trimmed.startsWith("{")) {
-            interviewerPrompt = msg.content; // first question only
-            break;
-          } else {
+          if (trimmed.startsWith("{")) {
             try {
               const parsed = JSON.parse(trimmed);
-              if (parsed.next_question) {
-                interviewerPrompt = parsed.next_question;
-                break;
+
+              if (!isFinalQuestion && parsed.feedback) {
+                feedbackToApply = {
+                  feedback: parsed.feedback,
+                  score: typeof parsed.score === "number" ? parsed.score : null,
+                };
+              } else if (isFinalQuestion && parsed.feedback && prevUserEntry) {
+                // Apply final question's feedback to previous question (Q11)
+                prevUserEntry.feedback = parsed.feedback;
+                prevUserEntry.score =
+                  typeof parsed.score === "number" ? parsed.score : null;
               }
+
+              break; // Only parse first interviewer JSON block
             } catch (err) {
-              console.log(err);
+              console.log("Invalid JSON:", err);
             }
           }
         }
       }
 
-      // STEP 2: Extract user message
+      // STEP 2: Apply feedback to *previous* question's user entry
+      if (feedbackToApply && prevUserEntry) {
+        prevUserEntry.feedback = feedbackToApply.feedback;
+        prevUserEntry.score = feedbackToApply.score;
+      }
+
+      // STEP 3: Extract user message
       for (const msg of msgs) {
-        if (msg.author === "user") {
+        if (msg.author === "user" && !userMessage) {
           userMessage = msg.content;
-          break;
         }
       }
 
-      // STEP 3: Extract feedback from next question's first interviewer message
-      for (const msg of nextMsgs) {
-        if (
-          msg.author === "interviewer" &&
-          msg.content.trim().startsWith("{")
-        ) {
-          try {
-            const parsed = JSON.parse(msg.content);
-            feedback = parsed.feedback || "";
-            score = parsed.score ?? null;
-            break;
-          } catch (err) {
-            console.log(err);
-          }
-        }
-      }
-
-      // STEP 4: Fallback: extract feedback from current if last question
-      if (!feedback && score === null) {
-        for (const msg of msgs) {
-          if (
-            msg.author === "interviewer" &&
-            msg.content.trim().startsWith("{")
-          ) {
-            try {
-              const parsed = JSON.parse(msg.content);
-              feedback = parsed.feedback || "";
-              score = parsed.score ?? null;
-              break;
-            } catch (err) {
-              console.log(err);
-            }
-          }
-        }
-      }
-
-      // STEP 5: Push prompt and user response + feedback
+      // STEP 4: Push prompt and user message
       if (interviewerPrompt) {
         out.push({ role: "interviewer", content: interviewerPrompt });
       }
 
       if (userMessage) {
-        const userEntry = {
-          role: "user",
-          content: userMessage,
-        };
-
-        if (feedback || score !== null) {
-          userEntry.feedback = feedback;
-          userEntry.score = score;
-        }
-
+        const userEntry = { role: "user", content: userMessage };
         out.push(userEntry);
+        prevUserEntry = userEntry;
+      }
+
+      // STEP 5: Final question fallback (feedback lives in current question)
+      if (isFinalQuestion && prevUserEntry) {
+        try {
+          const lastMsg = msgs[msgs.length - 1];
+          const parsed = JSON.parse(lastMsg.content);
+          if (
+            parsed.feedback &&
+            (prevUserEntry.feedback === undefined ||
+              prevUserEntry.feedback === "")
+          ) {
+            prevUserEntry.feedback = parsed.feedback;
+            prevUserEntry.score =
+              typeof parsed.score === "number" ? parsed.score : null;
+          }
+        } catch (err) {
+          console.log("Invalid JSON (final fallback):", err);
+        }
       }
     }
   }
-  // STEP 6: Add summary if finished
+
+  // Summary unchanged
   if (
     conv.current_topic === 0 &&
     conv.current_subtopic === "finished" &&
@@ -128,56 +118,27 @@ export default function flattenConversation(conv) {
       let topicScore = 0;
       let topicQuestions = 0;
 
-      for (let i = 0; i < questionOrder.length; i++) {
-        const qId = questionOrder[i];
-        const nextQId = questionOrder[i + 1];
+      for (let qIndex = 0; qIndex < questionOrder.length; qIndex++) {
+        const qId = questionOrder[qIndex];
         const question = topic.questions[qId];
-        const nextQuestion = topic.questions[nextQId];
+        const msgs = question.messages || [];
 
-        // 1. Prefer: score from next question's first interviewer message
-        if (nextQuestion) {
-          const nextMsgs = nextQuestion.messages || [];
-          for (const msg of nextMsgs) {
-            if (
-              msg.author === "interviewer" &&
-              msg.content.trim().startsWith("{")
-            ) {
-              try {
-                const parsed = JSON.parse(msg.content);
-                if (typeof parsed.score === "number") {
-                  topicScore += parsed.score;
-                  totalScore += parsed.score;
-                  topicQuestions++;
-                  totalQuestions++;
-                  break;
-                }
-              } catch (err) {
-                console.log(err);
+        for (const msg of msgs) {
+          if (
+            msg.author === "interviewer" &&
+            msg.content.trim().startsWith("{")
+          ) {
+            try {
+              const parsed = JSON.parse(msg.content);
+              if (typeof parsed.score === "number") {
+                topicScore += parsed.score;
+                totalScore += parsed.score;
+                topicQuestions++;
+                totalQuestions++;
+                break;
               }
-            }
-          }
-        }
-
-        // 2. Fallback: score from current question (for final Q only)
-        if (!nextQuestion) {
-          const msgs = question.messages || [];
-          for (const msg of msgs) {
-            if (
-              msg.author === "interviewer" &&
-              msg.content.trim().startsWith("{")
-            ) {
-              try {
-                const parsed = JSON.parse(msg.content);
-                if (typeof parsed.score === "number") {
-                  topicScore += parsed.score;
-                  totalScore += parsed.score;
-                  topicQuestions++;
-                  totalQuestions++;
-                  break;
-                }
-              } catch (err) {
-                console.log(err);
-              }
+            } catch (err) {
+              console.log("Invalid JSON (summary):", err);
             }
           }
         }
