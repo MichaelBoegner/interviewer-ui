@@ -141,18 +141,6 @@ background-color: #111;
   z-index: 50;
 }
 
-/* .message.interviewer {
-  color: #00ffff; /* Cyan */
-/*}
-
-/* .message.user {
-  color: #90ee90; Light green */
-/*}
-
-.message.system {
-  color: #ffd700; /* Gold/yellow */
-/*}*/
-
 .message.interviewer {
   color: #00ffff; /* Bright cyan */
   font-weight: bold;
@@ -169,6 +157,7 @@ background-color: #111;
 .message-header {
   font-weight:900;
   font-size: 1.1rem;
+  text-transform: uppercase;
   margin: 0;
   padding: 0;
 }

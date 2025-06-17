@@ -30,6 +30,15 @@ export default function InterviewScreen({ token, setToken }) {
   useNavigationGuard(isLoading);
 
   useEffect(() => {
+    const saved = localStorage.getItem("interviewInput");
+    if (saved) setInput(saved);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("interviewInput", input);
+  }, [input]);
+
+  useEffect(() => {
     const handleBeforeUnload = (e) => {
       if (isLoading) {
         e.preventDefault();
@@ -799,7 +808,7 @@ Your final score: ${totalScore + score}/${(questionsAnswered + 1) * 10} (${(((to
                         <div
                           style={{
                             display: "flex",
-                            overflow: "auto",
+                            overflow: "hidden",
                             width: "100%",
                             height: "100%",
                             border: "1px solid var(--primary-green)",
@@ -808,6 +817,7 @@ Your final score: ${totalScore + score}/${(questionsAnswered + 1) * 10} (${(((to
                           }}
                         >
                           <Editor
+                            key={language}
                             language={language}
                             defaultLanguage={language}
                             value={input}
