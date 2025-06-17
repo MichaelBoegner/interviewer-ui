@@ -99,7 +99,6 @@ export default function flattenConversation(conv) {
     }
   }
 
-  // Summary unchanged
   if (
     conv.current_topic === 0 &&
     conv.current_subtopic === "finished" &&
@@ -109,7 +108,8 @@ export default function flattenConversation(conv) {
     let totalQuestions = 0;
     const topicScores = [];
 
-    for (const topicId of topicOrder) {
+    for (let tIndex = 0; tIndex < topicOrder.length; tIndex++) {
+      const topicId = topicOrder[tIndex];
       const topic = conv.topics[topicId];
       const questionOrder = Object.keys(topic.questions || {}).sort(
         (a, b) => Number(a) - Number(b)
@@ -120,27 +120,80 @@ export default function flattenConversation(conv) {
 
       for (let qIndex = 0; qIndex < questionOrder.length; qIndex++) {
         const qId = questionOrder[qIndex];
-        const question = topic.questions[qId];
-        const msgs = question.messages || [];
 
-        for (const msg of msgs) {
+        // 1. Try feedback from next question in same topic
+        const nextQId = questionOrder[qIndex + 1];
+        const nextQuestion = topic.questions[nextQId];
+        const nextMsgs = nextQuestion?.messages || [];
+
+        let parsed = null;
+
+        for (const msg of nextMsgs) {
           if (
             msg.author === "interviewer" &&
             msg.content.trim().startsWith("{")
           ) {
             try {
-              const parsed = JSON.parse(msg.content);
-              if (typeof parsed.score === "number") {
-                topicScore += parsed.score;
-                totalScore += parsed.score;
-                topicQuestions++;
-                totalQuestions++;
-                break;
-              }
+              parsed = JSON.parse(msg.content);
+              break;
             } catch (err) {
-              console.log("Invalid JSON (summary):", err);
+              console.log("Invalid JSON (summary next-question):", err);
             }
           }
+        }
+
+        // 2. If this is the last question in the topic, look at next topic's first question
+        const isLastQuestion = qIndex === questionOrder.length - 1;
+        if (!parsed && isLastQuestion) {
+          const nextTopicId = topicOrder[tIndex + 1];
+          const nextTopic = conv.topics[nextTopicId];
+          const firstQId = nextTopic
+            ? Object.keys(nextTopic.questions || {}).sort(
+                (a, b) => Number(a) - Number(b)
+              )[0]
+            : null;
+          const nextTopicMsgs =
+            nextTopic?.questions?.[firstQId]?.messages || [];
+
+          for (const msg of nextTopicMsgs) {
+            if (
+              msg.author === "interviewer" &&
+              msg.content.trim().startsWith("{")
+            ) {
+              try {
+                parsed = JSON.parse(msg.content);
+                break;
+              } catch (err) {
+                console.log("Invalid JSON (summary next-topic):", err);
+              }
+            }
+          }
+        }
+
+        // 3. If this is the last question of the last topic, get feedback from its own messages
+        const isLastTopic = tIndex === topicOrder.length - 1;
+        if (!parsed && isLastQuestion && isLastTopic) {
+          const msgs = conv.topics[topicId].questions[qId].messages || [];
+          for (const msg of msgs) {
+            if (
+              msg.author === "interviewer" &&
+              msg.content.trim().startsWith("{")
+            ) {
+              try {
+                parsed = JSON.parse(msg.content);
+                break;
+              } catch (err) {
+                console.log("Invalid JSON (summary final question):", err);
+              }
+            }
+          }
+        }
+
+        if (parsed && typeof parsed.score === "number") {
+          topicScore += parsed.score;
+          totalScore += parsed.score;
+          topicQuestions++;
+          totalQuestions++;
         }
       }
 
