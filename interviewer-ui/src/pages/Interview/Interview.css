@@ -75,6 +75,7 @@
   flex-direction:row-reverse;
   justify-items: flex-end;
   justify-content: space-between;
+  height:3rem;
 }
 
 .button-is-code {
