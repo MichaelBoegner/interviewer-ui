@@ -25,7 +25,6 @@ export default function flattenConversation(conv) {
       const isLastQuestion = qIndex === questionOrder.length - 1;
       const isFinalQuestion = isLastTopic && isLastQuestion;
 
-      // STEP 1: Extract feedback from first interviewer message
       let feedbackToApply = null;
       for (const msg of msgs) {
         if (msg.author === "interviewer") {
@@ -40,13 +39,12 @@ export default function flattenConversation(conv) {
                   score: typeof parsed.score === "number" ? parsed.score : null,
                 };
               } else if (isFinalQuestion && parsed.feedback && prevUserEntry) {
-                // Apply final question's feedback to previous question (Q11)
                 prevUserEntry.feedback = parsed.feedback;
                 prevUserEntry.score =
                   typeof parsed.score === "number" ? parsed.score : null;
               }
 
-              break; // Only parse first interviewer JSON block
+              break;
             } catch (err) {
               console.log("Invalid JSON:", err);
             }
@@ -54,20 +52,17 @@ export default function flattenConversation(conv) {
         }
       }
 
-      // STEP 2: Apply feedback to *previous* question's user entry
       if (feedbackToApply && prevUserEntry) {
         prevUserEntry.feedback = feedbackToApply.feedback;
         prevUserEntry.score = feedbackToApply.score;
       }
 
-      // STEP 3: Extract user message
       for (const msg of msgs) {
         if (msg.author === "user" && !userMessage) {
           userMessage = msg.content;
         }
       }
 
-      // STEP 4: Push prompt and user message
       if (interviewerPrompt) {
         out.push({ role: "interviewer", content: interviewerPrompt });
       }
@@ -78,7 +73,6 @@ export default function flattenConversation(conv) {
         prevUserEntry = userEntry;
       }
 
-      // STEP 5: Final question fallback (feedback lives in current question)
       if (isFinalQuestion && prevUserEntry) {
         try {
           const lastMsg = msgs[msgs.length - 1];
@@ -121,7 +115,6 @@ export default function flattenConversation(conv) {
       for (let qIndex = 0; qIndex < questionOrder.length; qIndex++) {
         const qId = questionOrder[qIndex];
 
-        // 1. Try feedback from next question in same topic
         const nextQId = questionOrder[qIndex + 1];
         const nextQuestion = topic.questions[nextQId];
         const nextMsgs = nextQuestion?.messages || [];
@@ -142,7 +135,6 @@ export default function flattenConversation(conv) {
           }
         }
 
-        // 2. If this is the last question in the topic, look at next topic's first question
         const isLastQuestion = qIndex === questionOrder.length - 1;
         if (!parsed && isLastQuestion) {
           const nextTopicId = topicOrder[tIndex + 1];
@@ -170,7 +162,6 @@ export default function flattenConversation(conv) {
           }
         }
 
-        // 3. If this is the last question of the last topic, get feedback from its own messages
         const isLastTopic = tIndex === topicOrder.length - 1;
         if (!parsed && isLastQuestion && isLastTopic) {
           const msgs = conv.topics[topicId].questions[qId].messages || [];

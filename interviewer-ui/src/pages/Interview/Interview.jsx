@@ -53,8 +53,6 @@ export default function InterviewScreen({ token, setToken }) {
   }, [isLoading]);
 
   useEffect(() => {
-    console.log("InterviewScreen received token:", token);
-
     if (!token) {
       console.log("No token found, redirecting to login");
       navigate("/");
@@ -74,7 +72,6 @@ export default function InterviewScreen({ token, setToken }) {
 
     setInterviewId(Number(storedInterviewId));
 
-    // Fetch interview metadata including the current status
     fetch(`${API_URL}/interviews/${storedInterviewId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -97,7 +94,6 @@ export default function InterviewScreen({ token, setToken }) {
         const flattened = flattenConversation(data.conversation);
 
         if (flattened.length === 0) {
-          // fetch first_question again from local interview context
           fetch(`${API_URL}/interviews/${storedInterviewId}`, {
             headers: { Authorization: `Bearer ${token}` },
           })
@@ -184,7 +180,6 @@ export default function InterviewScreen({ token, setToken }) {
     }
 
     try {
-      console.log("Starting new interview with token:", token);
       const response = await fetch(`${API_URL}/interviews`, {
         method: "POST",
         headers: {
@@ -216,13 +211,11 @@ export default function InterviewScreen({ token, setToken }) {
         return;
       }
 
-      // Handle other server-side errors
       if (!response.ok) {
         const { error, message } = await response.json();
         throw new Error(error || message || "Unexpected server error");
       }
 
-      // At this point, we're guaranteed OK response
       const data = await response.json();
       setInterviewId(data.interview_id);
       setConversationId(data.conversation_id);
@@ -325,7 +318,6 @@ export default function InterviewScreen({ token, setToken }) {
         });
       }
 
-      // 🌟 Core change — just flatten and render the new state
       const updatedMessages = flattenConversation(conv);
       setMessages(updatedMessages);
     } catch (error) {

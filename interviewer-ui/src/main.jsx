@@ -16,8 +16,6 @@ posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_KEY, {
   debug: import.meta.env.MODE === "development",
 });
 
-console.log("Recording disabled?", posthog.sessionRecording?.started);
-
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <PostHogProvider client={posthog}>

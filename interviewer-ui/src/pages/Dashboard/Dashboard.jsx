@@ -365,8 +365,7 @@ NOTE: It may take a couple seconds for the update to occur. Try refreshing your 
                         interview_id: interviewMap.id,
                         score: interviewMap.score ?? null,
                       });
-                      console.log("INTERVIEWMAP", interviewMap);
-                      // Clear stale data
+
                       localStorage.removeItem(`${userId}_interviewId`);
                       localStorage.removeItem(`${userId}_conversationId`);
 
