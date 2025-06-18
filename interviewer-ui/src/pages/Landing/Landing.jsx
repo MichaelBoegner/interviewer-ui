@@ -38,16 +38,16 @@ export default function Landing() {
             </thead>
             <tbody>
               <tr>
-                <td>Pay-as-you-go</td>
+                <td>Individual</td>
                 <td>$4.99</td>
                 <td>1</td>
                 <td>$4.99</td>
               </tr>
               <tr>
                 <td>Pro</td>
-                <td>$19.99 / mo</td>
+                <td>$24.99 / mo</td>
                 <td>10 / mo</td>
-                <td>$2.00</td>
+                <td>$2.50</td>
               </tr>
               <tr>
                 <td>Premium</td>

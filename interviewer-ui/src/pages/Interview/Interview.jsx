@@ -633,6 +633,15 @@ Your final score: ${totalScore + score}/${(questionsAnswered + 1) * 10} (${(((to
               {isLoading ? "[ TRANSMITTING... ]" : "[ SAVE_AND_RESET ]"}
             </button>
           )}
+          <button
+            onClick={() => {
+              posthog.capture("interview_to_dashboard", {});
+              navigate("/dashboard");
+            }}
+            className="retro-button"
+          >
+            [ Go_to_Dashboard ]
+          </button>
         </div>
       </div>
       <div className="reset-pause-notice-row">
