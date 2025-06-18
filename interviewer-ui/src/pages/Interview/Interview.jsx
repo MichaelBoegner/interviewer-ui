@@ -259,6 +259,7 @@ export default function InterviewScreen({ token, setToken }) {
 
     const newMessages = [...messages, { role: "user", content: userMessage }];
     setMessages(newMessages);
+
     posthog.capture("interview_message_sent", {
       interviewId,
       content_length: userMessage.length,
@@ -272,34 +273,16 @@ export default function InterviewScreen({ token, setToken }) {
     }
 
     try {
-      // Determine if this is the first message in the conversation
       const userMessages = messages.filter((msg) => msg.role === "user");
       const isFirstMessage = userMessages.length === 0;
 
-      // Log the current state for debugging
-      console.log("Sending message to interview:", interviewId);
-      console.log("Current conversation ID:", conversationId);
-      console.log("Is first message:", isFirstMessage);
+      const payload = isFirstMessage
+        ? { message: userMessage }
+        : { conversation_id: conversationId, message: userMessage };
 
-      // Construct the payload based on whether this is the first message or not
-      let payload;
-      let url;
-      if (isFirstMessage) {
-        // First message only needs the user message
-        payload = {
-          message: userMessage,
-        };
-        url = `${API_URL}/conversations/create/${interviewId}`;
-      } else {
-        // Subsequent messages need conversation_id and message
-        payload = {
-          conversation_id: conversationId,
-          message: userMessage,
-        };
-        url = `${API_URL}/conversations/append/${interviewId}`;
-      }
-
-      console.log("Sending payload:", payload);
+      const url = isFirstMessage
+        ? `${API_URL}/conversations/create/${interviewId}`
+        : `${API_URL}/conversations/append/${interviewId}`;
 
       const response = await fetch(url, {
         method: "POST",
@@ -311,7 +294,6 @@ export default function InterviewScreen({ token, setToken }) {
       });
 
       const data = await response.json();
-      console.log("Conversation response:", data);
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -322,279 +304,30 @@ export default function InterviewScreen({ token, setToken }) {
         throw new Error(data.message || data.error || "Failed to send message");
       }
 
-      // Extract and save the conversation ID if this is the first message
-      if (isFirstMessage && data.conversation && data.conversation.id) {
-        console.log("Setting conversation ID:", data.conversation.id);
+      if (isFirstMessage && data.conversation?.id) {
         setConversationId(data.conversation.id);
         const userId = localStorage.getItem("userId");
         localStorage.setItem(`${userId}_conversationId`, data.conversation.id);
       }
 
-      // Process the response from the server
-      let interviewerResponse = "";
-      let isFinished = false;
-      let score = 0;
-      let feedback = "";
-      let parsedResponseData = null;
+      const conv = data.conversation;
 
-      // Extract the interviewer's response based on the structure
-      if (data.response) {
-        // Simple response format
-        interviewerResponse = data.response;
-        isFinished = data.next_question === "Finished" && data.topic === 0;
-      } else if (data.conversation) {
-        try {
-          // Get the current topic and question number
-          const currentTopic = data.conversation.current_topic;
-          const currentSubtopic = data.conversation.current_subtopic;
-          const currentQuestionNumber =
-            data.conversation.current_question_number;
-
-          console.log("Current topic:", currentTopic);
-          console.log("Current subtopic:", currentSubtopic);
-          console.log("Current question number:", currentQuestionNumber);
-
-          // Check if interview is finished
-          isFinished =
-            Number(currentTopic) === 0 &&
-            String(currentSubtopic).toLowerCase() === "finished";
-
-          // Get the latest topic and question data
-          const topics = data.conversation.topics;
-          const latestTopic =
-            Object.values(topics).find((t) => t.id === currentTopic) ||
-            Object.values(topics).pop();
-
-          if (latestTopic && latestTopic.questions) {
-            // Find the question with the current question number
-            const latestQuestion =
-              Object.values(latestTopic.questions).find(
-                (q) => q.question_number === currentQuestionNumber
-              ) || Object.values(latestTopic.questions).pop();
-
-            if (latestQuestion && latestQuestion.messages) {
-              // Get all interviewer messages for this question
-              const interviewerMessages = latestQuestion.messages.filter(
-                (msg) => msg.author === "interviewer"
-              );
-
-              if (interviewerMessages.length > 0) {
-                // Get the most recent message
-                const latestMessage =
-                  interviewerMessages[interviewerMessages.length - 1];
-
-                // Try to parse JSON content if it's a JSON string
-                if (
-                  typeof latestMessage.content === "string" &&
-                  latestMessage.content.trim().startsWith("{") &&
-                  latestMessage.content.trim().endsWith("}")
-                ) {
-                  try {
-                    parsedResponseData = JSON.parse(latestMessage.content);
-                    const isFinalMessage =
-                      parsedResponseData.next_question === "" &&
-                      parsedResponseData.next_topic === "" &&
-                      parsedResponseData.next_subtopic === "";
-
-                    if (isFinalMessage) {
-                      interviewerResponse = ""; // or null — signal to skip display
-                    } else {
-                      interviewerResponse =
-                        parsedResponseData.next_question ||
-                        parsedResponseData.question ||
-                        latestMessage.content;
-                    }
-
-                    // Extract score and feedback
-                    if (parsedResponseData.score !== undefined) {
-                      score = parsedResponseData.score;
-                      setTotalScore((prevTotal) => prevTotal + score);
-                      setQuestionsAnswered((prev) => prev + 1);
-                    }
-
-                    if (parsedResponseData.feedback) {
-                      feedback = parsedResponseData.feedback;
-                    }
-
-                    console.log("Extracted score:", score);
-                    console.log("Extracted feedback:", feedback);
-                    console.log(
-                      "Extracted next question:",
-                      interviewerResponse
-                    );
-                  } catch (error) {
-                    console.error("Error parsing JSON response:", error);
-                    interviewerResponse = latestMessage.content;
-                  }
-                } else {
-                  // If it's not JSON, use the content directly
-                  interviewerResponse = latestMessage.content;
-                }
-
-                console.log(
-                  "Extracted interviewer response:",
-                  interviewerResponse
-                );
-              }
-            }
-          }
-        } catch (error) {
-          console.error("Error parsing conversation response:", error);
-          interviewerResponse =
-            "Error parsing the interview response. Please try again.";
-          posthog.capture("interview_message_exception", {
-            error: error.message,
-            interviewId,
-          });
-        }
-      }
-
-      // Update the UI based on the response
-      if (isFinished) {
+      if (
+        conv.current_topic === 0 &&
+        conv.current_subtopic === "finished" &&
+        conv.current_question_number === 0
+      ) {
         setIsInterviewEnded(true);
-
-        let topicSummary = "";
-        if (data.conversation?.topics) {
-          const topics = data.conversation.topics;
-          const topicScores = [];
-
-          Object.values(topics).forEach((topic) => {
-            let topicScore = 0;
-            let questionsCount = 0;
-
-            const questionEntries = Object.entries(topic.questions || {}).sort(
-              ([a], [b]) => Number(a) - Number(b)
-            );
-
-            for (let i = 0; i < questionEntries.length; i++) {
-              const [, q] = questionEntries[i];
-              const [_, nextQ] = questionEntries[i + 1] || [];
-
-              let scoreFound = false;
-
-              // Prefer: score from next question's first interviewer message
-              if (nextQ?.messages?.length) {
-                for (const msg of nextQ.messages) {
-                  if (
-                    msg.author === "interviewer" &&
-                    typeof msg.content === "string" &&
-                    msg.content.trim().startsWith("{")
-                  ) {
-                    try {
-                      const parsed = JSON.parse(msg.content);
-                      if (typeof parsed.score === "number") {
-                        topicScore += parsed.score;
-                        questionsCount++;
-                        scoreFound = true;
-                        break;
-                      }
-                    } catch (err) {
-                      console.log("malformed json from nextQ:", err);
-                    }
-                  }
-                }
-              }
-
-              // Fallback: last question’s own messages
-              if (!scoreFound && i === questionEntries.length - 1) {
-                for (const msg of q.messages || []) {
-                  if (
-                    msg.author === "interviewer" &&
-                    typeof msg.content === "string" &&
-                    msg.content.trim().startsWith("{")
-                  ) {
-                    try {
-                      const parsed = JSON.parse(msg.content);
-                      if (typeof parsed.score === "number") {
-                        topicScore += parsed.score;
-                        questionsCount++;
-                        break;
-                      }
-                    } catch (err) {
-                      console.log("malformed json from fallback:", err);
-                    }
-                  }
-                }
-              }
-            }
-
-            if (questionsCount > 0) {
-              topicScores.push({
-                topic: topic.name,
-                score: topicScore,
-                total: questionsCount * 10,
-              });
-            }
-          });
-
-          topicSummary = "\n\nTopic Breakdown:\n";
-          topicScores.forEach((t) => {
-            const percent = ((t.score / t.total) * 100).toFixed(0);
-            topicSummary += `- ${t.topic}: ${t.score}/${t.total} (${percent}%)\n`;
-          });
-        }
-
-        const isFinalMessage =
-          (!parsedResponseData?.next_question ||
-            parsedResponseData.next_question.trim() === "") &&
-          (!parsedResponseData?.next_topic ||
-            parsedResponseData.next_topic.trim() === "") &&
-          (!parsedResponseData?.next_subtopic ||
-            parsedResponseData.next_subtopic.trim() === "");
-
-        setMessages([
-          ...newMessages,
-          ...(isFinalMessage
-            ? []
-            : [
-                {
-                  role: "interviewer",
-                  content: interviewerResponse,
-                  score,
-                  feedback,
-                  parsedData: parsedResponseData,
-                },
-              ]),
-          {
-            role: "system",
-            content: `
-=================================
-    INTERVIEW COMPLETED
-=================================
-
-Thank you for participating in our technical interview process! 
-The interview has concluded.
-
-Your final score: ${totalScore + score}/${(questionsAnswered + 1) * 10} (${(((totalScore + score) / ((questionsAnswered + 1) * 10)) * 100).toFixed(0)}%)${topicSummary}
-    `.trim(),
-          },
-        ]);
-
-        console.log("Firing interview_completed", {
-          interviewId,
-          total_score: totalScore + score,
-          questions_answered: questionsAnswered + 1,
-        });
-
         posthog.capture("interview_completed", {
           interviewId,
-          total_score: totalScore + score,
-          questions_answered: questionsAnswered + 1,
+          total_score: "final",
+          questions_answered: "final",
         });
-      } else {
-        setMessages([
-          ...newMessages.slice(0, -1),
-          {
-            ...newMessages[newMessages.length - 1],
-            feedback,
-            score,
-          },
-          {
-            role: "interviewer",
-            content: interviewerResponse,
-          },
-        ]);
       }
+
+      // 🌟 Core change — just flatten and render the new state
+      const updatedMessages = flattenConversation(conv);
+      setMessages(updatedMessages);
     } catch (error) {
       console.error("Error sending message:", error);
       setMessages([
@@ -630,7 +363,7 @@ Your final score: ${totalScore + score}/${(questionsAnswered + 1) * 10} (${(((to
               disabled={isLoading}
               className={`retro-button red ${isLoading ? "disabled" : ""}`}
             >
-              {isLoading ? "[ TRANSMITTING... ]" : "[ SAVE_AND_RESET ]"}
+              {isLoading ? "[ THINKING... ]" : "[ SAVE_AND_RESET ]"}
             </button>
           )}
           <button
@@ -868,7 +601,7 @@ Your final score: ${totalScore + score}/${(questionsAnswered + 1) * 10} (${(((to
                 disabled={isLoading || !input.trim() || isInterviewEnded}
                 className="retro-button green"
               >
-                {isLoading ? "[ TRANSMITTING... ]" : "[ SEND_MESSAGE ]"}
+                {isLoading ? "[ THINKING... ]" : "[ SEND_MESSAGE ]"}
               </button>
 
               <button
