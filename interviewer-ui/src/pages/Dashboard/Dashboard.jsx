@@ -46,7 +46,6 @@ export default function Dashboard({ token, setToken }) {
       .then((data) => {
         if (data) {
           setUserData(data);
-
           posthog.identify(data.user_id || data.email, {
             email: data.email,
             plan: data.plan,
@@ -57,11 +56,8 @@ export default function Dashboard({ token, setToken }) {
       .catch((err) => setError(err.message));
   }, [API_URL, token, navigate, setToken]);
 
-  if (error) return <div className="dashboard-error">Error: {error}</div>;
-  if (!userData) return <div className="dashboard-loading">Loading...</div>;
-
   const totalCredits =
-    userData.individual_credits + userData.subscription_credits;
+    userData?.individual_credits + userData?.subscription_credits;
 
   const handlePurchase = async (tier) => {
     posthog.capture("subscription_purchase_attempted", { tier });
@@ -137,10 +133,10 @@ export default function Dashboard({ token, setToken }) {
     if (isChangingPlan) return;
     setIsChangingPlan(true);
 
-    const tier = userData.plan === "pro" ? "premium" : "pro";
+    const tier = userData?.plan === "pro" ? "premium" : "pro";
 
     posthog.capture("subscription_change_plan_clicked", {
-      from: userData.plan,
+      from: userData?.plan,
       to: tier,
     });
 
@@ -226,6 +222,8 @@ NOTE: It may take a couple seconds for the update to occur. Try refreshing your 
     });
   }
 
+  if (error) return <div className="dashboard-error">Error: {error}</div>;
+
   return (
     <div className="dashboard-wrapper">
       <div className="dashboard-header">
@@ -245,26 +243,30 @@ NOTE: It may take a couple seconds for the update to occur. Try refreshing your 
           </button>
         </div>
       </div>
+
       <div className="dashboard-grid">
         <div className="left-panel">
           <h2 className="section-heading">Account Info</h2>
           <div className="user-info">
             <p>
-              <span className="account-label">Email:</span> {userData.email}
+              <span className="account-label">Email:</span>{" "}
+              {userData?.email || "Loading..."}
             </p>
             <p>
-              <span className="account-label">Plan:</span> {userData.plan}
+              <span className="account-label">Plan:</span>{" "}
+              {userData?.plan || "Loading..."}
             </p>
             <p>
-              <span className="account-label">Status:</span> {userData.status}
+              <span className="account-label">Status:</span>{" "}
+              {userData?.status || "Loading..."}
             </p>
-            {userData.subscription_start_date && (
+            {userData?.subscription_start_date && (
               <p>
                 <span className="account-label">Subscription Start Date:</span>{" "}
                 {formatDate(userData.subscription_start_date)}
               </p>
             )}
-            {userData.subscription_end_date && (
+            {userData?.subscription_end_date && (
               <p>
                 <span className="account-label">Subscription End Date:</span>{" "}
                 {formatDate(userData.subscription_end_date)}
@@ -272,15 +274,15 @@ NOTE: It may take a couple seconds for the update to occur. Try refreshing your 
             )}
             <p>
               <span className="account-label">Individual Credits:</span>{" "}
-              {userData.individual_credits}
+              {userData?.individual_credits ?? "Loading..."}
             </p>
             <p>
               <span className="account-label">Subscription Credits:</span>{" "}
-              {userData.subscription_credits}
+              {userData?.subscription_credits ?? "Loading..."}
             </p>
             <p>
               <span className="account-label">Total Credits:</span>{" "}
-              {totalCredits}
+              {totalCredits ?? "Loading..."}
             </p>
           </div>
 
@@ -300,7 +302,9 @@ NOTE: It may take a couple seconds for the update to occur. Try refreshing your 
               className="retro-button"
               onClick={() => handlePurchase("pro")}
               disabled={
-                userData.status === "active" || userData.status === "cancelled"
+                !userData ||
+                userData.status === "active" ||
+                userData.status === "cancelled"
               }
             >
               PRO | 10/month | $19.99/month
@@ -310,12 +314,15 @@ NOTE: It may take a couple seconds for the update to occur. Try refreshing your 
               className="retro-button"
               onClick={() => handlePurchase("premium")}
               disabled={
-                userData.status === "active" || userData.status === "cancelled"
+                !userData ||
+                userData.status === "active" ||
+                userData.status === "cancelled"
               }
             >
               PREMIUM | 20/month | $29.99/month
             </button>
-            {userData.plan !== "free" && userData.status === "active" && (
+
+            {userData?.plan !== "free" && userData?.status === "active" && (
               <button
                 className="retro-button cancel-change-button"
                 onClick={handleCancel}
@@ -323,7 +330,7 @@ NOTE: It may take a couple seconds for the update to occur. Try refreshing your 
                 Cancel Subscription
               </button>
             )}
-            {userData.plan !== "free" && userData.status === "cancelled" && (
+            {userData?.plan !== "free" && userData?.status === "cancelled" && (
               <button
                 className="retro-button resume-button"
                 onClick={handleResume}
@@ -331,8 +338,8 @@ NOTE: It may take a couple seconds for the update to occur. Try refreshing your 
                 Resume Subscription
               </button>
             )}
-            {userData.status === "active" &&
-              (userData.plan === "pro" || userData.plan === "premium") && (
+            {userData?.status === "active" &&
+              (userData?.plan === "pro" || userData?.plan === "premium") && (
                 <button
                   className="retro-button cancel-change-button"
                   onClick={handleChangePlan}
@@ -350,67 +357,73 @@ NOTE: It may take a couple seconds for the update to occur. Try refreshing your 
 
         <div className="right-panel">
           <h2 className="section-heading">Past Interviews</h2>
-          {!userData.past_interviews ||
-          userData.past_interviews.length === 0 ? (
-            <p>No past interviews yet.</p>
-          ) : (
-            <div className="interview-scroll">
-              <ul className="interview-list">
-                {userData.past_interviews.map((interviewMap) => (
-                  <li
-                    key={interviewMap.id}
-                    onClick={async () => {
-                      const userId = localStorage.getItem("userId");
-                      posthog.capture("past_interview_clicked", {
-                        interview_id: interviewMap.id,
-                        score: interviewMap.score ?? null,
-                      });
+          {userData ? (
+            Array.isArray(userData.past_interviews) ? (
+              userData.past_interviews.length === 0 ? (
+                <p>No past interviews yet.</p>
+              ) : (
+                <div className="interview-scroll">
+                  <ul className="interview-list">
+                    {userData.past_interviews.map((interviewMap) => (
+                      <li
+                        key={interviewMap.id}
+                        onClick={async () => {
+                          const userId = localStorage.getItem("userId");
+                          posthog.capture("past_interview_clicked", {
+                            interview_id: interviewMap.id,
+                            score: interviewMap.score ?? null,
+                          });
 
-                      localStorage.removeItem(`${userId}_interviewId`);
-                      localStorage.removeItem(`${userId}_conversationId`);
+                          localStorage.removeItem(`${userId}_interviewId`);
+                          localStorage.removeItem(`${userId}_conversationId`);
 
-                      try {
-                        const res = await fetch(
-                          `${API_URL}/interviews/${interviewMap.id}`,
-                          {
-                            headers: { Authorization: `Bearer ${token}` },
+                          try {
+                            const res = await fetch(
+                              `${API_URL}/interviews/${interviewMap.id}`,
+                              {
+                                headers: { Authorization: `Bearer ${token}` },
+                              }
+                            );
+
+                            if (!res.ok)
+                              throw new Error("Failed to fetch interview");
+
+                            const data = await res.json();
+                            const interview = data.interview;
+
+                            localStorage.setItem(
+                              `${userId}_interviewId`,
+                              interviewMap.id
+                            );
+                            localStorage.setItem(
+                              `${userId}_conversationId`,
+                              interview.conversation_id
+                            );
+
+                            navigate("/conversation");
+                          } catch (err) {
+                            console.error("Error loading past interview:", err);
                           }
-                        );
-
-                        if (!res.ok)
-                          throw new Error("Failed to fetch interview");
-
-                        const data = await res.json();
-                        const interview = data.interview;
-
-                        localStorage.setItem(
-                          `${userId}_interviewId`,
-                          interviewMap.id
-                        );
-                        localStorage.setItem(
-                          `${userId}_conversationId`,
-                          interview.conversation_id
-                        );
-
-                        navigate("/conversation");
-                      } catch (err) {
-                        console.error("Error loading past interview:", err);
-                      }
-                    }}
-                    className="interview-item"
-                  >
-                    <div>
-                      {new Date(interviewMap.started_at).toLocaleString()} —
-                      {" Score:"}
-                      {interviewMap.score ?? "N/A"}%
-                    </div>
-                    <div className="interview-feedback">
-                      {interviewMap.feedback}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
+                        }}
+                        className="interview-item"
+                      >
+                        <div>
+                          {new Date(interviewMap.started_at).toLocaleString()} —
+                          Score: {interviewMap.score ?? "N/A"}%
+                        </div>
+                        <div className="interview-feedback">
+                          {interviewMap.feedback}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            ) : (
+              <p>No past interviews yet.</p>
+            )
+          ) : (
+            <p>Loading interviews...</p>
           )}
         </div>
       </div>

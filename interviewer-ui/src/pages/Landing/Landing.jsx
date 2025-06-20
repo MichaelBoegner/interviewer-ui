@@ -45,14 +45,14 @@ export default function Landing() {
               </tr>
               <tr>
                 <td>Pro</td>
-                <td>$19.99 / mo</td>
-                <td>10 / mo</td>
+                <td>$19.99/month</td>
+                <td>10/month</td>
                 <td>$2.50</td>
               </tr>
               <tr>
                 <td>Premium</td>
-                <td>$29.99 / mo</td>
-                <td>20 / mo</td>
+                <td>$29.99/month</td>
+                <td>20/month</td>
                 <td>$1.50</td>
               </tr>
             </tbody>

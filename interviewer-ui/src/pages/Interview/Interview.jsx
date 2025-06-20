@@ -16,8 +16,8 @@ export default function InterviewScreen({ token, setToken }) {
   const [authError, setAuthError] = useState("");
   const [hasInterviewStarted, setHasInterviewStarted] = useState(false);
   const [isInterviewEnded, setIsInterviewEnded] = useState(false);
-  const [totalScore, setTotalScore] = useState(0);
-  const [questionsAnswered, setQuestionsAnswered] = useState(0);
+  const [, setTotalScore] = useState(0);
+  const [, setQuestionsAnswered] = useState(0);
   const [username, setUsername] = useState("");
   const [_, setPageLoaded] = useState(false);
   const messagesContainerRef = useRef(null);
@@ -391,8 +391,8 @@ export default function InterviewScreen({ token, setToken }) {
                 <div className="message interviewer">
                   <div className="message-header">{`INTERVIEWER >`}</div>
                   <div className="message-content">
-                    Hey there {username}! Welcome to the backend interview, and
-                    thanks so much for taking the time!
+                    Hey there {username}! Welcome to the interview, and thanks
+                    so much for taking the time!
                     <br />
                     <br />
                     As you probably noticed, above the chat window here, there's
@@ -418,7 +418,7 @@ export default function InterviewScreen({ token, setToken }) {
                     <br />
                     - For each response you give, you will get a score and
                     feedback, including what was done well, what was missing,
-                    and one clear suggestion for improvement. <br />
+                    and one suggestion for improvement. <br />
                     - At the end of an interview, a message will appear
                     indicating interview has finished and give you your total
                     score as a percentage. <br />
@@ -458,12 +458,20 @@ export default function InterviewScreen({ token, setToken }) {
                     --------------
                     <br />
                     <br />
-                    As a solo dev, I made Interviewer because I wanted to
-                    provide something useful to the world, so your feedback is
-                    everything to me. You'll get a survey at the end of each
-                    interview. If you can please take the time to fill it out,
-                    it will go a long ways towards making this better for
-                    everyone.
+                    As a solo dev, I made Interviewer because I always feel so
+                    nervous about an upcoming interview, no matter how confident
+                    I feel in my knowledge. Part of that is just wanting to do
+                    well, but I think a bigger part comes from so infrequently
+                    getting to test my knowledge in an interview setting. So I
+                    created something to help myself, and hopefully others, get
+                    more comfortable through regular practice, so the nerves
+                    don’t get in the way.
+                    <br />
+                    <br />
+                    Finally, your feedback is everything to me and the way I'll
+                    be able to make this the best experience for everyone. As a
+                    result, you'll get a very short survey at the end of each
+                    interview. If you can, please take the time to fill it out.
                     <br /> <br />
                     Thanks again for stopping by and best of luck on the
                     interview! ^_^
