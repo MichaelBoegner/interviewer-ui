@@ -45,7 +45,7 @@ export default function Landing() {
               </tr>
               <tr>
                 <td>Pro</td>
-                <td>$24.99 / mo</td>
+                <td>$19.99 / mo</td>
                 <td>10 / mo</td>
                 <td>$2.50</td>
               </tr>
