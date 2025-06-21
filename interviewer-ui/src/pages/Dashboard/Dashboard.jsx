@@ -7,6 +7,9 @@ export default function Dashboard({ token, setToken }) {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState("");
   const [isChangingPlan, setIsChangingPlan] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [confirmEmailInput, setConfirmEmailInput] = useState("");
+  const [deleteError, setDeleteError] = useState("");
   const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
@@ -46,7 +49,7 @@ export default function Dashboard({ token, setToken }) {
       .then((data) => {
         if (data) {
           setUserData(data);
-          posthog.identify(data.user_id || data.email, {
+          posthog.identify(data.email, {
             email: data.email,
             plan: data.plan,
             status: data.status,
@@ -352,6 +355,12 @@ NOTE: It may take a couple seconds for the update to occur. Try refreshing your 
                       : "Downgrade to Pro"}
                 </button>
               )}
+            <button
+              className="retro-button danger-button"
+              onClick={() => setShowDeleteModal(true)}
+            >
+              Delete My Account
+            </button>
           </div>
         </div>
 
@@ -427,6 +436,71 @@ NOTE: It may take a couple seconds for the update to occur. Try refreshing your 
           )}
         </div>
       </div>
+      {showDeleteModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Are you absolutely sure?</h3>
+            <p>
+              This will permanently delete your account, all interviews, and you
+              will lose all credits!
+            </p>
+            <p>
+              To confirm, enter your email: <strong>{userData?.email}</strong>
+            </p>
+            <input
+              type="email"
+              value={confirmEmailInput}
+              onChange={(e) => setConfirmEmailInput(e.target.value)}
+              placeholder="Enter your email to confirm"
+            />
+            {deleteError && <p className="error-text">{deleteError}</p>}
+            <div className="modal-actions">
+              <button
+                className="retro-button danger-button"
+                disabled={confirmEmailInput !== userData?.email}
+                onClick={async () => {
+                  try {
+                    const res = await fetch(
+                      `${API_URL}/users/delete/${localStorage.getItem("userId")}`,
+                      {
+                        method: "DELETE",
+                        headers: {
+                          Authorization: `Bearer ${token}`,
+                        },
+                      }
+                    );
+
+                    if (!res.ok) {
+                      const text = await res.text();
+                      throw new Error(text);
+                    }
+
+                    localStorage.removeItem("token");
+                    setToken(null);
+                    navigate("/login", { replace: true });
+                    alert("Your account has been deleted.");
+                  } catch (err) {
+                    console.error("Delete failed:", err);
+                    setDeleteError("Failed to delete account. Try again.");
+                  }
+                }}
+              >
+                Confirm Delete
+              </button>
+              <button
+                className="retro-button"
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setConfirmEmailInput("");
+                  setDeleteError("");
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

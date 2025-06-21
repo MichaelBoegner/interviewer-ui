@@ -14,9 +14,9 @@ posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_KEY, {
   capture_console_log_exceptions: false,
   disable_session_recording: false,
   session_recording: {
-    maskAllText: true, // or true to mask everything
-    blockClass: "ph-block", // use this class to hide elements
-    maskTextClass: "ph-mask", // use this class to mask content
+    maskAllText: true,
+    blockClass: "ph-block",
+    maskTextClass: "ph-mask",
   },
   debug: false,
 });
