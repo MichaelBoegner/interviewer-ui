@@ -229,7 +229,7 @@ NOTE: It may take a couple seconds for the update to occur. Try refreshing your 
       <div className="dashboard-header">
         <h1>DASHBOARD</h1>
         <p className="dashboard-subtext">
-          Buy interview credits and see past interviews and account info.
+          Buy interview credits, review past interviews, and see account info.
         </p>
         <div className="go-to-interview-row">
           <button
