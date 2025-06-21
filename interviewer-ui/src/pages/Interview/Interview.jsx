@@ -386,7 +386,7 @@ export default function InterviewScreen({ token, setToken }) {
           )}
 
           <div className="chat-window-wrapper">
-            <div className="chat-window" ref={messagesContainerRef}>
+            <div className="chat-window ph-block" ref={messagesContainerRef}>
               {messages.length === 0 ? (
                 <div className="message interviewer">
                   <div className="message-header">{`INTERVIEWER >`}</div>

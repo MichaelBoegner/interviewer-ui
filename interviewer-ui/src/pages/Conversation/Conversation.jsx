@@ -89,7 +89,7 @@ const Conversation = () => {
       <div className="dashboard-header">
         <h1>Past Interview</h1>
       </div>
-      <div className="conversation-box">
+      <div className="conversation-box ">
         <div className="scanline"></div>
 
         <div className="header-bar">
@@ -119,7 +119,7 @@ const Conversation = () => {
           )}
         </div>
 
-        <div className="chat-window" ref={messagesContainerRef}>
+        <div className="chat-window ph-block" ref={messagesContainerRef}>
           {(() => {
             let interviewerCount = 0;
 

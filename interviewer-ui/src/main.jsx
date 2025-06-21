@@ -12,7 +12,12 @@ posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_KEY, {
   capture_exceptions: false,
   capture_performance: false,
   capture_console_log_exceptions: false,
-  disable_session_recording: true,
+  disable_session_recording: false,
+  session_recording: {
+    maskAllText: true, // or true to mask everything
+    blockClass: "ph-block", // use this class to hide elements
+    maskTextClass: "ph-mask", // use this class to mask content
+  },
   debug: import.meta.env.MODE === "development",
 });
 
