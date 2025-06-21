@@ -622,7 +622,12 @@ export default function InterviewScreen({ token, setToken }) {
                   <select
                     id="language-select"
                     value={language}
-                    onChange={(e) => setLanguage(e.target.value)}
+                    onChange={(e) => {
+                      setLanguage(e.target.value);
+                      posthog.capture("language_selected", {
+                        language: e.target.value,
+                      });
+                    }}
                     className="language-dropdown"
                     disabled={!isCodeMode}
                   >

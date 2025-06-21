@@ -27,6 +27,10 @@ export default function Header({ setToken, isAuthenticated }) {
     navigate("/login");
   };
 
+  const handleLoginClick = () => {
+    posthog.capture("login_clicked");
+  };
+
   return (
     <>
       <div
@@ -52,7 +56,11 @@ export default function Header({ setToken, isAuthenticated }) {
                 Logout
               </span>
             ) : (
-              <Link to="/login" className="logout-link">
+              <Link
+                to="/login"
+                className="logout-link"
+                onClick={handleLoginClick}
+              >
                 Login
               </Link>
             )}
