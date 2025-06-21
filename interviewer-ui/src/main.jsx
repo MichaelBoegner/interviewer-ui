@@ -18,7 +18,7 @@ posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_KEY, {
     blockClass: "ph-block", // use this class to hide elements
     maskTextClass: "ph-mask", // use this class to mask content
   },
-  debug: import.meta.env.MODE === "development",
+  debug: false,
 });
 
 createRoot(document.getElementById("root")).render(
