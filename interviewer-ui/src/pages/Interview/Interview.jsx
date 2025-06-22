@@ -578,14 +578,6 @@ export default function InterviewScreen({ token, setToken }) {
                         <textarea
                           value={input}
                           onChange={(e) => setInput(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" && !e.shiftKey) {
-                              e.preventDefault();
-                              if (!isLoading && input.trim()) {
-                                sendMessage();
-                              }
-                            }
-                          }}
                           disabled={isLoading || isInterviewEnded}
                           placeholder="Enter your response here. Click [ SEND_MESSAGE ] below to send."
                           className="textarea-input"
