@@ -99,6 +99,16 @@ export default function Login({ setToken }) {
             </button>
           </form>
 
+          <p className="registration">
+            New here?{" "}
+            <a
+              href="/signup"
+              onClick={() => posthog.capture("signup_link_clicked")}
+            >
+              Create an account
+            </a>
+          </p>
+
           <p className="forgot-password">
             Forgot your password?{" "}
             <a
@@ -106,16 +116,6 @@ export default function Login({ setToken }) {
               onClick={() => posthog.capture("password_reset_link_clicked")}
             >
               Reset it here
-            </a>
-          </p>
-
-          <p className="forgot-password">
-            New here?{" "}
-            <a
-              href="/signup"
-              onClick={() => posthog.capture("signup_link_clicked")}
-            >
-              Create an account
             </a>
           </p>
         </div>

@@ -124,8 +124,12 @@ input:focus {
 }
 
 .forgot-password {
-  margin-top: 16px;
   font-size: 0.875rem;
+}
+
+.registration {
+  margin-top: 16px;
+  font-size: 1.15rem;
 }
 
 .footer-note {

@@ -32,7 +32,7 @@ export default function Landing() {
           <p>
             <strong>💸 Pricing</strong>
             <br />
-            Every new account will come with one free interview, no credit card
+            Every new account comes with one free interview, no credit card
             required. <br />
             After that, it's just <strong>$4.99</strong> per interview. Or
             choose a subscription to lower the cost per interview:
@@ -76,13 +76,6 @@ export default function Landing() {
               </tr>
             </tbody>
           </table>
-
-          <p>
-            <strong>🧪 Version 1.0.0 Coming</strong>
-            <br />
-            Public version coming soon! Reach out below if you'd like to be
-            notified when it's live.
-          </p>
 
           <p>
             <strong>👨‍💻 Who made this?</strong>
