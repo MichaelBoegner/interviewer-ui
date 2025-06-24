@@ -8,6 +8,9 @@ export default function Landing() {
           AI-driven backend engineering interviews. Real questions. Real
           feedback.
         </p>
+        <a href="/login" className="login-button">
+          [ LOGIN/SIGNUP ]
+        </a>
 
         <div className="info-section">
           <p>
@@ -97,13 +100,10 @@ export default function Landing() {
             >
               support@mail.interviewer.dev
             </a>
-            .
+            . I respond quickly (usually same day) and am happy to answer any
+            questions you may have! ^_^
           </p>
         </div>
-
-        <a href="/login" className="login-button">
-          [ LOGIN/SIGNUP ]
-        </a>
       </div>
     </div>
   );
