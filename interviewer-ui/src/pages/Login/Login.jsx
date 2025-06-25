@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import posthog from "posthog-js";
 import "./Login.css";
 
@@ -10,6 +10,20 @@ export default function Login({ setToken }) {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const oauthError = params.get("error");
+
+    if (oauthError === "github_denied") {
+      setError("GitHub login was cancelled.");
+    } else if (oauthError === "github_failed") {
+      setError("GitHub login failed. Please try again.");
+    } else if (oauthError === "github_malformed") {
+      setError("Invalid GitHub login attempt.");
+    }
+  }, [location.search]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -95,9 +109,22 @@ export default function Login({ setToken }) {
               disabled={isLoading || !email || !password}
               className="retro-button"
             >
-              {isLoading ? "[ PROCESSING... ]" : "[ LOGIN ]"}
+              {isLoading ? "[ PROCESSING... ]" : "[ SIGN_IN_WITH_EMAIL ]"}
             </button>
+            <p>OR</p>
           </form>
+
+          <a
+            href={`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(import.meta.env.VITE_GITHUB_REDIRECT_URI)}&scope=${encodeURIComponent("user:email")}`}
+            className={"login-button-login"}
+          >
+            <img
+              src="/github-mark-white.png"
+              alt="GitHub logo"
+              className="github-icon"
+            />
+            [ SIGN_IN_WITH_GITHUB ]
+          </a>
 
           <p className="registration">
             New here?{" "}

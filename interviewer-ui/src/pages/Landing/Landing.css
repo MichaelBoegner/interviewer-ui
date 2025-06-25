@@ -36,10 +36,25 @@
   text-decoration: underline;
 }
 
+
+.sign-in-section{
+  /* border: 2px solid blue; */
+  display: flex;
+  align-content: top;
+  justify-content: space-around;
+  padding: 0rem 4rem;
+}
+
+
 .login-button {
-  display: inline-block;
-  margin-top: 0.25rem;
-  padding: 0.75rem 1.5rem;
+  display: inline-flex;       
+  align-items: center;          
+  justify-content: center;
+
+  border-radius: 8px;
+  width: 15rem;
+  gap: 4px;               
+  padding: 0.25rem 1.5rem;
   background-color: black;
   border: 1px solid var(--primary-green);
   color: var(--primary-green);
@@ -48,10 +63,16 @@
   transition: background-color 0.2s, color 0.2s;
 }
 
+.github-icon {
+  width: 20px;
+  height: 20px;
+}
+
 .login-button:hover {
-  background-color: #00aa00;
+  background: var(--primary-green);
   color: black;
 }
+
 
 .pricing-table {
   width: 100%;

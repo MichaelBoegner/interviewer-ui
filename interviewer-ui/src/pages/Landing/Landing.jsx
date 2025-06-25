@@ -1,6 +1,24 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Landing.css";
 
 export default function Landing() {
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [githubClicked, setGithubClicked] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const handleGithubClick = () => {
+    setGithubClicked(true);
+    // let <a> handle redirect naturally
+  };
+
   return (
     <div className="landing-page">
       <div className="landing-content">
@@ -8,9 +26,38 @@ export default function Landing() {
           AI-driven backend engineering interviews. Real questions. Real
           feedback.
         </p>
-        <a href="/login" className="login-button">
-          [ LOGIN/SIGNUP ]
-        </a>
+
+        <div className="sign-in-section">
+          {isLoggedIn ? (
+            <button
+              className="login-button"
+              onClick={() => navigate("/dashboard")}
+            >
+              Go to Dashboard
+            </button>
+          ) : (
+            <>
+              <a href="/login" className="login-button">
+                [ SIGN_IN_WITH_EMAIL ]
+              </a>
+              <a
+                onClick={handleGithubClick}
+                href={`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(import.meta.env.VITE_GITHUB_REDIRECT_URI)}&scope=${encodeURIComponent("user:email")}`}
+                className={`login-button ${githubClicked ? "disabled" : ""}`}
+                style={
+                  githubClicked ? { pointerEvents: "none", opacity: 0.5 } : {}
+                }
+              >
+                <img
+                  src="/github-mark-white.png"
+                  alt="GitHub logo"
+                  className="github-icon"
+                />
+                [ SIGN_IN_WITH_GITHUB ]
+              </a>
+            </>
+          )}
+        </div>
 
         <div className="info-section">
           <p>

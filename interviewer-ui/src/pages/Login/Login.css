@@ -98,7 +98,7 @@ input:focus {
   flex-direction: column;
 }
 
-.retro-button {
+.retro-button-login {
   margin-top: 12px;
   padding: 8px;
   border: 1px solid var(--primary-green);
@@ -106,6 +106,28 @@ input:focus {
   color: var(--primary-green);
   cursor: pointer;
   transition: all 0.2s;
+}
+
+.login-button-login {
+  display: inline-flex;       
+  align-items: center;  
+  letter-spacing: 1px;        
+  border-radius: 8px;
+  gap: 4px;          
+  margin-top: 0.5rem;     
+  padding: 0.25rem 1.5rem;
+  background-color: black;
+  border: 1px solid var(--primary-green);
+  color: var(--primary-green);
+  text-decoration: none;
+  font-family: 'VT323', monospace;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+
+.login-button-login:hover {
+  background: var(--primary-green);
+  color: black;
 }
 
 .retro-button:hover {
@@ -123,13 +145,14 @@ input:focus {
   color: black;
 }
 
-.forgot-password {
+.registration {
   font-size: 0.875rem;
+  margin-bottom: 0px;
 }
 
-.registration {
-  margin-top: 16px;
-  font-size: 1.15rem;
+.forgot-password {
+  font-size: 0.875rem;
+  margin-top: 0.2rem;
 }
 
 .footer-note {

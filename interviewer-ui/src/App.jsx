@@ -19,6 +19,7 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import Terms from "./components/Footer/Terms";
 import Privacy from "./components/Footer/Privacy";
+import GithubCallback from "./pages/Github/githubCallback";
 
 function isTokenValid(token) {
   try {
@@ -107,6 +108,7 @@ export default function App() {
         />
         <Route path="/reset-request" element={<ResetRequest />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/github/callback" element={<GithubCallback />} />
         <Route path="/conversation" element={<Conversation />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
