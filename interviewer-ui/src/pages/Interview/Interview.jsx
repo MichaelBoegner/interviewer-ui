@@ -130,11 +130,11 @@ export default function InterviewScreen({ token, setToken }) {
   }, []);
 
   useEffect(() => {
-    if (messagesContainerRef.current) {
+    if (messagesContainerRef.current && hasInterviewStarted) {
       messagesContainerRef.current.scrollTop =
         messagesContainerRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, hasInterviewStarted]);
 
   const resetInterview = () => {
     const userId = localStorage.getItem("userId");
