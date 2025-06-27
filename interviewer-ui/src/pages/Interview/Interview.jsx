@@ -445,8 +445,8 @@ export default function InterviewScreen({ token, setToken }) {
                     <br />
                     - Make sure you answer each question directly. Asking
                     clarifying questions like “Can you explain?” or “I don’t
-                    understand” may confuse me and cause repeated prompts or
-                    incorrect feedback.
+                    understand” may cause repeated prompts or incorrect
+                    feedback.
                     <br />
                     - Once you enter your response, there is no further editing
                     it, meaning you will have wasted a question. As a result,
