@@ -25,6 +25,8 @@ export default function InterviewScreen({ token, setToken }) {
   const [resetNotice, setResetNotice] = useState("");
   const [language, setLanguage] = useState("plaintext");
   const location = useLocation();
+  const [showJDModal, setShowJDModal] = useState(false);
+  const [jobDescription, setJobDescription] = useState("");
   const API_URL = import.meta.env.VITE_API_URL;
 
   useNavigationGuard(isLoading);
@@ -179,6 +181,10 @@ export default function InterviewScreen({ token, setToken }) {
       return;
     }
 
+    const bodyPayload = {
+      job_description: jobDescription.trim(),
+    };
+
     try {
       const response = await fetch(`${API_URL}/interviews`, {
         method: "POST",
@@ -186,7 +192,7 @@ export default function InterviewScreen({ token, setToken }) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify(bodyPayload),
       });
 
       // Handle credit-related failure
@@ -336,12 +342,42 @@ export default function InterviewScreen({ token, setToken }) {
 
   return (
     <div className="interview-page">
+      {showJDModal && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <h3>Optional Job Description</h3>
+            <textarea
+              value={jobDescription}
+              onChange={(e) => setJobDescription(e.target.value)}
+              placeholder="Paste job description here (optional)"
+              className="jd-textarea"
+            />
+            <div className="modal-actions">
+              <button
+                onClick={() => {
+                  setShowJDModal(false);
+                  startNewInterview();
+                }}
+                className="retro-button green"
+              >
+                [ START INTERVIEW ]
+              </button>
+              <button
+                onClick={() => setShowJDModal(false)}
+                className="retro-button red"
+              >
+                [ CANCEL ]
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="interview-header">
         <h1>INTERVIEW</h1>
         <div className="button-row-start-save">
           {!hasInterviewStarted ? (
             <button
-              onClick={startNewInterview}
+              onClick={() => setShowJDModal(true)}
               disabled={isLoading}
               className={`retro-button green ${isLoading ? "disabled" : ""}`}
             >
