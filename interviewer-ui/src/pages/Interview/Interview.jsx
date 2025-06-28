@@ -256,7 +256,11 @@ export default function InterviewScreen({ token, setToken }) {
     setInput("");
     setIsLoading(true);
 
-    const newMessages = [...messages, { role: "user", content: userMessage }];
+    const newMessages = [
+      ...messages,
+      { role: "user", content: userMessage },
+      { role: "system", content: "Thinking", id: "thinking" }, // insert placeholder
+    ];
     setMessages(newMessages);
 
     posthog.capture("interview_message_sent", {
@@ -328,13 +332,15 @@ export default function InterviewScreen({ token, setToken }) {
       setMessages(updatedMessages);
     } catch (error) {
       console.error("Error sending message:", error);
-      setMessages([
-        ...newMessages,
+      const failedMessages = [
+        ...messages,
+        { role: "user", content: userMessage },
         {
           role: "system",
           content: `Error: ${error.message || "Could not send message"}`,
         },
-      ]);
+      ];
+      setMessages(failedMessages);
     } finally {
       setIsLoading(false);
     }
@@ -534,8 +540,17 @@ export default function InterviewScreen({ token, setToken }) {
                               : "SYSTEM >"}
                         </div>
                         <div className="message-content">
-                          {msg.content}
-                          {isInterviewer && <span className="cursor" />}
+                          {msg.id === "thinking" ? (
+                            <>
+                              Thinking
+                              <span className="dot-anim" />
+                            </>
+                          ) : (
+                            <>
+                              {msg.content}
+                              {isInterviewer && <span className="cursor" />}
+                            </>
+                          )}
                         </div>
                         {msg.role === "user" &&
                           (Object.prototype.hasOwnProperty.call(

@@ -63,20 +63,12 @@ export default function Landing() {
           <p>
             <strong>✅ What is it?</strong>
             <br />
-            Interviewer is a solo-built, AI-powered platform that simulates
-            backend engineering interviews. Each interview features real-time
-            questions, tailored feedback, and a final score. You also get access
-            to past interviews you've already started or completed so you can
-            review and improve.
-            <br />
-            <br />
-            As a solo dev, I made Interviewer because I always feel so nervous
-            about an upcoming interview, no matter how confident I feel in my
-            knowledge. Part of that is just wanting to do well, but I think a
-            bigger part comes from so infrequently getting to test my knowledge
-            in an interview setting. So I created something to help myself, and
-            hopefully others, get more comfortable through regular practice, so
-            the nerves don’t get in the way.
+            Interviewer isn’t just another coding practice tool. It’s built to
+            help you master real interviews. Drop in the job description from a
+            role you’re aiming for, and get a custom mock interview designed
+            around that exact position. Sharpen your skills with targeted
+            questions, instant feedback, a final score, and access to every past
+            interview, so you can walk into the real thing with confidence!
           </p>
 
           <p>
@@ -130,8 +122,16 @@ export default function Landing() {
           <p>
             <strong>👨‍💻 Who made this?</strong>
             <br />
-            Hi! I'm Michael, a backend engineer based in Thailand. You can find
-            me on{" "}
+            As a solo dev, I made Interviewer because I always feel so nervous
+            about an upcoming interview, no matter how confident I feel in my
+            knowledge. Part of that is just wanting to do well, but I think a
+            bigger part comes from so infrequently getting to test my knowledge
+            in an interview setting. So I created something to help myself, and
+            hopefully others, get more comfortable through regular practice, so
+            the nerves don’t get in the way.
+            <br />
+            <br />
+            You can find me on{" "}
             <a
               href="https://www.linkedin.com/in/michael-boegner-855a9741/"
               target="_blank"
