@@ -25,6 +25,8 @@ export default function InterviewScreen({ token, setToken }) {
   const [resetNotice, setResetNotice] = useState("");
   const [language, setLanguage] = useState("plaintext");
   const location = useLocation();
+  const [showJDModal, setShowJDModal] = useState(false);
+  const [jobDescription, setJobDescription] = useState("");
   const API_URL = import.meta.env.VITE_API_URL;
 
   useNavigationGuard(isLoading);
@@ -179,6 +181,10 @@ export default function InterviewScreen({ token, setToken }) {
       return;
     }
 
+    const bodyPayload = {
+      job_description: jobDescription.trim(),
+    };
+
     try {
       const response = await fetch(`${API_URL}/interviews`, {
         method: "POST",
@@ -186,7 +192,7 @@ export default function InterviewScreen({ token, setToken }) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify(bodyPayload),
       });
 
       // Handle credit-related failure
@@ -250,7 +256,11 @@ export default function InterviewScreen({ token, setToken }) {
     setInput("");
     setIsLoading(true);
 
-    const newMessages = [...messages, { role: "user", content: userMessage }];
+    const newMessages = [
+      ...messages,
+      { role: "user", content: userMessage },
+      { role: "system", content: "Thinking", id: "thinking" }, // insert placeholder
+    ];
     setMessages(newMessages);
 
     posthog.capture("interview_message_sent", {
@@ -322,13 +332,15 @@ export default function InterviewScreen({ token, setToken }) {
       setMessages(updatedMessages);
     } catch (error) {
       console.error("Error sending message:", error);
-      setMessages([
-        ...newMessages,
+      const failedMessages = [
+        ...messages,
+        { role: "user", content: userMessage },
         {
           role: "system",
           content: `Error: ${error.message || "Could not send message"}`,
         },
-      ]);
+      ];
+      setMessages(failedMessages);
     } finally {
       setIsLoading(false);
     }
@@ -336,18 +348,52 @@ export default function InterviewScreen({ token, setToken }) {
 
   return (
     <div className="interview-page">
+      {showJDModal && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <h3>Optional Job Description</h3>
+            <textarea
+              value={jobDescription}
+              onChange={(e) => setJobDescription(e.target.value)}
+              placeholder="Paste an entire job description here, and Interviewer will tailor the questions to your ideal/upcoming interview. Otherwise, leave this blank and a generic backend interview will be generated."
+              className="jd-textarea"
+            />
+            <div className="modal-actions">
+              <button
+                onClick={() => {
+                  setShowJDModal(false);
+                  startNewInterview();
+                }}
+                className="retro-button green"
+              >
+                [ START INTERVIEW ]
+              </button>
+              <button
+                onClick={() => setShowJDModal(false)}
+                className="retro-button red"
+              >
+                [ CANCEL ]
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="interview-header">
         <h1>INTERVIEW</h1>
         <div className="button-row-start-save">
           {!hasInterviewStarted ? (
             <button
-              onClick={startNewInterview}
+              onClick={() => setShowJDModal(true)}
               disabled={isLoading}
               className={`retro-button green ${isLoading ? "disabled" : ""}`}
             >
-              {isLoading
-                ? "[ STARTING NEW INTERVIEW... ]"
-                : "[ START_NEW_INTERVIEW ]"}
+              {isLoading ? (
+                <>
+                  [ STARTING_NEW_INTERVIEW<span className="dot-anim"></span> ]
+                </>
+              ) : (
+                "[ START_NEW_INTERVIEW ]"
+              )}
             </button>
           ) : (
             <button
@@ -400,6 +446,12 @@ export default function InterviewScreen({ token, setToken }) {
                     course, start a new interview. It will also deduct a credit
                     from your current credit total. If you don't have credits,
                     you can purchase them on your Dashboard page.
+                    <br />
+                    <br />
+                    After clicking [ START_NEW_INTERVIEW ], you will get the
+                    option to paste in a job description from your
+                    upcoming/ideal job. Paste in the entire job description and
+                    your interview questions will be tailored to that job.
                     <br />
                     <br />
                     <span className="intro-header">
@@ -494,8 +546,17 @@ export default function InterviewScreen({ token, setToken }) {
                               : "SYSTEM >"}
                         </div>
                         <div className="message-content">
-                          {msg.content}
-                          {isInterviewer && <span className="cursor" />}
+                          {msg.id === "thinking" ? (
+                            <>
+                              Thinking
+                              <span className="dot-anim" />
+                            </>
+                          ) : (
+                            <>
+                              {msg.content}
+                              {isInterviewer && <span className="cursor" />}
+                            </>
+                          )}
                         </div>
                         {msg.role === "user" &&
                           (Object.prototype.hasOwnProperty.call(
