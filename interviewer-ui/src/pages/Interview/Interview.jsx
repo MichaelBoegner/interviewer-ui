@@ -381,9 +381,13 @@ export default function InterviewScreen({ token, setToken }) {
               disabled={isLoading}
               className={`retro-button green ${isLoading ? "disabled" : ""}`}
             >
-              {isLoading
-                ? "[ STARTING NEW INTERVIEW... ]"
-                : "[ START_NEW_INTERVIEW ]"}
+              {isLoading ? (
+                <>
+                  [ STARTING_NEW_INTERVIEW<span className="dot-anim"></span> ]
+                </>
+              ) : (
+                "[ START_NEW_INTERVIEW ]"
+              )}
             </button>
           ) : (
             <button
