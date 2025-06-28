@@ -355,7 +355,7 @@ export default function InterviewScreen({ token, setToken }) {
             <textarea
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
-              placeholder="Paste an entire job description here, and Interviewer will tailor the interview to your ideal/upcoming interview. Otherwise, leave this blank and a generic backend interview will be generated."
+              placeholder="Paste an entire job description here, and Interviewer will tailor the questions to your ideal/upcoming interview. Otherwise, leave this blank and a generic backend interview will be generated."
               className="jd-textarea"
             />
             <div className="modal-actions">
@@ -448,6 +448,12 @@ export default function InterviewScreen({ token, setToken }) {
                     you can purchase them on your Dashboard page.
                     <br />
                     <br />
+                    After clicking [ START_NEW_INTERVIEW ], you will get the
+                    option to paste in a job description from your
+                    upcoming/ideal job. Paste in the entire job description and
+                    your interview questions will be tailored to that job.
+                    <br />
+                    <br />
                     <span className="intro-header">
                       About the Interview Process Itself:
                     </span>
@@ -491,8 +497,8 @@ export default function InterviewScreen({ token, setToken }) {
                     <br />
                     - Make sure you answer each question directly. Asking
                     clarifying questions like “Can you explain?” or “I don’t
-                    understand” may confuse me and cause repeated prompts or
-                    incorrect feedback.
+                    understand” may cause repeated prompts or incorrect
+                    feedback.
                     <br />
                     - Once you enter your response, there is no further editing
                     it, meaning you will have wasted a question. As a result,
