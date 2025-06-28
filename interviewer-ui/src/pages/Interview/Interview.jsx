@@ -349,7 +349,7 @@ export default function InterviewScreen({ token, setToken }) {
             <textarea
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
-              placeholder="Paste job description here (optional)"
+              placeholder="Paste an entire job description here, and Interviewer will tailor the interview to your ideal/upcoming interview. Otherwise, leave this blank and a generic backend interview will be generated."
               className="jd-textarea"
             />
             <div className="modal-actions">
