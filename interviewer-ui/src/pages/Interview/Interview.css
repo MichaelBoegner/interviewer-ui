@@ -371,3 +371,11 @@ background-color: #111;
     content: "...";
   }
 }
+
+.countdown-timer {
+  font-family: monospace;
+  font-size: 14px;
+  color: var(--primary-green);
+  text-align: right;
+  margin-right: 1rem;
+}
