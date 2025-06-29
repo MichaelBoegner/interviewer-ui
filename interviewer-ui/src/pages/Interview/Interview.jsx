@@ -27,6 +27,7 @@ export default function InterviewScreen({ token, setToken }) {
   const location = useLocation();
   const [showJDModal, setShowJDModal] = useState(false);
   const [jobDescription, setJobDescription] = useState("");
+  const hasLoggedJDEntryRef = useRef(false);
   const API_URL = import.meta.env.VITE_API_URL;
 
   useNavigationGuard(isLoading);
@@ -137,6 +138,15 @@ export default function InterviewScreen({ token, setToken }) {
         messagesContainerRef.current.scrollHeight;
     }
   }, [messages, hasInterviewStarted]);
+
+  useEffect(() => {
+    if (jobDescription.trim().length > 0 && !hasLoggedJDEntryRef.current) {
+      posthog.capture("jd_description_entered", {
+        length: jobDescription.length,
+      });
+      hasLoggedJDEntryRef.current = true;
+    }
+  }, [jobDescription]);
 
   const resetInterview = () => {
     const userId = localStorage.getItem("userId");
@@ -366,7 +376,7 @@ export default function InterviewScreen({ token, setToken }) {
                 }}
                 className="retro-button green"
               >
-                [ START INTERVIEW ]
+                [ START_INTERVIEW ]
               </button>
               <button
                 onClick={() => setShowJDModal(false)}
@@ -383,7 +393,10 @@ export default function InterviewScreen({ token, setToken }) {
         <div className="button-row-start-save">
           {!hasInterviewStarted ? (
             <button
-              onClick={() => setShowJDModal(true)}
+              onClick={() => {
+                posthog.capture("interview_modal_opened");
+                setShowJDModal(true);
+              }}
               disabled={isLoading}
               className={`retro-button green ${isLoading ? "disabled" : ""}`}
             >

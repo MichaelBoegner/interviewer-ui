@@ -108,6 +108,7 @@ export default function Login({ setToken }) {
               type="submit"
               disabled={isLoading || !email || !password}
               className="retro-button"
+              onClick={() => posthog.capture("email_login_clicked")}
             >
               {isLoading ? "[ PROCESSING... ]" : "[ SIGN_IN_WITH_EMAIL ]"}
             </button>
@@ -117,6 +118,7 @@ export default function Login({ setToken }) {
           <a
             href={`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(import.meta.env.VITE_GITHUB_REDIRECT_URI)}&scope=${encodeURIComponent("user:email")}`}
             className={"login-button-login"}
+            onClick={() => posthog.capture("github_login_clicked")}
           >
             <img
               src="/github-mark-white.png"

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import posthog from "posthog-js";
 import "./Landing.css";
 
 export default function Landing() {
@@ -16,7 +17,7 @@ export default function Landing() {
 
   const handleGithubClick = () => {
     setGithubClicked(true);
-    // let <a> handle redirect naturally
+    posthog.capture("github_login_clicked");
   };
 
   return (
@@ -31,15 +32,24 @@ export default function Landing() {
           {isLoggedIn ? (
             <button
               className="login-button"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => {
+                posthog.capture("go_to_dashboard_clicked");
+                navigate("/dashboard");
+              }}
             >
               Go to Dashboard
             </button>
           ) : (
             <>
-              <a href="/login" className="login-button">
+              <button
+                onClick={() => {
+                  navigate("/login");
+                  posthog.capture("email_login_clicked");
+                }}
+                className="login-button"
+              >
                 [ SIGN_IN_WITH_EMAIL ]
-              </a>
+              </button>
               <a
                 onClick={handleGithubClick}
                 href={`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(import.meta.env.VITE_GITHUB_REDIRECT_URI)}&scope=${encodeURIComponent("user:email")}`}
