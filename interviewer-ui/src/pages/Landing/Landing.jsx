@@ -22,10 +22,13 @@ export default function Landing() {
 
   return (
     <div className="landing-page">
-      <div className="landing-content">
-        <p className="intro-text">
-          AI-driven backend engineering interviews. Real questions. Real
-          feedback.
+      {/* === Hero Section === */}
+      <div className="hero-section">
+        <h1 className="hero-headline">
+          AI-powered mock interviews using real job descriptions
+        </h1>
+        <p className="hero-subheadline">
+          Sign up now and get started for free!
         </p>
 
         <div className="sign-in-section">
@@ -68,97 +71,110 @@ export default function Landing() {
             </>
           )}
         </div>
+      </div>
 
-        <div className="info-section">
+      {/* === Demo Section ===
+      <div className="section demo-section">
+        <h2>See it in action</h2>
+        <div className="demo-grid">
+          <video className="demo-video" autoPlay muted loop controls>
+            <source src="/demo.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <ul className="feature-list">
+            <li>🧠 Upload a job description → Get custom questions</li>
+            <li>📈 Instant feedback after every response</li>
+            <li>🗂 Review past interviews anytime</li>
+            <li>🔐 Built for privacy. No data shared or sold.</li>
+          </ul>
+        </div>
+      </div> */}
+
+      {/* === Value Prop Section === */}
+      <div className="section value-section">
+        <h2>Why Interviewer?</h2>
+        <p>
+          Most coding platforms test algorithms. Interviewer prepares you for
+          the real conversation. Get structured questions and honest AI feedback
+          designed around the exact job you’re applying to.
+        </p>
+        <div className="value-grid">
+          <div>✅ Realistic mock interviews</div>
+          <div>✅ Target real jobs</div>
+          <div>✅ Practice at your pace</div>
+          <div>✅ Measurable progress</div>
+        </div>
+      </div>
+
+      {/* === Pricing Section === */}
+      <div className="section pricing-section">
+        <h2>Simple, fair pricing</h2>
+        <p>
+          Every new account gets one free interview. No credit card required.
+        </p>
+        <table className="pricing-table">
+          <thead>
+            <tr>
+              <th>Plan</th>
+              <th>Price</th>
+              <th>Interviews</th>
+              <th>Per Interview</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>Free Trial</strong>
+              </td>
+              <td>$0</td>
+              <td>1</td>
+              <td>$0</td>
+            </tr>
+            <tr>
+              <td>Individual</td>
+              <td>$4.99</td>
+              <td>1</td>
+              <td>$4.99</td>
+            </tr>
+            <tr>
+              <td>Pro</td>
+              <td>$19.99/month</td>
+              <td>10/month</td>
+              <td>$2.50</td>
+            </tr>
+            <tr>
+              <td>Premium</td>
+              <td>$29.99/month</td>
+              <td>20/month</td>
+              <td>$1.50</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* === About Section === */}
+      <div className="section about-section">
+        <h2>Made by a dev who hates interview anxiety</h2>
+        <div className="about">
           <p>
-            <strong>✅ What is it?</strong>
-            <br />
-            Interviewer isn’t just another coding practice tool. It’s built to
-            help you master real interviews. Drop in the job description from a
-            role you’re aiming for, and get a custom mock interview designed
-            around that exact position. Sharpen your skills with targeted
-            questions, instant feedback, a final score, and access to every past
-            interview, so you can walk into the real thing with confidence!
+            I got tired of feeling rusty before interviews, and built
+            Interviewer to simulate the real thing. Don't let your nerves stand
+            in the way of your dream job.
           </p>
-
           <p>
-            <strong>💸 Pricing</strong>
-            <br />
-            Every new account comes with one free interview, no credit card
-            required. <br />
-            After that, it's just <strong>$4.99</strong> per interview. Or
-            choose a subscription to lower the cost per interview:
-          </p>
-
-          <table className="pricing-table">
-            <thead>
-              <tr>
-                <th>Plan</th>
-                <th>Price</th>
-                <th>Interviews</th>
-                <th>Per Interview</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <strong>Free Trial</strong>
-                </td>
-                <td>$0</td>
-                <td>1</td>
-                <td>$0 (no credit card)</td>
-              </tr>
-              <tr>
-                <td>Individual</td>
-                <td>$4.99</td>
-                <td>1</td>
-                <td>$4.99</td>
-              </tr>
-              <tr>
-                <td>Pro</td>
-                <td>$19.99/month</td>
-                <td>10/month</td>
-                <td>$2.50</td>
-              </tr>
-              <tr>
-                <td>Premium</td>
-                <td>$29.99/month</td>
-                <td>20/month</td>
-                <td>$1.50</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <p>
-            <strong>👨‍💻 Who made this?</strong>
-            <br />
-            As a solo dev, I made Interviewer because I always feel so nervous
-            about an upcoming interview, no matter how confident I feel in my
-            knowledge. Part of that is just wanting to do well, but I think a
-            bigger part comes from so infrequently getting to test my knowledge
-            in an interview setting. So I created something to help myself, and
-            hopefully others, get more comfortable through regular practice, so
-            the nerves don’t get in the way.
-            <br />
-            <br />
-            You can find me on{" "}
+            Reach me at{" "}
+            <a href="mailto:support@mail.interviewer.dev">
+              support@mail.interviewer.dev
+            </a>{" "}
+            or{" "}
             <a
               href="https://www.linkedin.com/in/michael-boegner-855a9741/"
               target="_blank"
               rel="noopener noreferrer"
-              className="external-link"
             >
               LinkedIn
-            </a>{" "}
-            or reach me by email at{" "}
-            <a
-              href="mailto:support@mail.interviewer.dev"
-              className="email-link"
-            >
-              support@mail.interviewer.dev
             </a>
-            . I respond quickly (usually same day) and am happy to answer any
-            questions you may have! ^_^
+            .
           </p>
         </div>
       </div>

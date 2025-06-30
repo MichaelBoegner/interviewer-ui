@@ -6,17 +6,19 @@
 
 .header-wrapper.centered-layout .topbar {
   justify-content: center;
+
 }
 
 .header-wrapper.centered-layout .ascii-banner {
   justify-content: center;
   width: 100%;
+
 }
 
 
 .header-wrapper{
   background: #111;
-  /* border:4px solid blue; */
+  
   display: flex;
   flex-direction: row;
   justify-content: space-between;

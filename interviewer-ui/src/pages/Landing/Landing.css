@@ -1,66 +1,79 @@
-.landing-page {
-  min-height: 100vh;
-  background-color: black;
+:root {
+  --primary-green: #00ff00;
+  --background-black: #000000;
+  --section-bg-alt: #0a0a0a; 
+  --border-green: rgba(0, 255, 0, 0.2);
+  --terminal-font: 'VT323', monospace;
+  --modern-font: 'Inter', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-black);
+  font-family: var(--terminal-font);
   color: var(--primary-green);
+}
+
+.landing-page {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* === Hero Section === */
+.hero-section {
+  padding-top: 10rem;
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: top;
-  font-family: 'VT323', monospace;
-}
-
-.landing-content {
+  align-items: center;
   text-align: center;
-  max-width: 640px;
+  background: radial-gradient(ellipse at center, #001100 0%, #000000 100%);
+  font-family: var(--terminal-font);
 }
 
-.intro-text {
-  font-size: 1.35rem;
-  color: #99ff99;
-  margin-bottom: 1.15rem;
-}
-
-.info-section {
-  margin-top: 1.5rem;
-  font-size: 1.15rem;
+.hero-headline {
+  font-size: 2.75rem;
+  margin-bottom: 1rem;
   color: var(--primary-green);
-  text-align: left;
 }
 
-.info-section p {
-  margin-bottom: 1.5rem;
-}
-
-.email-link {
+.hero-subheadline {
+  font-size: 1.25rem;
+  max-width: 700px;
+  margin-bottom: 2.5rem;
   color: #99ff99;
-  text-decoration: underline;
 }
 
-
-.sign-in-section{
-  /* border: 2px solid blue; */
+.sign-in-section {
   display: flex;
-  align-content: top;
-  justify-content: space-around;
-  padding: 0rem 4rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
 }
-
 
 .login-button {
-  display: inline-flex;       
-  align-items: center;          
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-
-  border-radius: 8px;
+  gap: 6px;
   width: 15rem;
-  gap: 4px;               
-  padding: 0.25rem 1.5rem;
+  padding: 0.6rem 1rem;
   background-color: black;
   border: 1px solid var(--primary-green);
   color: var(--primary-green);
+  font-family: var(--terminal-font);
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
   text-decoration: none;
-  font-family: 'VT323', monospace;
-  transition: background-color 0.2s, color 0.2s;
+  transition: all 0.2s ease-in-out;
+}
+
+.login-button:hover {
+  background-color: var(--primary-green);
+  color: black;
 }
 
 .github-icon {
@@ -68,37 +81,138 @@
   height: 20px;
 }
 
-.login-button:hover {
-  background: var(--primary-green);
-  color: black;
+/* === Shared Section Style === */
+.section {
+  border-top: 1px solid rgba(0, 255, 0, 0.2);
+  min-height: 85vh;
+  padding: 6rem 25rem;
+  margin: 0 auto;
+  font-family: var(--modern-font);
+  font-size: x-large;
+  color: #d0ffd0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
+.section h2{
+
+}
+
+/* Divider Styling */
+.section:not(:first-of-type)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  border-top: 1px dashed var(--border-green);
+}
+
+/* === Demo Section === */
+.demo-section {
+  background-color: #0a0f0a;
+  display: flex;
+  flex-direction: column;
+}
+
+.demo-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.demo-video {
+  /* border: 3px solid pink; */
+  width: 100%;
+  max-width: 480px;
+  border: 1px solid var(--primary-green);
+  border-radius: 2px;
+}
+
+.feature-list {
+  /* border: 1px solid brown; */
+  list-style: none;
+  padding: 0;
+  font-size: 1.05rem;
+}
+
+.feature-list li {
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+/* === Value Prop Section === */
+.value-section {
+  background-color: #0c0c1a;
+  text-align: center;
+}
+
+.value-section p {
+  max-width: 700px;
+  margin: 1rem auto 2rem;
+  font-size: 1.5rem;
+}
+
+.value-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* === Pricing Section === */
+.pricing-section {
+  background-color: var(--section-bg-alt);
+}
 
 .pricing-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 0.5rem;
-  margin-bottom: 1.5rem;
-  font-family: 'VT323', monospace;
-  text-align: left;
-  color: var(--primary-green);
+  font-size: 1.35rem;
+  font-family: var(--terminal-font);
 }
 
 .pricing-table th,
 .pricing-table td {
-  padding: 0.5rem;
+  padding: 0.55rem 1rem;
   border: 1px solid var(--primary-green);
+  text-align: center;
 }
 
 .pricing-table th {
   background-color: rgba(0, 255, 0, 0.1);
 }
 
-.external-link {
-  color: #99ff99;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s ease, text-decoration 0.2s ease;
-  text-decoration: underline;
+/* === About Section === */
+.about-section {
+  background-color: var(--background-black);
+  display: flex;
+  flex-direction: column;  
 }
 
+.about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.about-section p {
+  max-width: 700px;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-size: 1.25rem;
+}
+
+.about-section a {
+  color: #99ff99;
+  text-decoration: underline; 
+}
+
+.about-section a:hover {
+  color: #ccffcc;
+}
