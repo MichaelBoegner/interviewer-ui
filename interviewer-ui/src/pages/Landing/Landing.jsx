@@ -25,10 +25,10 @@ export default function Landing() {
       {/* === Hero Section === */}
       <div className="hero-section">
         <h1 className="hero-headline">
-          AI-powered mock interviews using real job descriptions
+          AI-Powered Mock Interviews Using Real Job Descriptions
         </h1>
         <p className="hero-subheadline">
-          Sign up now and get started for free!
+          Sign up now and get started for FREE!
         </p>
 
         <div className="sign-in-section">
@@ -108,7 +108,7 @@ export default function Landing() {
 
       {/* === Pricing Section === */}
       <div className="section pricing-section">
-        <h2>Simple, fair pricing</h2>
+        <h2>Simple, fair pricing!</h2>
         <p>
           Every new account gets one free interview. No credit card required.
         </p>
@@ -154,20 +154,61 @@ export default function Landing() {
 
       {/* === About Section === */}
       <div className="section about-section">
-        <h2>Made by a dev who hates interview anxiety</h2>
+        <h2>Made by a dev who hates interview anxiety.</h2>
         <div className="about">
           <p>
-            I got tired of feeling rusty before interviews, and built
+            I got tired of feeling rusty before interviews, so I built
             Interviewer to simulate the real thing. Don't let your nerves stand
-            in the way of your dream job.
+            in the way of your dream job. Get started for FREE now!
           </p>
+          <div className="sign-in-section">
+            {isLoggedIn ? (
+              <button
+                className="login-button"
+                onClick={() => {
+                  posthog.capture("go_to_dashboard_clicked");
+                  navigate("/dashboard");
+                }}
+              >
+                Go to Dashboard
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={() => {
+                    navigate("/login");
+                    posthog.capture("email_login_clicked");
+                  }}
+                  className="login-button"
+                >
+                  [ SIGN_IN_WITH_EMAIL ]
+                </button>
+                <a
+                  onClick={handleGithubClick}
+                  href={`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(import.meta.env.VITE_GITHUB_REDIRECT_URI)}&scope=${encodeURIComponent("user:email")}`}
+                  className={`login-button ${githubClicked ? "disabled" : ""}`}
+                  style={
+                    githubClicked ? { pointerEvents: "none", opacity: 0.5 } : {}
+                  }
+                >
+                  <img
+                    src="/github-mark-white.png"
+                    alt="GitHub logo"
+                    className="github-icon"
+                  />
+                  [ SIGN_IN_WITH_GITHUB ]
+                </a>
+              </>
+            )}
+          </div>
           <p>
             Reach me at{" "}
-            <a href="mailto:support@mail.interviewer.dev">
+            <a className="about-a" href="mailto:support@mail.interviewer.dev">
               support@mail.interviewer.dev
             </a>{" "}
             or{" "}
             <a
+              className="about-a"
               href="https://www.linkedin.com/in/michael-boegner-855a9741/"
               target="_blank"
               rel="noopener noreferrer"
