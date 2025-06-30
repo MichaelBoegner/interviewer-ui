@@ -129,7 +129,7 @@ export default function Login({ setToken }) {
           </a>
 
           <p className="registration">
-            New here?{" "}
+            For email login:{" "}
             <a
               href="/signup"
               onClick={() => posthog.capture("signup_link_clicked")}
