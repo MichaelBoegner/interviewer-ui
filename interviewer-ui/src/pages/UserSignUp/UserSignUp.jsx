@@ -95,7 +95,7 @@ export default function UserSignUp() {
           <form onSubmit={handleRegister} className="auth-form">
             <div className="input-row">
               <input
-                placeholder="username"
+                placeholder="what name should we use in interviews?"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 disabled={isLoading}
@@ -161,6 +161,15 @@ export default function UserSignUp() {
             >
               {isLoading ? "[ PROCESSING... ]" : "[ CREATE_ACCOUNT ]"}
             </button>
+            <p className="registration">
+              Already have an account?{" "}
+              <a
+                href="/login"
+                onClick={() => posthog.capture("login_link_clicked")}
+              >
+                Login
+              </a>
+            </p>
           </form>
         </div>
       </div>

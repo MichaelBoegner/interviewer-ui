@@ -46,12 +46,12 @@ export default function Landing() {
             <>
               <button
                 onClick={() => {
-                  navigate("/login");
+                  navigate("/signup");
                   posthog.capture("email_login_clicked");
                 }}
                 className="login-button"
               >
-                [ SIGN_IN_WITH_EMAIL ]
+                [ SIGN_UP_WITH_EMAIL ]
               </button>
               <a
                 onClick={handleGithubClick}
@@ -66,7 +66,7 @@ export default function Landing() {
                   alt="GitHub logo"
                   className="github-icon"
                 />
-                [ SIGN_IN_WITH_GITHUB ]
+                [ SIGN_UP_WITH_GITHUB ]
               </a>
             </>
           )}
@@ -176,12 +176,12 @@ export default function Landing() {
               <>
                 <button
                   onClick={() => {
-                    navigate("/login");
+                    navigate("/signup");
                     posthog.capture("email_login_clicked");
                   }}
                   className="login-button"
                 >
-                  [ SIGN_IN_WITH_EMAIL ]
+                  [ SIGN_UP_WITH_EMAIL ]
                 </button>
                 <a
                   onClick={handleGithubClick}
@@ -196,7 +196,7 @@ export default function Landing() {
                     alt="GitHub logo"
                     className="github-icon"
                   />
-                  [ SIGN_IN_WITH_GITHUB ]
+                  [ SIGN_UP_WITH_GITHUB ]
                 </a>
               </>
             )}

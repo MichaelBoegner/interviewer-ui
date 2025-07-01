@@ -28,9 +28,6 @@ export default function InterviewScreen({ token, setToken }) {
   const [showJDModal, setShowJDModal] = useState(false);
   const [jobDescription, setJobDescription] = useState("");
   const hasLoggedJDEntryRef = useRef(false);
-  const [timeLeft, setTimeLeft] = useState(null);
-  const timerRef = useRef(null);
-  const TIMER_DURATION = 180;
   const API_URL = import.meta.env.VITE_API_URL;
   const inputRef = useRef("");
   useEffect(() => {
@@ -155,42 +152,6 @@ export default function InterviewScreen({ token, setToken }) {
     }
   }, [jobDescription]);
 
-  useEffect(() => {
-    const latest = messages[messages.length - 1];
-    if (latest?.role === "interviewer") {
-      const currentPromptId = `${latest.content}-${messages.length}`;
-      const storageKey = `timerStart_${currentPromptId}`;
-
-      let startTime = Number(localStorage.getItem(storageKey));
-      if (!startTime) {
-        startTime = Date.now();
-        localStorage.setItem(storageKey, startTime);
-      }
-
-      const elapsed = Math.floor((Date.now() - startTime) / 1000);
-      const remaining = Math.max(TIMER_DURATION - elapsed, 0);
-      setTimeLeft(remaining);
-
-      clearInterval(timerRef.current);
-      timerRef.current = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            clearInterval(timerRef.current);
-            localStorage.removeItem(storageKey);
-
-            const message = inputRef.current.trim();
-            sendMessage(message || "No response given");
-
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-
-    return () => clearInterval(timerRef.current);
-  }, [messages]);
-
   const resetInterview = () => {
     const userId = localStorage.getItem("userId");
 
@@ -302,8 +263,8 @@ export default function InterviewScreen({ token, setToken }) {
     }
   };
 
-  const sendMessage = async (messageOverride) => {
-    const userMessage = messageOverride || input.trim();
+  const sendMessage = async () => {
+    const userMessage = input.trim();
     if (!userMessage || !interviewId || isLoading || isInterviewEnded) return;
     setInput("");
     setIsLoading(true);
@@ -400,16 +361,10 @@ export default function InterviewScreen({ token, setToken }) {
 
   return (
     <div className="interview-page">
-      {timeLeft !== null && !isInterviewEnded && (
-        <div className="countdown-timer">
-          Time remaining: {Math.floor(timeLeft / 60)}:
-          {String(timeLeft % 60).padStart(2, "0")}
-        </div>
-      )}
       {showJDModal && (
         <div className="modal-overlay">
           <div className="modal-box">
-            <h3>Optional Job Description</h3>
+            <h2>Paste a Job Description Below</h2>
             <textarea
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}

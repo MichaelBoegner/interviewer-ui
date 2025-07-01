@@ -260,7 +260,7 @@ NOTE: It may take a couple seconds for the update to occur. Try refreshing your 
               {userData?.plan || "Loading..."}
             </p>
             <p>
-              <span className="account-label">Status:</span>{" "}
+              <span className="account-label">Subscription Status:</span>{" "}
               {userData?.status || "Loading..."}
             </p>
             {userData?.subscription_start_date && (

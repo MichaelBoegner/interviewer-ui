@@ -316,13 +316,17 @@ background-color: #111;
   background: black;
   border: 2px solid var(--primary-green);
   padding: 20px;
-  width: 600px;
-  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  box-sizing: border-box;
 }
 
 .jd-textarea {
   width: 100%;
-  height: 200px;
+  height: 400px;
+  width: 700px;
+  max-width: 1200px;
   margin-top: 10px;
   font-family: monospace;
   font-size: 14px;

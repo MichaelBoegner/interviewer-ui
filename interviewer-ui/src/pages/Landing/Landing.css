@@ -146,6 +146,8 @@ body {
 .value-section {
   background-color: #0c0c1a;
   text-align: center;
+  display: flex; 
+  align-items: center;
 }
 
 .value-section p {
