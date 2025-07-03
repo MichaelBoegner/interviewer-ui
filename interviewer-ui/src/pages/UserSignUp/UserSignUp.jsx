@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import posthog from "posthog-js";
 import "./UserSignUp.css";
 
@@ -12,6 +12,12 @@ export default function UserSignUp() {
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    if (window.rdt) {
+      window.rdt("track", "PageVisit");
+    }
+  }, []);
 
   const handleRegister = async (e) => {
     e.preventDefault();

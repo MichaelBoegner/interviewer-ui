@@ -25,7 +25,7 @@ export default function Landing() {
       {/* === Hero Section === */}
       <div className="hero-section">
         <h1 className="hero-headline">
-          Mock Backend Interviews Using Real Job Descriptions
+          AI Backend Interviews Using Real Job Descriptions
         </h1>
         <p className="hero-subheadline">
           Sign up now and get your first interview for FREE!
