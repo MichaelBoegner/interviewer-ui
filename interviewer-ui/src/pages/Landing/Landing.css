@@ -123,7 +123,6 @@ body {
 }
 
 .demo-video {
-  /* border: 3px solid pink; */
   width: 100%;
   max-width: 480px;
   border: 1px solid var(--primary-green);
@@ -131,7 +130,6 @@ body {
 }
 
 .feature-list {
-  /* border: 1px solid brown; */
   list-style: none;
   padding: 0;
   font-size: 1.05rem;

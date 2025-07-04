@@ -7,7 +7,6 @@
 }
 
 .dashboard-header {
-  /* border: solid 1px blue; */
   text-align: center;
   display:flex;
   flex-direction: column;
@@ -59,12 +58,9 @@
 }
 
 .section-heading {
-  /* border-bottom: 1px solid #99ff99; */
   color: #99ff99;
   font-size: 1.5rem;
   margin-bottom: 0.25rem;
-  /* padding-bottom: 0.025rem;
-  width: 20rem; */
 }
 
 .section-sub-heading {
@@ -72,7 +68,6 @@
 }
 
 .sub-heading {
-  
   color: #00cc66;
   font-size: 1.1rem;
   margin-bottom: 0;
@@ -121,7 +116,7 @@
   flex: 1;
   padding-right: 0.5rem;
   padding-left: 1rem;
-   max-height: 50vh; 
+  max-height: 50vh; 
 }
 
 .interview-list {

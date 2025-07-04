@@ -1,9 +1,4 @@
-.interview-page {
-  /* border: 10px solid gold; */
-}
-
 .interview-header {
-  /* border: 4px solid white; */
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -24,9 +19,7 @@
   margin-top: 0;
 }
 
-
 .interview-screen {
-  /* border: 10px solid pink; */
   height: 100vh;
   background: black;
   color: var(--primary-green);
@@ -35,7 +28,6 @@
   display: flex;
   flex-direction: column;
 }
-
 
 .paused-message {
   color: var(--primary-yellow);
@@ -68,7 +60,6 @@
 }
 
 .button-container-interview{
-  /* border: 8px solid turquoise; */
   border-top: 3px solid var(--primary-green);
   padding: 0.25rem;
   display: flex;
@@ -90,7 +81,6 @@
 .language-select-row {
   display: flex;
   justify-content: center;
-  /* border: 4px solid blue; */
 }
 
 .button-row-start-save {
@@ -105,22 +95,19 @@
 }
 
 .chat-window-wrapper {
-  /* border: 8px solid silver; */
   width: 50%;
   height: 100%;
   background-color: #111;
   border-right: 10px solid #448e44;;
-   align-items: stretch;
+  align-items: stretch;
   margin: 0;
   padding: 0;
 }
 
 .chat-window {
   height: 100%;
-  /* border: 8px solid brown; */
   overflow-y: auto;
-background-color: #111;
-  /* border: 1px solid #0f0; */
+  background-color: #111;
   font-size: 0.95rem;
 }
 
@@ -129,7 +116,6 @@ background-color: #111;
   font-weight: bold;
   font-size: 1.45rem;;
 }
-
 
 .message {
   background-color: #222;
@@ -142,16 +128,16 @@ background-color: #111;
 }
 
 .message.interviewer {
-  color: #00ffff; /* Bright cyan */
+  color: #00ffff;
   font-weight: bold;
 }
 
 .message.user {
-  color: #b8ffb8; /* Pale green */
+  color: #b8ffb8;
 }
 
 .message.system {
-  color: #ffd700; /* Gold/yellow */
+  color: #ffd700;
 }
 
 .message-header {
@@ -200,13 +186,7 @@ background-color: #111;
   color: red;
 }
 
-
-
-
-
-
 .user-entry-wrapper {
-  /* border: 8px solid white; */
   width: 50%;
   height: 100%;
   display:flex;
@@ -214,12 +194,10 @@ background-color: #111;
 }
 
 .input-wrapper {
-  /* border: 8px solid blue; */
   height: 100%;
 }
 
 .textarea-wrapper {
-  /* border: 8px solid orange; */
   height: 100%;
 }
 
@@ -235,7 +213,6 @@ background-color: #111;
   font-family: 'VT323', monospace;
 }
 
-
 .retro-button {
   background: black;
   border: 1px solid var(--primary-green);
@@ -244,7 +221,6 @@ background-color: #111;
   cursor: pointer;
   transition: all 0.2s;
   font-family: 'VT323', monospace;
-
 }
 
 .retro-button.red {

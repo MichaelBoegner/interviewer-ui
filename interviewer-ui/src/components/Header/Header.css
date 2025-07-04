@@ -6,19 +6,15 @@
 
 .header-wrapper.centered-layout .topbar {
   justify-content: center;
-
 }
 
 .header-wrapper.centered-layout .ascii-banner {
   justify-content: center;
   width: 100%;
-
 }
-
 
 .header-wrapper{
   background: #111;
-  
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -28,17 +24,13 @@
 }
 
 .topbar {
-  /* border: 3px solid brown; */
   display: flex;
   justify-content: space-between;
   align-items:top;
-
   width: 100%;
 }
 
-
 .header-logo-row {
-  /* border: 5px solid white; */
   width: auto;
   margin-left: 1rem;
 }
@@ -50,15 +42,12 @@
 
 .ascii-banner {
   display: flex;
-  /* border: 4px solid blue; */
-
   padding-bottom: 1rem;
   margin: 0;
   padding-top: 0;
 }
 
 .nav-links {
-  /* border: 4px solid yellow; */
   display: flex;
   gap: 1.5rem;
   font-family: 'VT323', monospace;
