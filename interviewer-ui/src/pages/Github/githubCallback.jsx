@@ -8,6 +8,12 @@ function GithubCallback() {
   const hasRun = useRef(false);
 
   useEffect(() => {
+    if (window.rdt) {
+      window.rdt("track", "PageVisit");
+    }
+  }, []);
+
+  useEffect(() => {
     if (hasRun.current) return;
     hasRun.current = true;
 
