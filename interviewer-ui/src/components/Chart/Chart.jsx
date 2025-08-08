@@ -8,10 +8,15 @@ import {
 } from "recharts";
 
 export default function InterviewScoreChart({ data }) {
-  const formattedData = data.map((d) => ({
-    date: new Date(d.start_date).toLocaleDateString(),
-    score: d.score,
-  }));
+  const formattedData = data
+    .slice()
+    .sort((a, b) => new Date(a.started_at) - new Date(b.started_at))
+    .map((d) => ({
+      date: new Date(d.started_at).toLocaleDateString(),
+      score: d.score,
+    }));
+
+  console.log("formattedData.date: ", formattedData.date);
 
   return (
     <LineChart width={600} height={300} data={formattedData}>

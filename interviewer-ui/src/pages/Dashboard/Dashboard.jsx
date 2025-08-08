@@ -434,6 +434,7 @@ NOTE: It may take a couple seconds for the update to occur. Try refreshing your 
                   </div>
                   <div className="interview-chart">
                     <InterviewScoreChart data={userData.past_interviews} />
+                    {console.log("userData: ", userData.past_interviews)}
                   </div>
                 </div>
               )
