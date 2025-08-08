@@ -6,6 +6,7 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
+import "./Chart.css";
 
 export default function InterviewScoreChart({ data }) {
   const formattedData = data
@@ -20,11 +21,14 @@ export default function InterviewScoreChart({ data }) {
 
   return (
     <LineChart width={600} height={300} data={formattedData}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="date" />
-      <YAxis domain={[0, 100]} />
-      <Tooltip />
-      <Line type="monotone" dataKey="score" stroke="#8884d8" />
+      <XAxis className="score-chart__x-axis" dataKey="date" />
+      <YAxis
+        className="score-chart__y-axis"
+        domain={[0, 100]}
+        ticks={[20, 40, 60, 80, 100]}
+      />
+      <Tooltip wrapperClassName="score-chart__tooltip" />
+      <Line className="score-chart__line" type="monotone" dataKey="score" />
     </LineChart>
   );
 }
