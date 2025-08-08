@@ -9,7 +9,7 @@ Frontend for [Interviewer](https://interviewer.dev), an AI-powered mock backend 
 - **Monaco Editor** for in-browser coding
 - **PostHog** for analytics
 
-## 🚀 Features
+## 🚀 Features 
 
 - Authentication and account management (email + GitHub OAuth)
 - Interactive interview interface powered by OpenAI
