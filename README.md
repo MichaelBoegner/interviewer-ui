@@ -17,7 +17,7 @@ Frontend for [Interviewer](https://interviewer.dev), an AI-powered mock backend 
 - Real-time feedback, scoring, and conversation flow
 - Resume/pause interview functionality
 - Subscription and credit system integration
-- Full dashboard of past interviews and stats 
+- Full dashboard of past interviews and stats  
 
 ## 🧪 Scripts
 
