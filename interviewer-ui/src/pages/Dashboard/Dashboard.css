@@ -112,11 +112,17 @@
 }
 
 .interview-scroll {
+  border: 1px solid  var(--primary-green);
   overflow-y: auto;
   flex: 1;
-  padding-right: 0.5rem;
-  padding-left: 1rem;
-  max-height: 50vh; 
+  padding: 0.5rem;
+  
+  margin-left: 2rem;
+  max-height: 25vh; 
+}
+
+.interview-chart { 
+  padding-top: 2rem;
 }
 
 .interview-list {

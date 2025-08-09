@@ -373,6 +373,10 @@ NOTE: It may take a couple seconds for the update to occur. Try refreshing your 
                 <p>No past interviews yet.</p>
               ) : (
                 <div>
+                  <div className="interview-chart">
+                    <InterviewScoreChart data={userData.past_interviews} />
+                    {console.log("userData: ", userData.past_interviews)}
+                  </div>
                   <div className="interview-scroll">
                     <ul className="interview-list">
                       {userData.past_interviews.map((interviewMap) => (
@@ -431,10 +435,6 @@ NOTE: It may take a couple seconds for the update to occur. Try refreshing your 
                         </li>
                       ))}
                     </ul>
-                  </div>
-                  <div className="interview-chart">
-                    <InterviewScoreChart data={userData.past_interviews} />
-                    {console.log("userData: ", userData.past_interviews)}
                   </div>
                 </div>
               )
