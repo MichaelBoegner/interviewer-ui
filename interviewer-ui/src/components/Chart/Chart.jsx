@@ -17,8 +17,6 @@ export default function InterviewScoreChart({ data }) {
       score: d.score,
     }));
 
-  console.log("formattedData.date: ", formattedData.date);
-
   return (
     <LineChart width={600} height={300} data={formattedData}>
       <XAxis className="score-chart__x-axis" dataKey="date" />

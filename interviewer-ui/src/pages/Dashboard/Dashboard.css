@@ -112,7 +112,6 @@
 }
 
 .interview-scroll {
-  /* border: 1px dashed  var(--primary-green); */
   overflow-y: auto;
   flex: 1;
   padding: 0.5rem 0rem;
