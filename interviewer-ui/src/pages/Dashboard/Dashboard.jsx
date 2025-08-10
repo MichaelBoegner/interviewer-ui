@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import posthog from "posthog-js";
+import InterviewScoreChart from "../../components/Chart/Chart";
 import "./Dashboard.css";
 
 export default function Dashboard({ token, setToken }) {
@@ -371,61 +372,69 @@ NOTE: It may take a couple seconds for the update to occur. Try refreshing your 
               userData.past_interviews.length === 0 ? (
                 <p>No past interviews yet.</p>
               ) : (
-                <div className="interview-scroll">
-                  <ul className="interview-list">
-                    {userData.past_interviews.map((interviewMap) => (
-                      <li
-                        key={interviewMap.id}
-                        onClick={async () => {
-                          const userId = localStorage.getItem("userId");
-                          posthog.capture("past_interview_clicked", {
-                            interview_id: interviewMap.id,
-                            score: interviewMap.score ?? null,
-                          });
+                <div>
+                  <div className="interview-chart">
+                    <InterviewScoreChart data={userData.past_interviews} />
+                  </div>
+                  <div className="interview-scroll">
+                    <ul className="interview-list">
+                      {userData.past_interviews.map((interviewMap) => (
+                        <li
+                          key={interviewMap.id}
+                          onClick={async () => {
+                            const userId = localStorage.getItem("userId");
+                            posthog.capture("past_interview_clicked", {
+                              interview_id: interviewMap.id,
+                              score: interviewMap.score ?? null,
+                            });
 
-                          localStorage.removeItem(`${userId}_interviewId`);
-                          localStorage.removeItem(`${userId}_conversationId`);
+                            localStorage.removeItem(`${userId}_interviewId`);
+                            localStorage.removeItem(`${userId}_conversationId`);
 
-                          try {
-                            const res = await fetch(
-                              `${API_URL}/interviews/${interviewMap.id}`,
-                              {
-                                headers: { Authorization: `Bearer ${token}` },
-                              }
-                            );
+                            try {
+                              const res = await fetch(
+                                `${API_URL}/interviews/${interviewMap.id}`,
+                                {
+                                  headers: { Authorization: `Bearer ${token}` },
+                                }
+                              );
 
-                            if (!res.ok)
-                              throw new Error("Failed to fetch interview");
+                              if (!res.ok)
+                                throw new Error("Failed to fetch interview");
 
-                            const data = await res.json();
-                            const interview = data.interview;
+                              const data = await res.json();
+                              const interview = data.interview;
 
-                            localStorage.setItem(
-                              `${userId}_interviewId`,
-                              interviewMap.id
-                            );
-                            localStorage.setItem(
-                              `${userId}_conversationId`,
-                              interview.conversation_id
-                            );
+                              localStorage.setItem(
+                                `${userId}_interviewId`,
+                                interviewMap.id
+                              );
+                              localStorage.setItem(
+                                `${userId}_conversationId`,
+                                interview.conversation_id
+                              );
 
-                            navigate("/conversation");
-                          } catch (err) {
-                            console.error("Error loading past interview:", err);
-                          }
-                        }}
-                        className="interview-item"
-                      >
-                        <div>
-                          {new Date(interviewMap.started_at).toLocaleString()} —
-                          Score: {interviewMap.score ?? "N/A"}%
-                        </div>
-                        <div className="interview-feedback">
-                          {interviewMap.feedback}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+                              navigate("/conversation");
+                            } catch (err) {
+                              console.error(
+                                "Error loading past interview:",
+                                err
+                              );
+                            }
+                          }}
+                          className="interview-item"
+                        >
+                          <div>
+                            {new Date(interviewMap.started_at).toLocaleString()}{" "}
+                            — Score: {interviewMap.score ?? "N/A"}%
+                          </div>
+                          <div className="interview-feedback">
+                            {interviewMap.feedback}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               )
             ) : (

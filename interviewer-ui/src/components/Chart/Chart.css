@@ -1,0 +1,71 @@
+:root {
+  --neon: #00ff00;
+  --neon-dim: rgba(0, 255, 0, 0.3);
+  --ink: #e6ffe6;      
+  --bg: #000000;       
+}
+
+.score-chart {
+  display: inline-block;
+}
+
+.score-chart__grid line {
+  stroke: var(--neon);
+  stroke-opacity: 0.3;
+  shape-rendering: crispEdges;
+}
+
+.score-chart__x-axis text,
+.score-chart__y-axis text {
+  fill: var(--ink);
+  font-size: 12px;
+}
+
+.score-chart__x-axis line,
+.score-chart__y-axis line,
+.score-chart__x-axis path,
+.score-chart__y-axis path {
+  stroke: var(--neon);
+  stroke-opacity: 0.5;
+}
+
+.score-chart__line path {
+  stroke: var(--neon);
+  stroke-width: 2;
+  fill: none;
+}
+
+.score-chart__dot circle {
+  fill: var(--neon);
+  stroke: var(--neon);
+  stroke-width: 1;
+  filter: drop-shadow(0 0 2px var(--neon-dim));
+}
+
+.score-chart__dot--active circle {
+  stroke: #ffffff;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 4px var(--neon));
+}
+
+.score-chart__tooltip {
+  pointer-events: none;
+}
+
+.score-chart__tooltip .recharts-default-tooltip {
+  background: var(--bg);
+  border: 4px solid var(--neon);
+  color: var(--bg);
+  border-radius: 4px;
+  padding: 6px 8px;
+  box-shadow: 0 0 8px var(--neon-dim);
+}
+
+.score-chart__tooltip .recharts-tooltip-label {
+  color: var(--bg);
+  margin-bottom: 4px;
+}
+
+.score-chart__tooltip .recharts-tooltip-item {
+  color: var(--bg);
+}
