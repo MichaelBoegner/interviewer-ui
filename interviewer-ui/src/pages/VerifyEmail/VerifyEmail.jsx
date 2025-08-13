@@ -23,14 +23,15 @@ export default function VerifyEmail() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ token }),
         });
+
         const data = await response.json();
         if (!response.ok) {
           throw new Error(data.error || "Verification failed");
         }
-        console.log("response: ", data);
+
         localStorage.setItem("token", data.jwtoken);
         setStatus("success");
-        setTimeout(() => navigate("/login", { replace: true }), 3000);
+        setTimeout(() => navigate("/dashboard", { replace: true }), 3000);
       } catch (err) {
         const alreadyExists = err.message.includes("Email already exists");
         setError(err.message);
