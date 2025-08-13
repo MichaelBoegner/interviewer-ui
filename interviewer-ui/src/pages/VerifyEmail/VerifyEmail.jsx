@@ -23,12 +23,12 @@ export default function VerifyEmail() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ token }),
         });
-
+        const data = await response.json();
         if (!response.ok) {
-          const data = await response.json();
           throw new Error(data.error || "Verification failed");
         }
-
+        console.log("response: ", data);
+        localStorage.setItem("token", data.jwtoken);
         setStatus("success");
         setTimeout(() => navigate("/login", { replace: true }), 3000);
       } catch (err) {
@@ -61,7 +61,7 @@ export default function VerifyEmail() {
           {status === "success" && (
             <div className="success-box">
               <span className="success-label">SUCCESS:</span> Your account has
-              been verified! Redirecting to login...
+              been verified! Logging in...
             </div>
           )}
 
