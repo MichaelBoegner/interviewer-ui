@@ -21,7 +21,7 @@ Frontend for [Interviewer](https://interviewer.dev), an AI-powered mock backend 
 
 ## 🧪 Scripts
 
-```bash
+```bash 
 npm install       # Install dependencies
 npm run dev       # Start development server
 ```
