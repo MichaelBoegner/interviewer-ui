@@ -1,6 +1,6 @@
 const sampleJDs = [
   {
-    label: "Backend Engineer - Go",
+    label: "Senior Backend",
     value: `We are seeking a Senior Backend Engineer to lead the design and implementation of scalable services powering our high-traffic platform. You will architect distributed systems, optimize performance, and mentor junior developers. The ideal candidate has deep experience with Golang, PostgreSQL, containerization (Docker, Kubernetes), and cloud platforms (AWS or GCP). Familiarity with event-driven systems, caching strategies, and CI/CD pipelines is expected.  
 
 Requirements:  
@@ -12,7 +12,7 @@ Requirements:
 `,
   },
   {
-    label: "Frontend Engineer - React",
+    label: "Mid-Level Backend",
     value: `We are hiring a Backend Engineer to build and maintain microservices supporting our SaaS product. You will work closely with frontend and product teams to design REST and GraphQL APIs, improve database performance, and contribute to deployment automation.  
 
 Requirements:  
@@ -25,7 +25,7 @@ Requirements:
 `,
   },
   {
-    label: "Fullstack Developer",
+    label: "Junior Backend",
     value: `We are looking for a Junior Backend Engineer excited to learn and grow in a fast-paced startup environment. You will help implement features, fix bugs, and maintain backend services under the guidance of senior engineers. This role is ideal for someone with strong fundamentals and a desire to gain real-world experience.  
 
 Requirements:  

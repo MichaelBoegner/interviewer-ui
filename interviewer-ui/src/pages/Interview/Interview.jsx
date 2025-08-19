@@ -28,6 +28,7 @@ export default function InterviewScreen({ token, setToken }) {
   const location = useLocation();
   const [showJDModal, setShowJDModal] = useState(false);
   const [jobDescription, setJobDescription] = useState("");
+  const [selectedJD, setSelectedJD] = useState("");
   const hasLoggedJDEntryRef = useRef(false);
   const API_URL = import.meta.env.VITE_API_URL;
   const inputRef = useRef("");
@@ -370,13 +371,24 @@ export default function InterviewScreen({ token, setToken }) {
               <label htmlFor="sample-jd-select">Or choose a sample:</label>
               <select
                 id="sample-jd-select"
-                onChange={(e) => setJobDescription(e.target.value)}
-                value=""
+                value={selectedJD} // <-- bind to label state
+                onChange={(e) => {
+                  const jd = sampleJDs.find(
+                    (jd) => jd.label === e.target.value
+                  );
+                  if (jd) {
+                    setSelectedJD(jd.label); // show label in dropdown
+                    setJobDescription(jd.value); // put full JD text in textarea
+                  } else {
+                    setSelectedJD("");
+                    setJobDescription("");
+                  }
+                }}
                 className="sample-jd-dropdown"
               >
                 <option value="">-- Select a sample JD --</option>
                 {sampleJDs.map((jd, idx) => (
-                  <option key={idx} value={jd.value}>
+                  <option key={idx} value={jd.label}>
                     {jd.label}
                   </option>
                 ))}
