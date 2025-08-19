@@ -1,24 +1,16 @@
-export type JDTemplate = { id: string; title: string; content: string };
-
-export const JD_TEMPLATES: JDTemplate[] = [
+const sampleJDs = [
   {
-    id: "backend-go",
-    title: "Backend Engineer, Go (Sample)",
-    content: `We are looking for a Backend Engineer with strong Go experience...
-Responsibilities:
-- Design and build HTTP services in Go
-- Postgres, Redis, AWS, Docker
-- Testing, observability, CI/CD
-
-Requirements:
-- 3+ years backend experience (Go preferred)
-- SQL, schema design, performance tuning
-- Familiarity with distributed systems & queues
-
-Nice to have:
-- gRPC, OpenAPI, Terraform, Kubernetes`
-  }
+    label: "Backend Engineer - Go",
+    value: `We are looking for a backend engineer proficient in Golang, PostgreSQL, and Docker...`,
+  },
+  {
+    label: "Frontend Engineer - React",
+    value: `We are seeking a frontend engineer experienced with React, TypeScript, and UI/UX principles...`,
+  },
+  {
+    label: "Fullstack Developer",
+    value: `We are hiring a fullstack developer skilled in Node.js, React, REST APIs, and AWS cloud services...`,
+  },
 ];
 
-export const getJDTemplate = (id: string) =>
-  JD_TEMPLATES.find(t => t.id === id) || null;
+export default sampleJDs;

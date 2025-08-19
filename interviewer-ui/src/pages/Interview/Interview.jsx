@@ -4,6 +4,7 @@ import posthog from "posthog-js";
 import flattenConversation from "../../helpers/flattenConversation";
 import Editor from "@monaco-editor/react";
 import useNavigationGuard from "./useNavigationGuard";
+import sampleJDs from "../../lib/jdSamples";
 import "./Interview.css";
 
 export default function InterviewScreen({ token, setToken }) {
@@ -365,6 +366,22 @@ export default function InterviewScreen({ token, setToken }) {
         <div className="modal-overlay">
           <div className="modal-box">
             <h2>Paste a Job Description Below</h2>
+            <div className="sample-jd-row">
+              <label htmlFor="sample-jd-select">Or choose a sample:</label>
+              <select
+                id="sample-jd-select"
+                onChange={(e) => setJobDescription(e.target.value)}
+                value=""
+                className="sample-jd-dropdown"
+              >
+                <option value="">-- Select a sample JD --</option>
+                {sampleJDs.map((jd, idx) => (
+                  <option key={idx} value={jd.value}>
+                    {jd.label}
+                  </option>
+                ))}
+              </select>
+            </div>
             <textarea
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
