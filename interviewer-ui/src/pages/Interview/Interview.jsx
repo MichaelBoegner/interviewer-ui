@@ -371,14 +371,14 @@ export default function InterviewScreen({ token, setToken }) {
               <label htmlFor="sample-jd-select">Or choose a sample:</label>
               <select
                 id="sample-jd-select"
-                value={selectedJD} // <-- bind to label state
+                value={selectedJD}
                 onChange={(e) => {
                   const jd = sampleJDs.find(
                     (jd) => jd.label === e.target.value
                   );
                   if (jd) {
-                    setSelectedJD(jd.label); // show label in dropdown
-                    setJobDescription(jd.value); // put full JD text in textarea
+                    setSelectedJD(jd.label);
+                    setJobDescription(jd.value);
                   } else {
                     setSelectedJD("");
                     setJobDescription("");
@@ -387,8 +387,8 @@ export default function InterviewScreen({ token, setToken }) {
                 className="sample-jd-dropdown"
               >
                 <option value="">-- Select a sample JD --</option>
-                {sampleJDs.map((jd, idx) => (
-                  <option key={idx} value={jd.label}>
+                {sampleJDs.map((jd) => (
+                  <option key={jd.label} value={jd.label}>
                     {jd.label}
                   </option>
                 ))}
